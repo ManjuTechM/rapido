@@ -1,0 +1,314 @@
+{% extends "rapido/staff/staff.html" %}
+{% block body_block %}
+{% load static %}
+<style type="text/css">
+  table{
+    border-spacing: 0 !important;
+    text-align: left;
+  }
+  td, th{
+    border:1px solid #a7a6a6;
+    font-weight:500 !important;
+    padding:4px;
+  }
+  .rapido{
+    margin-top:0 !important;
+    margin-bottom: 10px !important;
+  }
+  p{
+    margin-top: 0 !important;
+    margin-bottom:4px !important; 
+  }
+  thead img{
+    //width:100% !important;
+  }
+  .reporting{
+    border-bottom: transparent;
+    //border-right: transparent;
+    border-top: transparent;
+  }
+  
+
+    @media print{
+    #non-printable{display: none;}
+    td, th{
+      font-size: 12px;
+      padding: 3px;
+    }
+    .notify{
+      display: none;
+    }
+  }
+
+  .checkbox-inline{
+    font-size: 16px;
+  }
+</style>
+<!-- Main content -->
+<section class="invoice">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:50%;">
+          <h3 class="rapido">Rapido Travels India Pvt. Ltd.</h3>
+          <p>#314, 1st Floor, 12th Main, 15th Cross, <br> 5th Phase, J.P. Nagar, Bangalore - 560 078.</p>
+          <p>Ph : 080 - 26595567, 26585567</p>
+          <p>E-mail : bookings@rapidotravels.co.in</p>
+          <p>www.rapidotravels.co.in</p>
+        </th>
+        <th>Trip Sheet :{{booking.booking_id}}</th>
+        <th> <img src="{% static 'images/invoice_logo.png'%}"></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="width:40%; border-right: 0 !important;"> Service City : {{dutyslip.booking.servicing_city.name}} </td>
+        <td style="width:40%; border-left:0 !important;">Booking ID:RTPL-{{booking.servicing_city.city_code}}-{{booking.booking_id}} </td>         
+        <td style="width:20%;">PAN No. : AAICR1074L</td>
+      </tr>
+      <tr>
+        <td style="width:40%; border-right: 0 !important;">Company : {{dutyslip.booking.company.company_name}}</td>
+        <td style="width:40%; border-left:0 !important;"> </td> 
+        <td style="width:20%;">Service Tax : </td>
+      </tr>
+      <tr>
+        <td style="width:40%; border-right: 0 !important;">User :  {{dutyslip.booking.guest_name}} </td>
+        <td style="width:40%; border-left:0 !important;">Contact :{{dutyslip.booking.guest_phoneno}} </td>  
+        <td style="width:40%;"> </td>
+      </tr>
+      <tr>
+        <td style="width:20%; border-right: 0 !important;">Booked by : {{dutyslip.booking.booking_from}}</td>
+        <td style="width:50%; border-left:0 !important; border-right: 0 !important;">Contact : {{dutyslip.booking.booking_phoneno}} </td>  
+        <td style="width:20%; border-left:0 !important;">category:{{dutyslip.booking.category}} </td>       
+      </tr>
+    </tbody>    
+  </table>
+  
+  <table style="width:100%;">
+
+    <tr>
+      <td colspan="3">Point of Origin : </td> 
+      <td colspan="3">Flight No : </td>     
+      <td colspan="3">ETA : </td>  
+      <td colspan="3" class="reporting" style="font-weight:600 !important;">Rental Type : {{dutyslip.booking.service_type}} </td>
+    </tr> 
+    <tr>
+      <td colspan="4">Chauffeur Name:{{dutyslip.chauffeur_name}}</td>
+      <td colspan="4">Chauffeur Mobile :{{dutyslip.chauffeur_phoneno}}</td>
+      <td colspan="4">Car No. :{{dutyslip.vehicle_no}} </td>
+    </tr>
+    <tr>
+      <td colspan="4">Car Booked : {{dutyslip.booking.requested_vehicle_model}}</td>
+      <td colspan="4">Car Alloted : {{dutyslip.allocated_vehicle}} </td>
+      <td colspan="4">Report Time : {{dutyslip.booking.pickup_date_time}}</td>
+    </tr>
+
+    <tr>
+      <td colspan="12" class="reporting" style="font-weight:600 !important;">Reporting Address :  {{dutyslip.booking.pick_up_location}}</td> 
+    </tr>
+    <tr>
+      <td colspan="4">Date Out : </td>
+      <td colspan="4">Date in : </td> 
+      <td colspan="4">Total Days : </td>
+    </tr>
+    <tr>
+      <td colspan="4">Opening Time : </td>
+      <td colspan="4">Closing Time : </td>  
+      <td colspan="4">Total Hrs. : </td>
+    </tr>
+<!--     <tr>
+      <td colspan="4">Opening Time : </td>
+      <td colspan="4">Closing Time : </td>  
+      <td colspan="4">Total Hrs. : </td>
+    </tr> 
+ -->    <tr>
+      <td colspan="4">Point opening Time : </td>
+      <td colspan="4">Point Closing Time : </td>  
+      <td colspan="4"> </td>
+    </tr>
+    
+    <tr>
+      <td colspan="4">Point opening KM : </td>
+      <td colspan="4">Point Closing KM : </td>  
+      <td colspan="4"> </td>
+    </tr> 
+<!--     <tr>
+      <td colspan="4">KM Out : </td>
+      <td colspan="4">KM In : </td> 
+      <td colspan="4">Total KM : </td>
+    </tr>
+ -->    <tr>
+      <td colspan="4">KM Out :</td>
+      <td colspan="4">KM In :</td>
+      <td colspan="4">Total KM :</td>
+    </tr>
+    <tr>
+      <td colspan="12" style="font-weight:600 !important;">Tariff Details :</td>      
+    </tr>   
+    <tr>
+      <td colspan="4">Package :</td>
+      <td colspan="4">Parking :</td>
+      <td colspan="4">Service Tax :</td>
+    </tr>   
+    <tr>
+      <td colspan="4">Extra KM :</td>
+      <td colspan="4">Other Charges :</td>
+      <td colspan="4">Educ. Cess :</td>
+    </tr>   
+    <tr>
+      <td colspan="4">Extra Hrs. :</td>
+      <td colspan="4">Permit :</td>
+      <td colspan="4">VAT @ :</td>
+    </tr>
+    <tr>
+      <td colspan="8" style="text-align: right; font-weight:600 !important;">Total</td>     
+      <td colspan="4"></td>
+    </tr>
+    <tr>
+      <td colspan="4">Paymeny Mode :</td>
+      <td colspan="8">Direct Payment / Indirect Payment </td>
+    </tr>
+    <tr>
+      <td colspan="12" style="font-weight:600 !important;">To be filled by the customet (Mandatory)</td>
+    </tr>
+    <tr>
+      <td colspan="6">Opening Time : </td>
+      <td colspan="6">Opening KM : </td>
+    </tr>
+    <tr>
+      <td colspan="6">Closing Time : </td>
+      <td colspan="6">Closing KM : </td>
+    </tr>
+    <tr>
+      <td colspan="4" style="font-weight:600 !important;">Next Requirement : </td>
+      <td colspan="4">Date : </td>
+      <td colspan="4">Time : </td>
+    </tr>
+    <tr>
+      <td colspan="12">Address : </td>
+    </tr>
+    <tr>
+      <td colspan="12" style="text-align:center; border-bottom:transparent !important; padding-bottom: 18px;"> I Confirm that i am responsible for full payment of this bull in the event that this bull is not paid <br> by the organisation r person indicated
+      </td>
+    </tr>
+    <tr>
+      <td colspan="6" style="border-top:transparent !important; border-right:transparent !important;">Standard Terms & Conditions Applicable </td>
+      <td colspan="6" style="border-top:transparent !important; text-align:center; border-left:transparent !important;">Customer Signature </td>
+    </tr>
+    <tr>
+      <td colspan="12">
+        <p>Customer Feedback :</p>
+        <p>1. Did your car report on time : Yes / No</p>
+        <p>2. Is the car quality up to your expectation : Yes / No</p>
+        <p style="font-weight:600; text-align:center;">We welcome your feedback on : bookings@rapidotravels.co.in</p>
+      </td>
+    </tr>
+      <tr class="notify">
+        <td>
+<label class="checkbox-inline"><input type="checkbox" id="sendSmsUser" name="notify" value="Send SMS">Send SMS to Customer</label>
+</td>
+        <td>
+<label class="checkbox-inline"><input type="checkbox" id="sendSmsDriver" name="notify" value="Send SMS">Send SMS to Driver</label>
+</td>
+<td>
+<label class="checkbox-inline"><input type="checkbox" id="sendEmail" name="notify" value="Send Email">Send Email</label>
+        </td>
+      </tr>
+  </table>  
+<br/><br/>
+      <!-- this row will not appear when printing -->
+      <div class="row no-print">
+        <div class="col-xs-12 text-center">
+
+          <a href="/rapido/staff_dutyslip_list/" onclick="window.print();Notify();" class="btn btn-success"><i class="fa fa-print"></i> Print</a>
+<button type="button"  class="btn btn-primary smsButton" data-toggle="modal" data-target="#chaufModal">Trip SMS for others</button>
+
+<!--           <button id="ajaxcall" class="btn btn-success"><i class="fa fa-print"></i> Print</button>
+ -->        <!--<button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;">
+            <i class="fa fa-download"></i> Generate PDF
+          </button>--> 
+          </div>
+      </div>
+
+
+
+      <!-- Modal for sending sms-->
+
+  <div class="modal fade" id="chaufModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">Sending Trip SMS for others</h4>
+        </div>
+        <div class="modal-body">
+        <form id="sendTripOthers">
+          <input type="text" placeholder="mobile number" maxlength="10" minlength="10" pattern="[0-9]{10}" data-msg="please enter 10 digit mobile number" id="enterOthers" name="phoneno" class="form-control" required/><span id="errmsg"></span><br/>
+      </form>
+        <button onclick="sendTripOther('{{dutyslip.id}}');" class="btn btn-success">Send</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+
+
+</section>
+<script type="text/javascript">
+  function Notify(){
+
+    $.get("/rapido/admin_dispatch_vehicle/{{dutyslip.booking.booking_id}}",function(data){});
+    
+    var smsdriver = $("#sendSmsDriver").prop("checked");
+    var smsuser = $("#sendSmsUser").prop("checked");
+    var email = $("#sendEmail").prop("checked");
+
+    if(smsuser==true && smsdriver==true && email==true){
+      $.getJSON('/rapido/sendtripdetailsmsforuser/{{dutyslip.id}}/',function(data){});
+      $.getJSON('/rapido/sendtripdetailsmsfordriver/{{dutyslip.id}}/',function(data){});
+      $.getJSON('/rapido/sendtripdetailemail/{{dutyslip.id}}/',function(data){});
+    }
+    else if(smsuser==true && smsdriver==true){
+      $.getJSON('/rapido/sendtripdetailsmsforuser/{{dutyslip.id}}/',function(data){});
+      $.getJSON('/rapido/sendtripdetailsmsfordriver/{{dutyslip.id}}/',function(data){});
+    }
+    else if(smsuser==true && email==true){
+      $.getJSON('/rapido/sendtripdetailsmsforuser/{{dutyslip.id}}/',function(data){});
+      $.getJSON('/rapido/sendtripdetailemail/{{dutyslip.id}}/',function(data){});
+    }
+    else if(smsdriver==true && email==true){
+      $.getJSON('/rapido/sendtripdetailsmsfordriver/{{dutyslip.id}}/',function(data){});
+      $.getJSON('/rapido/sendtripdetailemail/{{dutyslip.id}}/',function(data){});
+    }
+    else if(smsuser==true){
+      $.getJSON('/rapido/sendtripdetailsmsforuser/{{dutyslip.id}}/',function(data){});
+    }
+    else if(smsdriver==true){
+      $.getJSON('/rapido/sendtripdetailsmsfordriver/{{dutyslip.id}}/',function(data){});
+    }
+    else if(email==true){
+      $.getJSON('/rapido/sendtripdetailemail/{{dutyslip.id}}/',function(data){});
+    }
+  
+  }
+</script>
+
+
+<!-- <script type="text/javascript">
+  $("#ajaxcall").click(function(){
+    window.print()
+    $.ajax({
+      type:'POST',
+      url:'/rapido/admin_dispatch_vehicle/{{dutyslip.booking.booking_id}}',
+      success:function(result){
+        console.log("successful");
+      }
+    })
+  })
+</script>
+ -->
+{% endblock %}
+

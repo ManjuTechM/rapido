@@ -1,0 +1,272 @@
+{% extends "rapido/master/master.html" %}
+{% block body_block %}
+<div class="row">
+   {% if success %}
+   <div class="alert alert-success" role="alert">
+      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+      <span class="sr-only">Sucess:</span>
+      {{ success }}
+   </div>
+   {% endif %}
+   {% if error %}
+   <div class="alert alert-danger" role="alert">
+      <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+      <span class="sr-only">Error:</span>
+      {{ error }}
+   </div>
+   {% endif %}
+   <div class="panel panel-primary">
+      <div class="panel-heading">
+         <form class="navbar-form navbar-left" role="search"   method="post" action="/rapido/get_completedetail/"  enctype="multipart/form-data">
+            {% csrf_token %}          
+            <div class="form-group">
+               <label class="control-label col-xs-4">Enter Booking ID:</label>
+               <input type="text" class="form-control" placeholder="Search Booking ID" name="bookingid"required="">
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+         </form>
+         <br>
+         <br>
+      </div>
+   </div>
+</div>
+<div class="panel panel-primary">
+   <div class="panel-heading">Booking Detail</div>
+   <div class="panel-body">
+      <div class="col-md-4">
+         <div class="table-responsive">
+            <table class="table">
+               <tbody>
+                  <tr>
+                     <td>Booking ID : RTIPL-{{booking.servicing_city.city_code}}-{{booking.booking_id}}</td>
+                  </tr>
+                  <tr>
+                     <td>Company : {{booking.company}}</td>
+                  </tr>
+                  <tr>
+                     <td>Booker Name : {{booking.booking_from}}</td>
+                  </tr>
+                  <tr>
+                     <td>Booker Email-ID : {{booking.booking_email}}
+
+                      {% if booking.bookingsms.emailsent == 1 %}
+                      <i style="color: green" class="fa fa-address-card-o green"></i> Sent
+                      {% endif %}
+                      {% if booking.bookingsms.emailsent == 0 %}
+                      <i style="color: red" class="fa fa-address-card-o red"></i> Not sent                   {% endif %}
+                     </td>
+
+                  </tr>
+                  <tr>
+                     <td>Booker Phone No. : {{booking.booking_phoneno}} </td>
+                  </tr>
+                  <tr>
+                     <td>Guest Name : {{booking.guest_name}} </td>
+                  </tr>
+                  <tr>
+                     <td> Phone No : {{booking.guest_phoneno}} 
+                     {% if booking.bookingsms.smssent == 1 %}
+                      <i style="color: green" class="fa fa-address-card-o green"></i> Sent
+                      {% endif %}
+                      {% if booking.bookingsms.smssent == 0 %}
+                      <i style="color: red" class="fa fa-address-card-o red"></i> Not sent                   {% endif %}
+                     </td>
+
+                  </tr>
+                  <tr>
+                     <td> Guest Email : {{booking.guest_email}} </td>
+                  </tr>
+                  <tr>
+                     <td> Requested Vehicle : {{booking.requested_vehicle_model}} </td>
+                  </tr>
+
+               </tbody>
+            </table>
+         </div>
+      </div>
+      <div class="col-md-4">
+         <div class="table-responsive">
+            <table class="table">
+               <tbody>
+                  <tr>
+                     <td>Service Type: {{booking.service_type}} </td>
+                  </tr>
+                  <tr>
+                     <td>Booking Date: {{booking.pickup_date_time|date}} </td>
+                  </tr>
+                  <tr>
+                     <td>Pickup Time: {{booking.pickup_date_time|time}} </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        Pickup Address:
+                        <p>{{booking.pick_up_location}}</p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        Drop Address:
+                        <p>{{booking.drop_location}}</p>
+                     </td>
+                  </tr>
+                  <tr>
+                     <td>
+                        special Intruction:
+                        <p>{{booking.comment}}</p>
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
+         </div>
+      </div>
+      <div class="col-md-4">
+         <div class="table-responsive">
+            <table class="table">
+               <tbody>
+                  <tr>
+                     <td>Created By : {{booking.created_by}} </td>
+                  </tr>
+                  <tr>
+                     <td>Created On : {{booking.created_date}} </td>
+                  </tr>
+                  <tr>
+                     <td>Last Changes Done by : {{booking.updated_by}}</td>
+                  </tr>
+                  <tr>
+                     <td>Last Changes Done on : {{booking.updated_date}}</td>
+                  </tr>
+                   
+                  <tr>
+                     <td>Present Status. : {{booking.status}} </td>
+                  </tr>
+                  <tr>
+                     <td>Reason for Change : {{booking.remaks}}</td>
+                  </tr>
+                  <tr>
+                     <td>
+                        Remarks:
+                        <p>{{booking.remarks}}</p>
+                     </td>
+                  </tr>
+
+               </tbody>
+            </table>
+         </div>
+      </div>
+   </div>
+</div>
+<div class="panel panel-primary">
+   <div class="panel-heading">Trip Details</div>
+   <div class="panel-body">
+     
+      <div class="col-md-4">
+         <div class="table-responsive">
+            <table class="table">
+               <tbody>
+                  <tr>
+                     <td>Trip ID : {{booking.dutyslip.booking.booking_id}}</td>
+                  </tr>
+                  <tr>
+                     <td>vendor Name : {{booking.dutyslip.vendor}}</td>
+                  </tr>
+                  <tr>
+                     <td>chauffeur Name : {{booking.dutyslip.chauffeur_name}}</td>
+                  </tr>
+                  <tr>
+                     <td>chauffeur Phone No. : {{booking.dutyslip.chauffeur_phoneno}}
+                      {% if booking.dutyslip.dutyslipsms.driversmssent == 1 %}
+                      <i style="color: green" class="fa fa-address-card-o green"></i> Sent
+                      {% endif %}
+                      {% if booking.dutyslip.dutyslipsms.driversmssent == 0 %}
+                      <i style="color: red" class="fa fa-address-card-o red"></i> Not sent                   {% endif %}
+
+                      </td>
+                  </tr>
+                  <tr>
+                     <td>Vehicle Model : {{booking.dutyslip.allocated_vehicle}} </td>
+                  </tr>
+                  <tr>
+                     <td> Vehicle No : {{booking.dutyslip.vehicle_no}} </td>
+                  </tr>
+                  <tr>
+                     <td>Trip SMS for User:
+
+                      {% if booking.dutyslip.dutyslipsms.usersmssent == 1 %}
+                      <i style="color: green" class="fa fa-address-card-o green"></i> Sent
+                       {% endif %}
+                      {% if booking.dutyslip.dutyslipsms.usersmssent == 0 %}
+                      <i style="color: red" class="fa fa-address-card-o red"></i> Not sent                   {% endif %}
+
+                      </td>
+                  </tr>
+                  <tr>
+                     <td>Trip E-mail for User:
+                      {% if booking.dutyslip.dutyslipsms.emailsent == 1 %}
+                      <i style="color: green" class="fa fa-address-card-o green"></i> Sent
+                      {% endif %}
+                      {% if booking.dutyslip.dutyslipsms.emailsent == 0 %}
+                      <i style="color: red" class="fa fa-address-card-o red"></i> Not sent                   {% endif %}
+
+                      </td>
+                  </tr>
+
+               </tbody>
+            </table>
+         </div>
+      </div>
+
+      <div class="col-md-4">
+         <div class="table-responsive">
+            <table class="table">
+               <tbody>
+                  <tr>
+                     <td>Created By : {{booking.dutyslip.created_by}} </td>
+                  </tr>
+                  <tr>
+                     <td>Created On : {{booking.dutyslip.created_date}} </td>
+                  </tr>
+                  <tr>
+                     <td>Last Changes Done by : {{booking.dutyslip.updated_by}}</td>
+                  </tr>
+                  <tr>
+                     <td>Last Changes Done on : {{booking.dutyslip.updated_date}}</td>
+                  </tr>
+                   
+                  <tr>
+                     <td>Present Status. : {{booking.dutyslip.status}} </td>
+                  </tr>
+                  <tr>
+                     <td>Reason for Change : {{booking.dutyslip.remaks}}</td>
+                  </tr>
+                  <tr>
+                     <td>
+                        Remarks:
+                        <p>{{booking.dutyslip.remarks}}</p>
+                     </td>
+                  </tr>
+
+               </tbody>
+            </table>
+         </div>
+      </div>
+
+      <div class="col-md-4">
+         <div class="table-responsive">
+            <table class="table">
+               <tbody>
+                  <tr>
+                     <td>
+                        SMS Sent For Other: {% for i in smsdetails %}
+                        <p>phone no :{{i.phoneno}}===>: {{i.message}} </p>
+                        {% endfor %}
+                     </td>
+                  </tr>
+               </tbody>
+            </table>
+         </div>
+      </div>
+
+   </div>
+</div>
+
+{% endblock %}

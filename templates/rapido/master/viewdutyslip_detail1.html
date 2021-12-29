@@ -1,0 +1,272 @@
+{% extends "rapido/master/master.html" %}
+{% block body_block %}
+<style type="text/css">
+  #result {
+   position: absolute;
+   cursor: pointer;
+   overflow-y: auto;
+   max-height: 400px;
+   box-sizing: border-box;
+   z-index: 1001;
+  }
+  .link-class:hover{
+   background-color:#f1f1f1;
+  }
+
+.inputs { width: 34px; }
+
+
+  input.error{
+    border-color: red;
+  }
+
+  label.error{
+    color: red;
+    font-weight: 300 !important;
+  }
+   </style>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading" style="padding: 1px 25px;">
+      <h4> Edit DutySlip No. {{booking.booking_id}}
+      <span class="pull-right">Type of Service:{{booking.service_type}}</span></h4> 
+      </div>
+            <!-- /.panel-heading -->
+      <div class="panel-body">
+              <table class="table">
+                  <tr style="border: 1px ;background-color: #dddddd;">
+                    <th>Date of Booking:</th> <td>{{booking.created_date}}</td>
+
+                    <th>Booking ID:</th><td>RTPL-{{booking.servicing_city.city_code}}-{{booking.booking_id}}</td>
+                    
+                    <th>category : </th> <td>{{booking.category}}</td>
+
+                  </tr>
+                  <tr>
+                    <th>Booking from:</th><td>{{booking.booking_from}}</td>
+                    <th>Booking Email:</th> <td>{{booking.booking_email}}</td>
+                    <th>Booking Phone no:</th><td>{{booking.booking_phoneno}}</td>
+                  </tr>
+                  <tr>
+                    <th>Guest Name:</th><td>{{booking.guest_name}} </td>
+                    <th>Guest Phone No:</th><td>{{booking.guest_phoneno}}</td>
+                    <th>Guest Email:</th><td>{{booking.guest_email}}</td>  
+                  </tr>
+                  <tr>
+                    <th>PickUp date & time</th><td><li>{{booking.pickup_date_time.date }}</li><li>{{booking.pickup_date_time.time}}</li> </td>
+                    <th> pickup location</th>
+                    <td>{{booking.pick_up_location}} </td>
+                  </tr>
+                  <tr>
+                    <th> drop location</th>
+                    <td>{{booking.drop_location}} </td>
+
+                  <!--     <td><li>{{booking.drop_location.street_address}},{{booking.drop_location.area}},{{booking.drop_location.city}},{{booking.drop_location.state}}</li><li>{{booking.drop_location.pincode}}</li>
+                      </td>
+                      <th> land mark</th><td>{{booking.drop_location.landmark}}</td>
+ -->
+                    <th> requested vehicle</th><td>{{booking.requested_vehicle_model}}</td>
+                 
+                  </tr>
+                  </table>
+                  <hr>
+                  <h5> Allocate the Vehicle and chauffeur</h5>
+                  <hr>
+
+<!-- <form class="form-item span8" id="item_form" method="post" action="/rapido/admin_createdutyslip/{{booking.booking_id}}/" enctype="multipart/form-data">
+
+          {% csrf_token %}          
+
+                  <table>
+                      <input type="hidden" value={{booking.category.id}} name="category"></input>
+                      <tr style="border: 1px ;background-color: #dddddd;">                      
+                      <th>Select Vendor:</th>
+                      <td>
+    <input type="text" id="vensearch" placeholder="Select vendor" class="form-control" required/>
+
+    <input type="text" id="vendorid" style="display: none;" name="vendor">
+
+   <ul class="list-group" id="result"></ul>
+                      </td>
+
+
+                      <th>Vehicle Model:</th>
+                      <td><input type="text" class="form-control" name="allocated_vehicle" placeholder="vehicle model name" required=""></td>
+                 
+
+                      <th>vehicle No:</th>
+                      <td><input name="vehicle_no" placeholder="AA 99 AA 9999" pattern="^[A-Z]{2}[ -][0-9]{1,2}(?: [A-Z])?(?: [A-Z]*)? [0-9]{4}$" title="please enter No in AA 99 AA 9999 formate" />
+                      </td>
+                      
+
+                      <th>vehicle Colour:</th>
+                      <td><input type="text" class="form-control" name="vehicle_colour" placeholder="vehicle colour" required=""></td>
+                      </tr>
+                      
+                      <tr>
+                        <td>chauffeur Name:</td>
+                        <td><input type="text" class="form-control" placeholder="chauffeur Name" name="chauffeur_name"  required=""></td>
+                        <td>chauffeur phoneno:</td>
+                        <td><input type="text" class="form-control" placeholder="chauffeur phoneno" name="chauffeur_phoneno" pattern="[0-9]{10}" maxlength="10" min="7000000000" max="9999999999" required=""  ></td>
+                        <td>chauffeur Drivinglicense:</td>
+                        <td><input type="text" class="form-control" placeholder="chauffeur Drivinglicense" name="chauffeur_drivinglicense" required=""></td>
+                      </tr>          
+                      <tr>
+                      <td><button class="btn btn-success">Assign</button></td>
+                  </tr>
+              </table>
+          </form> -->
+
+<form id="cab_assign_form">
+
+  <table>
+        <input type="hidden" value={{booking.category.id}} name="category"></input>
+        <tr style="border: 1px ;background-color: #dddddd;">
+            <th>Select Vendor:</th>
+            <td>
+
+                <input type="text" id="vensearch" value="{{booking.dutyslip.vendor.vendor_name}} | {{booking.dutyslip.vendor}}" placeholder="Select vendor" class="form-control" required/>
+
+                <input type="text" style="display: none;" value="{{booking.dutyslip.vendor_id}}" id="vendorid" name="vendor">
+
+                <ul class="list-group" id="result"></ul>
+            </td>
+
+
+            <th>Vehicle Model:</th>
+            <td><input type="text" class="form-control" id="vehicle_model" value="{{booking.dutyslip.allocated_vehicle}}" name="allocated_vehicle" placeholder="vehicle model name" required=""></td>
+
+
+            <th>vehicle No:</th>
+            <td><input name="vehicle_no" placeholder="AA 99 AA 9999" id="vehicle_no" pattern="^[A-Z]{2}[ -][0-9]{1,2}(?: [A-Z])?(?: [A-Z]*)? [0-9]{4}$" value="{{booking.dutyslip.vehicle_no}}" title="please enter No in AA 99 AA 9999 formate" />
+            </td>
+
+
+            <th>vehicle Colour:</th>
+            <td><input type="text" class="form-control" value="{{booking.dutyslip.vehicle_colour}}" id="vehicle_color" name="vehicle_colour" placeholder="vehicle colour" required=""></td>
+        </tr>
+
+        <tr>
+            <td>chauffeur Name:</td>
+            <td><input type="text" class="form-control" value="{{booking.dutyslip.chauffeur_name}}" id="chauffeur_name" placeholder="chauffeur Name" name="chauffeur_name" required=""></td>
+            <td>chauffeur phoneno:</td>
+            <td><input type="text" class="form-control" value="{{booking.dutyslip.chauffeur_phoneno}}" id="chauffeur_phone" placeholder="chauffeur phoneno" name="chauffeur_phoneno" pattern="[0-9]{10}" maxlength="10" min="7000000000" max="9999999999" required=""></td>
+            <td>chauffeur Drivinglicense:</td>
+            <td><input type="text" class="form-control" value="{{booking.dutyslip.chauffeur_drivinglicense}}" id="chauffeur_dl" placeholder="chauffeur Drivinglicense" name="chauffeur_drivinglicense" required=""></td>
+        </tr>
+        <tr>
+            <td><button id="assign" class="btn btn-success">Assign</button></td>
+        </tr>
+    </table>
+</form>          
+      </div>
+     </div>
+  </div>
+
+</div>
+
+
+{% endblock %}
+
+
+{% block javascript %}
+
+<script type="text/javascript">
+  
+
+    $(function(){
+
+        $("#cab_assign_form").validate();
+
+      $( "#assign" ).click(function(e){
+        e.preventDefault();
+
+        if($("#cab_assign_form").valid()){
+
+      var assign_cab = {
+    "chauffeur_drivinglicense": $("#chauffeur_dl").val(),
+    "chauffeur_name": $("#chauffeur_name").val(),
+    "vehicle_no": $("#vehicle_no").val(),
+    "vehicle_colour": $("#vehicle_color").val(),
+    "allocated_vehicle": $("#vehicle_model").val(),
+    "chauffeur_phoneno": $("#chauffeur_phone").val(),
+    "booking": {{booking.dutyslip.id}},
+    "category":{{booking.category.id}},
+    "updated_by": {{user.id}},
+    "created_by":{{booking.created_by.id}},
+    "vendor" :parseInt($("#vendorid").val()),
+    "status":1
+      };
+
+      console.log(assign_cab);
+
+        $.ajax({
+            url: '/rapido/api/get_dutyslip_details/{{booking.id}}/',
+            method: 'PUT',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            contentType: 'application/json',
+            data: JSON.stringify(assign_cab),
+            success: function(res) {
+                swal({
+                  title:"Success!",
+                  text:"Message sent successfully",
+                  icon:"success",
+                  buttons:["Not now","Dispatch now"]
+                }).then((willDelete) => {
+                      if (willDelete) {
+                        window.location.href="/rapido/admin_dispatch_vehicle/{{booking.booking_id}}/";
+                      } else {
+                        window.location.href="/rapido/admin_dutyslip_list/";
+                      }
+                    });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                if(jqXHR.status==500 || jqXHR.status==400){
+                  swal ( "Oops" ,  "Cab is already to assigned to this booking check it in dutyslip list" ,  "error" );
+                document.getElementById("cab_assign_form").reset();
+                }
+            }
+        });
+        }
+      });
+
+    });
+
+
+
+           //vendor search
+         $(document).ready(function(){
+         $.ajaxSetup({ cache: false });
+         $('#vensearch').keyup(function(){
+         $('#result').html('');
+         $('#state').val('');
+         var searchField = $('#vensearch').val();
+         var expression = new RegExp(searchField, "i");
+         $.getJSON('/rapido/api/add_vendor/', function(data) {
+          $.each(data, function(key, value){
+           if (value.vendor_name.search(expression) != -1 || value.vendor_phoneno.search(expression) != -1)
+           {
+             $('#result').append('<li class="list-group-item link-class">'+value.vendor_name+' | '+value.vendor_phoneno+'</li>');
+             $('#vendorid').val(value.id);
+           }
+           else{
+             event.preventDefault();
+           }
+          });   
+         });
+         });
+         
+         $('#result').on('click', 'li', function() {
+         var click_text = $(this).text();
+         $('#vensearch').val(click_text);
+         $("#result").html('');
+         });
+         });
+         //vendor search
+
+</script>
+{% endblock %}

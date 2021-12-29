@@ -1,0 +1,53 @@
+{% extends "rapido/staff/staff.html" %}
+
+{% block body_block %}
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading" style="padding: 1px 15px;">
+      <h4> Bookings that are on Trip </h4>
+      </div>
+      <!-- /.panel-heading -->
+      <div class="panel-body">
+
+            <div class="table-responsive">
+              <table class="table">
+                  <tr>
+                    <th>Booking ID</th>
+                    <th>Booked from</th>
+                    <th>Type of Service</th>
+                    <th>category</th>
+                    <th>Duty slip</th>
+                    <th>duty-slip done by</th>
+                    <th>Billing Base</th>
+                    <th>status </th>
+                    <th>view details</th>
+                    <th> edit </th>
+                    <th>Dispatch now</th>
+
+                  </tr>
+                {% for b in duty_slip_list %}
+                  <tr>
+                      <td>{{b.booking.booking_id}}</td>
+                      <td>{{b.booking.booking_from}}</td>
+                      <td>{{b.booking.service_type}}</td>
+                      <td>{{b.booking.category}} </td>
+                      <td>{{b.duty_slip_id}}</td>
+                      <td>{{b.duty_slip_createdby}} </td>
+                      <td>{{b.booking.billing_base}}</td>
+                      <td>{{b.status}}</td>
+                      <td><a>  view </a> </td>
+                      <td><button class="btn btn-success">Edit</button></td>
+                      <td><a href="/rapido/generate_invoice/{{b.duty_slip_id}}/"><button class="btn btn-success">Close Trip sheet</button></td>
+                  </tr>
+                  {% endfor %}
+              </table>
+          </div>
+
+      </div>
+     </div>
+  </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,205 @@
+{% extends "rapido/company/master.html" %}
+{% block body_block %}
+{% load static %}
+
+<!-- Main content -->
+<section class="invoice">
+
+
+
+
+  <table style="width:100%;border-bottom:1px solid #a7a6a6;">
+    <tr class="logo_td">
+      <td colspan="6">
+        <h3 class="rapido">Rapido Travels India Pvt. Ltd.</h3>
+        <p>#314, 1st Floor, 12th Main, 15th Cross, <br> 5th Phase, J.P. Nagar, Bangalore - 560 078.</p>
+        <p>Ph : 080 - 26595567, 26585567</p>
+        <p>E-mail : bookings@rapidotravels.co.in</p>
+        <p>www.rapidotravels.co.in</p>
+      </td>
+      <td colspan="3"></td>
+      <td colspan="3"><img src="{% static 'images/invoice_logo.png'%}" style="float:right;"></td>
+    </tr>
+  </table>
+  
+  <table style="width:100%;">
+    <tr>
+      <td colspan="3">Company : {{ booking.company}}</td>
+      <td colspan="3">Booking No : {{booking.booking_id}} </td>
+      <td colspan="3"> </td>
+      <td colspan="3">Invoice No :INV2432 </td>
+    </tr>
+    <tr>
+      <td colspan="3">Car Used By : {{ booking.guest_name }}</td>
+      <td colspan="3"> </td>
+      <td colspan="3"> </td>
+      <td colspan="3">Invoice Date : {{ dutyslip.created_date.date }} </td>
+    </tr>   
+    <tr style="border-bottom:1px solid #a7a6a6;">
+      <td colspan="3">Booked By : {{ booking.created_by }} </td>
+      <td colspan="3">Requested Branch : {{ booking.servicing_city }} </td>
+      <td colspan="3"> </td>
+      <td colspan="3">Used In : {{ booking.servicing_city }}</td>
+    </tr>
+    <tr>
+      <td colspan="3">Car No. : {{ dutyslip.vehicle_no }}</td>
+      <td colspan="3">Car Allotted :{{ dutyslip.allocated_vehicle }} </td>
+      <td colspan="3"> </td>
+      <td colspan="3">DS No. :{{dutyslip.dutyslip_id}} </td>
+    </tr>
+    <tr>
+      <td colspan="3">Package Car : {{dutyslip.package}} </td>
+      <td colspan="3">Car Billed : {{ dutyslip.allocated_vehicle }} </td>
+      <td colspan="3"> </td>
+      <td colspan="3">Rs. : {{ dutyslip.package_rate }} </td>
+    </tr>
+    <tr>
+      <td colspan="3">KM Used : {{dutyslip.total_kms}}</td>
+      <td colspan="3">Extra KM : {{dutyslip.extra_km}}</td>
+      <td colspan="3"> </td>
+      <td colspan="3">Extra KM @ Rs : {{dutyslip.extra_km_rate}}</td>
+    </tr>
+    <tr>
+      <td colspan="3">Hr(s) Used : {{dutyslip.total_hrs}}</td>
+      <td colspan="3">Extra Hr(s) : {{dutyslip.extra_hr}} </td>
+      <td colspan="3"> </td>
+      <td colspan="3">Extra Hr(s) @ Rs : {{dutyslip.extra_hr_rate}} </td>
+    </tr>
+    <tr style="border-bottom:1px solid #a7a6a6;">
+      <td colspan="3">Car Used On : {{booking.pickup_date_time.date}} </td>
+      <td colspan="3"> </td>
+      <td colspan="3"> </td>
+      <td colspan="3"></td>
+    </tr>
+    <tr>
+      <td colspan="3">Parking & Toll : {{dutyslip.parking}} </td>
+      <td colspan="3">Other : {{dutyslip.miscellaneous}}</td>
+      <td colspan="3"> </td>
+      <td colspan="3">Fuel Surcharge Impact* : 0</td>
+    </tr>
+    <tr>
+      <td colspan="3">Out Station Allowance (Days) : {{dutyslip.daybhatta}}</td>
+      <td colspan="3">Night : {{dutyslip.nightbhatta}} </td>
+      <td colspan="3"> </td>
+      <td colspan="3">Fixed Garage Run : {{dutyslip.fgr}}</td>
+    </tr>
+    <tr style="border-bottom:1px solid #a7a6a6;">
+      <td colspan="3"> </td>
+      <td colspan="3"> </td>
+      <td colspan="3"> </td>
+      <td colspan="3">Sub Total : </td>
+    </tr>
+  </table>
+  
+  <table style="width:100%;">
+    <tr>
+      <td colspan="4">
+        <p>PAN : AAICR1074L</p>
+        <p>Service Tax No. : AAICR1074LSD001</p>
+        <p>GST NO. : 29AAICR1074LIZY</p>
+        <p>Service Tax Category : Rent-A-Cab</p>        
+      </td>
+      <td colspan="4">
+        <p> Other Charges : {{dutyslip.miscellaneous}} </p>
+        <p> Total Amount : {{dutyslip.total_amount}}  </p>
+      </td>
+    </tr>   
+  </table>
+  
+  <table style="width:100%;">   
+    <tr>
+      <td colspan="8"></td>      
+      <td colspan="4"> CGST &nbsp;  &nbsp; 2.5% : {{dutyslip.cgst_Rs}} </td>      
+    </tr>   
+    <tr>
+      <td colspan="8"></td>      
+      <td colspan="4"> SGST &nbsp;  &nbsp; 2.5% : {{dutyslip.sgst_Rs}} </td>      
+    </tr>    
+    <tr>
+      <td colspan="8">All Cheques / Drafts to be drawn in favor of Rapido Travels India Pvt. Ltd.</td>      
+      <td colspan="4"> GST &nbsp;  &nbsp; 5% : {{dutyslip.gst_Rs}} </td>      
+    </tr>
+    <tr>
+      <td colspan="8"></td>     
+      <td colspan="4">Net Payable :  {{dutyslip.amount_tobe_paid}} </td>     
+    </tr>   
+  </table>
+  
+  <table style="width:100%;">
+    <tr>
+      <td colspan="8">
+        <p style="font-weight:600 !important;">Billing Address</p>
+        <p></p>
+      </td>     
+      <td colspan="4">
+        <p style="font-weight:600 !important; text-align:center; padding-top:1%;">For Rapido Travels India Pvt. Ltd.</p>
+        <p style="text-align:center; padding-top:5%;">Authorised Signatory</p>
+      </td>     
+    </tr>
+  </table>
+  <table style="width:100%; font-size:12px !important;">
+    <tr>
+      <td colspan="12">
+        <p>1. Dutyslip / Statement of Usage enclosed in original.</p>
+        <p>2. In case of any dispute the same must be brought into our notice in writing 7 days of date of service / billing.</p>
+        <p>3. All bills must be paid within 7 days of billing or within contracted payment period to avoid levy of 18% interest.</p>
+        <p>4. All disputes are subject to Bangalore jurisdiction only.</p>
+        <p class="note">Note :- We welcome your feedback on feedback@rapidotravels.co.in</p>
+        <p>Regd. Off. #314, 1st Floor, 12th Main, 15th Cross, 5th Phase, JP Nagar, Bangalore - 560078.</p>
+      </td>         
+    </tr>
+  </table>
+
+      <!-- this row will not appear when printing -->
+      <div class="row no-print">
+        <div class="col-xs-12">
+
+          <a href="" onclick="window.print()" class="btn btn-success"><i class="fa fa-print"></i> Print</a>
+<!--           <button id="ajaxcall" class="btn btn-success"><i class="fa fa-print"></i> Print</button>
+ -->        <!--<button type="button" class="btn btn-primary pull-right" style="margin-right: 5px;">
+            <i class="fa fa-download"></i> Generate PDF
+          </button>--> 
+          </div>
+      </div>
+
+
+</section>
+
+<style type="text/css">
+  table{
+    border-spacing: 0 !important;
+    text-align: left;
+  }
+  td, th{
+    //border:1px solid #a7a6a6;
+    /*border-bottom:1px solid #a7a6a6;*/
+    font-weight:500 !important;
+    padding:6px;
+  }
+  .rapido{
+    margin-top:0 !important;
+    margin-bottom: 10px !important;
+  }
+  p{
+    margin-top: 0 !important;
+    margin-bottom:6px !important; 
+  }
+  thead img{
+    //width:100% !important;
+  }
+  .reporting{
+    border-bottom: transparent;
+    //border-right: transparent;
+    border-top: transparent;
+  }
+  .note{
+    border:1px solid #a7a6a6;
+    padding:5px;
+    text-align:center;
+    font-weight:600;
+  }
+  
+</style>
+
+
+{% endblock %}

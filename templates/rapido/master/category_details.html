@@ -1,0 +1,162 @@
+{% extends "rapido/master/master.html" %}
+
+
+{% block body_block %}
+  <ul class="nav nav-pills">
+    <li class="active"><a data-toggle="pill" href="#home">View</a></li>
+    <li><a data-toggle="pill" href="#menu1">Edit</a></li>
+    <li><a data-toggle="pill" href="#menu2">Delete</a></li>
+  </ul>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<div class="tab-content">
+
+  <div id="home" class="tab-pane fade in active">
+    <div class="row">
+      <div class="col-lg-12">
+         <h4 class="page-header">category</h4>
+      </div>
+      <!-- /.col-lg-12 -->
+      <div class="col-lg-8">
+        <div class="row">
+         
+          <div class="col-lg-6 col-md-6">
+            <div class="panel panel-primary">
+              <div class="panel-heading">
+             <h4 class="page-header">category -{{category.name}}</h4> 
+
+                <h3> <span class="pull-right"></span></h3>
+                <span class="pull-right">
+                </span>
+
+                <div class="row">
+                    <div class="col-xs">
+                      <img width=310 height=200 src="{{ category.picture.url }}" />
+                    </div>
+                </div>
+              </div>
+              <div class="panel-footer">
+                <span class="pull-left">Admin Verified STATUS</span>
+                <span class="pull-right">
+                  {% if category.is_active %}
+                  <li style="color: blue">Yes</li><br>
+                  {% else %}
+                  <form class="span8" method="post" action="/rapido/update_category/{{category.id}}/">
+                  {% csrf_token %}
+                  <input class="btn btn-primary" type="submit" name="submit" value="activate-now"/>
+                  </form>
+                  {% endif%}
+                  </span>
+              <div class="clearfix"></div>
+              </div>
+            </div>
+          </div>
+
+          </div>
+      </div>
+    </div>
+    <!-- /.row -->
+  </div>
+
+    <div id="menu1" class="tab-pane fade">
+     <div class="col-lg-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+                  Category-{{category}}
+          </div>
+          <!-- /.panel-heading -->
+          <div class="panel-body">
+            <div class="table-responsive">
+             <table class="table">
+              <form class="span6" id="category_form" method="post" action="/rapido/update_category/{{category.id}}/"  enctype="multipart/form-data">
+       
+                          {% csrf_token %}          
+              
+                          <div class="form-group">
+                          <label class="control-label col-xs-4">Category Name:</label>
+                          <div class="col-xs-6">
+                          <input type="text" class="form-control" placeholder={{category.name}} name="name" value={{category.name}}>
+                          </div>
+                          </div>
+              
+                          <div class="form-group">
+                              <label class="control-label col-xs-4">change image:</label>
+                              <div class="col-xs-6">
+                                <input  type="file" name="picture" value={{category.picture.url}}>
+                              </div>
+                          </div>
+              
+                          <div class="form-group">
+                              <label class="control-label col-xs-4">active Status:</label>
+                              <div class="col-xs-6">
+                              <select name="status">
+                              <option value="True" class="form-control">Enable / Active </option>
+                              <option value="False"class="form-control">dissable/stop</option>
+                              </select>
+                              </div>
+                          </div>
+
+                          <div class="form-group">
+                            <div class="col-xs-offset-3 col-xs-6">
+                              <input class="btn btn-outline btn-success" type="submit" value="Save">
+                              <input type="reset" class="btn btn-outline btn-primary" value="Reset">
+                            </div>
+                          </div>
+                         <br/>
+              </form>
+
+             </table>          <!-- /.table-responsive -->
+           </div>
+          </div>
+              <!-- /.panel-body -->
+          </div>
+      </div>
+ 
+
+     <div class="col-lg-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          Category Picture
+        </div>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+                                <img width=410 height=200 src="{{ category.picture.url }}" />
+
+            </div>
+                <!-- /.panel-body -->
+       </div>
+     </div>
+    </div>
+
+    <div id="menu2" class="tab-pane fade">
+  
+      <div class="col-lg-8">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+                 Delete this Category
+          </div>
+          <!-- /.panel-heading -->
+          <div class="panel-body">
+            <div class="table-responsive">
+  <p> Deleting this category affect the previous history
+if you dont want to use this category just dissable </p>
+          </div>
+          <!-- /.table-responsive -->
+
+              </div>
+              <!-- /.panel-body -->
+          </div>
+      </div>
+ 
+    </div>
+
+</div>
+
+{% endblock %}

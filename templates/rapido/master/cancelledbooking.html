@@ -1,0 +1,233 @@
+{% extends "rapido/master/master.html" %}
+{% load static %}
+
+{% block body_block %}
+      <style type="text/css">
+  .pagination{
+    margin: 0;
+  }
+    .red{color:#e60b0b}
+  .green{color:#269212}
+
+  .emailSend,.smsSend{
+    cursor: pointer;
+  }
+
+  #loader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url('{% static 'images/preloader.gif'%}') 50% 50% no-repeat rgb(249,249,249);
+    opacity: .8;
+    display: none;
+}
+
+  .actived{
+    color: black;
+    font-weight: bold;
+  }
+
+</style>
+
+    <section class="content-header">
+      <h6>
+      <ol class="breadcrumb">
+        <li>Booking</li>
+        <li class="actived">New Bookings</li>
+      </ol>
+      </h6>
+     <!--  <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Category</li>
+      </ol> -->
+
+    </section>
+
+
+<div id="loader"></div>
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <!-- /.box -->
+
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Booking</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive"> 
+
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th >Booking ID</th>
+                  <th>Company</th>
+                  <th >City</th>
+                  <th >Guest Name</th>
+                  <th >Guest PhoneNo</th>
+                  <th >Type of Service</th>
+                  <th >status</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for b in cancelled_list %}
+ 
+                    <tr class="outer_loop">
+                      <td><a href="/rapido/view_cancelledbooking_detail/{{b.booking_id}}/">RTPL-{{b.servicing_city.city_code}}-{{b.booking_id}}</a></td> 
+                      <td>{{b.company}}</td>
+                      <td>{{b.servicing_city.name}}</td>
+                      <td>{{b.guest_name}}<br>
+                        ------------
+                        {% if b.cancelsms.useremailsent == 1 %}
+                        <p onclick="sendOtherEmail({{b.id}});" title="{{b.guest_email}}" style="color: green;cursor:pointer;" class="emailSend" ><i class="fa fa-history green"></i> Resend </p>
+                        {% else %}
+                        <p onclick="sendOtherEmail({{b.id}});" title="{{b.guest_email}}" style="color: red" class="emailSend"><i class="fa fa-address-card-o red"></i> Send now </p>
+                        {% endif %}
+                      </td>
+
+                      <td>{{b.guest_phoneno}}<br>
+
+                        ---------------
+                        {% if b.cancelsms.usersmssent == 1 %}
+                        <p style="color: green;cursor:pointer;" onclick="sendOtherMessage({{b.id}});" class="smsSend" ><i class="fa fa-history green"></i> Resend </p>
+                        
+                        {% else %}
+                        <p></p>
+                        <p style="color: red" onclick="sendOtherMessage({{b.id}});" class="smsSend"><i class="fa fa-envelope-o red"></i> Send now </p>
+                        {% endif %}
+                      </td>
+                      <td>{{b.service_type}} </td>
+
+                      <td><span class="label label-warning">{{b.id}}.{{b.status}}</span></td>
+
+                  </tr>
+
+
+                  {% endfor %}
+
+                </tbody>
+              </table>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+
+
+
+        <!-- /.col -->
+
+<script type="text/javascript">
+
+  
+  // time color problem
+  x=document.getElementsByClassName("inner_loop");  // Find the element
+  y=document.getElementsByClassName("outer_loop");
+
+
+  for(var j = 0;j<y.length;j++){
+     for(var i = 0; i < x.length; i++){
+         var a = [];
+         var c = [];
+         var d = new Date();
+         var n = d.getTime();
+         a[i] = new Date(x[i].innerHTML).getTime();
+         // console.log(new Date(x[i].innerHTML));
+         var hour = Math.floor((a[i]-n)/3600000);
+         minute = new Date(x[i].innerHTML).getMinutes() - d.getMinutes();
+         // seconds = new Date(x[i].innerHTML).getSeconds() - d.getSeconds();
+         // console.log(hour+":"+minute);
+         c[i] = new Date(x[i].innerHTML).getDate()+""+(new Date(x[i].innerHTML).getMonth()+1)+""+new Date(x[i].innerHTML).getFullYear();
+         var b = d.getDate()+""+(d.getMonth()+1)+""+d.getFullYear();
+         // if((parseInt(c[i])==parseInt(b) && diff<) ||  ){
+         //     y[i].style.backgroundColor = "red";
+         // }
+         if(parseInt(c[i])==parseInt(b)){
+             if(hour<3 || hour==3 && minute==0){
+                 y[i].style.color = "red";
+             }
+             else if(hour>=3 && hour<5){
+              y[i].style.color = "green";
+             }
+         }
+         else if(new Date(x[i].innerHTML).getDate()-d.getDate()==1){
+             if(hour<3 && hour>=0 || hour==3 && minute==0){
+                 y[i].style.color = "red";
+             }
+         }
+     }
+  }
+</script>
+
+{% endblock %}
+
+{% block javascript %}
+
+<script>
+
+$(function () {
+  $('#example1').DataTable({
+  dom: "<'row'<'col-sm-2'l><'col-sm-3'f><'col-sm-4 toolbar'><'col-sm-3'p>>" +
+"<'row'<'col-sm-12'tr>>" +
+"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+ });
+
+$("div.toolbar").html('<div id="reportrange" data-url="#" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;<span></span> <b class="caret"></b></div>');
+  //search implementation
+});
+
+//date range picker 
+$(function() {
+
+var start = moment();
+var end = moment();
+var startDate;
+var endDate;
+var url;
+
+function cb(start, end) {
+$('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+startDate = start.format('YYYY-MM-DD');
+endDate = end.format('YYYY-MM-DD');
+// console.log(startDate);
+// console.log(endDate);
+
+// $.get(url,function(data){
+
+//   console.log(data);
+//   // $("html").html(data);
+// });
+}
+
+$('#reportrange').daterangepicker({
+startDate: start,
+endDate: end
+}, cb);
+
+$('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+console.log(picker.startDate.format('YYYY-MM-DD'));
+console.log(picker.endDate.format('YYYY-MM-DD'));
+dataUrl = $("#reportrange").attr("data-url");
+url=dataUrl+startDate+"/"+endDate+"/";
+console.log(url);
+location.href=url;
+
+});
+
+cb(start, end);
+// location.href=url;
+
+});
+
+</script>
+
+{% endblock %}

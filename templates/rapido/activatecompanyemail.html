@@ -1,0 +1,168 @@
+{% load static %}
+
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<title>Rapido</title>	
+	<link rel='shortcut icon' type='image/x-icon' href="images/fave-icon.png">	
+</head>
+<body>
+	<header>
+		<div class="logo"><a href="index.html" class="active"><img src="images/main_logo.png"></a></div>
+		<div class="callus">
+			<ul>
+				<li>
+					<a href="tel:080-26595567"> <img src="images/phone.png">
+						<span>
+							<span>Call us 24 x 7</span> </br>
+							<label>080-26595567</label>
+						</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</header>
+	<section class="section_1">
+		<div class="col-md-6 col-text">
+			<h1> Thank you for connecting with Rapido </h1>
+			<p>We value your time and also your moments, at Rapido we want to make your rides better.</p>
+		</div>
+		<div class="col-md-6 main_img">
+			<img src="images/home_img.png">
+		</div>
+	</section>
+	
+	<section class="section_2">
+		<p>Dear Sir / Madam,</p>
+		<h3>Greetings from Rapido…!</h3>
+		<p>you can login by using below user name and password you are requested not to share this with anyone. and if you find any trouble please contact us at: 080 – 26595567 or reply to this e-mail:</p>
+	</section>
+	
+	<table style="100%;">
+		<tr>
+			<td colspan="4" style="font-weight:600 !important;">User Name</td>
+			<td colspan="4">:{{company.company_name}}</td>
+		</tr>
+		<tr>
+			<td colspan="4" style="font-weight:600 !important;">password</td>
+			<td colspan="4">: abc123</td>
+		</tr>
+	</table>
+	
+	<section class="section_3">
+		<p>The chauffeur and the car details will be sent via SMS at least three hour before the reporting time. The receipt of the SMS is subject to the reach of the telecom service provider.</p>
+		<p>Please be advised of forwarding your request of continuation / next day booking or car cancellation to our central reservations team at <a href="mailto:bookings@rapditotravels.co.in ">bookings@rapditotravels.co.in</a>. Please note, we shall not be responsible for any delay / non – reporting of car if the instructions are not shared with our central reservations team.</p>
+		<p style="font-weight:600 !important;">For any assistance:</p>
+		<p>Booking / Car Details : <a href="mailto:Bookings@rapidotravels.co.in">bookings@rapidotravels.co.in</a> &nbsp; / &nbsp; <a href="mailto:pramod.cr@rapidotravels.co.in">pramod.cr@rapidotravels.co.in</a></p>
+		<p>Contact No : 7625059665 / 7625059667</p>
+		<p style="padding-top:10px;">Thanks & Regards</p>
+		<p style="font-weight:600 !important;">Rapido Travels India Pvt Ltd.,</p>		
+	</section>
+	
+	
+	
+	
+	
+</body>
+</html>
+
+<style type="text/css">
+	body{
+		display:block;
+		margin:0 auto;
+		width:700px;
+		//padding-top:2%;
+		padding-bottom:2%;
+		font-family:"Trebuchet MS", Helvetica, sans-serif !important;
+		font-size:14px !important;
+		background: #e4e3e3;
+	}
+	table{
+		border-spacing: 0 !important;
+		text-align: left;
+		margin-top: 2%;
+		margin-left: 1.9%;
+		width:100%;
+		background:white;
+	}
+	td, th{
+		border:1px solid #a7a6a6;
+		font-weight:500 !important;
+		padding:6px;
+	}	
+	p{
+		margin-top: 0 !important;
+		margin-bottom:6px !important;	
+	}	
+	header {
+		background-color: rgba(0, 0, 0, 0.8);		
+		padding-top: 4px;
+		padding-bottom: 3px;
+		padding-left: 6px;
+		height: 60px;
+		padding-right: 4px;
+	}
+	.logo img {
+		width:41%;
+	}
+	.logo{		
+		width:50%;
+		float:left;
+	}
+	.callus{
+		width:50%;
+		float:left;
+	}
+	.callus ul{
+		float:right;
+	}
+	.callus li{
+		list-style-type:none;
+	}
+	.callus a{
+		color: #fff;
+		display: inline-block;
+		text-transform: uppercase;
+		text-decoration: none;
+	}
+	.callus span{
+		display: inline-block;
+		vertical-align: middle;
+		margin-left: 5px;
+		margin-top: -14px;
+	}
+	.callus label {
+		display: block;
+		margin-bottom: 0px;
+		margin-left: 5px;
+	}
+	.section_1{
+		padding:10px;
+		background:white;
+		height:135px;
+	}
+	.col-md-6{
+		width:50%;
+		float:left;		
+	}
+	.main_img img{
+		width:100%;
+	}
+	.col-text> h1, p{
+		padding-left:12px;		
+	}
+	.col-text p{
+		line-height: 22px;
+	}
+	.section_2 h3{
+		padding-left:12px;
+	}
+	.section_3{
+		padding-top:2%;
+	}
+	
+</style>

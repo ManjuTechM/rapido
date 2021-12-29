@@ -1,0 +1,188 @@
+{% extends "rapido/staff/staff.html" %}
+{% block body_block %}
+<style>
+    .actived{
+      color: black;
+      font-weight: bold;
+    }
+</style>
+    <section class="content-header">
+      <h6>
+          <ol class="breadcrumb">
+            <li>Dutyslip</li>
+            <li class="actived">OnTrip</li>
+          </ol>
+      </h6>
+     <!--  <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Category</li>
+      </ol> -->
+    </section>
+
+   <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <!-- /.box -->
+
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Pending to receive trip sheets on
+              <span id="filterDate">{{date}}</span></h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th >Trip Date</th>
+                  <th >Booking ID</th>
+                  <th >Type of Service</th>
+                  <th>Company</th>
+                  <th >Guest name</th>
+                  <th >Chauffeur Name</th>
+                  <th >Chauffeur Phone no</th>
+                  <th >Car No $ Model</th>
+                  <th >status</th>
+                  <!-- <th >view details</th> -->
+                  <th >Receive trip sheet</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for b in dutyslip_list %}
+ 
+                    <tr>
+                      <td>{{b.created_date.date}}</td>
+            
+                      <td class="test_id">RTIPL-{{b.booking.servicing_city.city_code}}-{{b.booking.booking_id}}</td> 
+
+                      <td>{{b.booking.service_type}} </td>
+                      <td>{{b.booking.company}}</td>
+                      <td>{{b.booking.guest_name}}</td>
+                      <td>{{b.chauffeur_name}} </td>
+                      <td>{{b.chauffeur_phoneno}}</td>
+                      <td>{{b.vehicle_no}} , {{b.allocated_vehicle}} </td>
+                      <td><span class="label label-success">{{b.status}}</span></td>
+                      <!-- <td><a href=""><span class="label label-primary">view</span></a></td>  -->
+                 
+                      <td><button onclick="call('{{b.booking.booking_id}}')" class="receive_trip btn btn-success">Receive</button></td>
+                                      
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+
+
+
+{% endblock %}
+
+{% block javascript %}
+
+  <script>
+
+$(function () {
+  $('#example1').DataTable({
+  dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-3 toolbar'><'col-sm-3'p>>" +
+"<'row'<'col-sm-12'tr>>" +
+"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+ });
+
+$("div.toolbar").html('<div id="reportrange" data-url="/rapido/staff_receivetrip_list/" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;<span></span> <b class="caret"></b></div>');
+  //search implementation
+});
+
+//date range picker 
+$(function() {
+
+var start = ($("#filterDate").text()=="")?moment():moment($("#filterDate").text());
+var end = moment();
+var startDate;
+var endDate;
+var url;
+
+function cb(start, end) {
+$('#reportrange span').html(start.format('MMMM D, YYYY'));
+startDate = start.format('YYYY-MM-DD');
+endDate = end.format('YYYY-MM-DD');
+// console.log(startDate);
+// console.log(endDate);
+
+// $.get(url,function(data){
+
+//   console.log(data);
+//   // $("html").html(data);
+// });
+}
+
+$('#reportrange').daterangepicker({
+startDate: start,
+singleDatePicker:true
+}, cb);
+
+$('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+console.log(picker.startDate.format('YYYY-MM-DD'));
+console.log(picker.endDate.format('YYYY-MM-DD'));
+dataUrl = $("#reportrange").attr("data-url");
+url=dataUrl+startDate+"/"+endDate+"/";
+console.log(url);
+location.href=url;
+
+});
+
+cb(start, end);
+// location.href=url;
+
+});
+
+
+
+         function call(res){
+          var url="/rapido/receive_tripsheet/"+res;
+
+        $.ajax({
+            url: url,
+            method: 'GET',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            contentType: 'application/json',
+            success: function(result) {
+                swal({
+                  title:"Trip Sheet Received!",
+                  text:"Do you want to close trip sheet now?",
+                  icon:"success",
+                  buttons:["Not now","Close trip"]
+                }).then((willDelete) => {
+                      if (willDelete) {
+                        window.location.href="/rapido/staff_closetrip/"+res;
+
+                      } else {
+                        window.location.href="/rapido/staff_receivetrip_list/";
+                      }
+                    });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                if(jqXHR.status==500 || jqXHR.status==400){
+                  swal ( "Oops" ,  "Cab is already to assigned to this booking check it in dutyslip list" ,  "error" );
+                }
+            }
+        });
+
+         }
+
+  </script>
+
+
+
+
+{% endblock %}

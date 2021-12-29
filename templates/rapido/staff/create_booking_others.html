@@ -1,0 +1,446 @@
+{% extends "rapido/staff/staff.html" %}
+{% block body_block %}
+{% load static %}
+      <link rel="stylesheet" href="{% static 'dist/css/bootstrap-datetimepicker2.css' %}">
+<style type="text/css">
+  #result {
+   position: absolute;
+   cursor: pointer; 
+   overflow-y: auto;
+   max-height: 400px;
+   box-sizing: border-box;
+   z-index: 1001;
+  }
+  .link-class:hover{
+   background-color:#f1f1f1;
+  }
+
+  input.error{
+    border-color: red;
+  }
+
+  label.error{
+    color: red;
+    font-weight: 300 !important;
+  }
+
+  .checkbox-inline{
+    font-size: 18px;
+  }
+     
+  .actived{
+    color: black;
+    font-weight: bold;
+  }
+</style>
+    <section class="content-header">
+      <h6>
+          <ol class="breadcrumb">
+            <li>Create Booking</li>
+            <li class="actived">Others</li>
+          </ol>
+      </h6>
+    </section>
+
+<section>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading" style="padding: 1px 15px;">
+      <h4> Book A Cab </h4>
+      </div>
+      <div class="panel-body">
+        <form id="bookingform">
+      <table>
+      <br>
+ <!--          <tr>
+            <td>Booking ID:</td>
+            <td><input type="text" id="booking_id" class="form-control" placeholder="booking ID" name="booking_id" required=""></td>
+          </tr> -->
+          <tr>
+              <td>Service Type:</td>
+              <td>
+                <select name="service_type" class="form-control" id="service_type_id">
+                {% for service in service_type %}
+                <option value="{{service.id}}">{{service.name}}</option>
+                {% endfor %}
+                </select>
+              </td>
+          </tr>
+
+          <tr>
+              <td>Service needed In:</td>
+              <td>
+                <select name="city" class="form-control" id="city_id">
+                {% for c in service_place %}
+                <option value={{c.id}}>{{c.name}}</option>
+                {% endfor %}
+                </select>
+              </td>
+          </tr>
+
+          <tr>
+              <td>Vehicle category:</td>
+              <td>
+                <select name="category" class="form-control" id="category_id">
+                <!-- {% for c in cat_list %}
+                <option value=""></option>
+                {% endfor %} -->
+                </select>
+              </td>
+          </tr>
+
+          <tr>
+            <td>Booker Name:</td>
+            <td><input type="text" id="booker_name" class="form-control" placeholder="booker name" name="booking_from" ></td>
+          </tr>
+
+          <tr>
+            <td>Booker Mobileno:</td>
+            <td><input type="text" id="booker_phone" class="form-control" placeholder="booker mobileno" name="booking_phoneno" pattern="[0-9]{10}"></td>
+          </tr>
+
+          <tr>
+            <td>Booker Email-Id:</td>
+            <td><input type="email" id="booker_email" class="form-control" placeholder="booker Email" name="booking_email"></td>
+          </tr>
+          <tr>
+            <td>Guest Name:</td>
+            <td><input type="text" id="guest_name" class="form-control" placeholder="Guest name" name="guest_name"  required=""></td>
+          </tr>
+          <tr>
+            <td>Gender:</td>
+            <td>
+               <input type="radio" name="gender" id="male"> 
+                <label for="m">Male</label>
+                
+                <input type="radio" name="gender" id="female"> 
+                <label for="f">Female</label>
+             </td>
+          </tr>
+
+          <tr>
+            <td>Guest Mobileno:</td>
+            <td><input type="text" id="guest_mobile" class="form-control" placeholder="Guest mobileno" name="guest_phoneno" maxlength="10" minlength="10" pattern="[0-9]{10}" data-msg="please enter 10 digit mobile number" required=""></td>
+          </tr>
+
+          <tr>
+            <td>Guest Email-Id:</td>
+            <td><input type="email" id="guest_email" class="form-control" placeholder="Guest Email" name="guest_email"></td>
+          </tr>
+
+              <tr>
+                <td>Pick up date & Time</td>
+                <td><input size="16" type="text" class="form-control" placeholder="MM/DD/YY HH:mm" id="datetimepicker1"></td>
+              </tr>
+
+              <tr>
+                <td>Pick-up Address:</td>
+                <td>
+             <input type="text" id="pickup_address" class="form-control" placeholder="Complete address" name="pickup_address" required=""></td>
+              </tr>
+
+              <tr>
+                <td>Drop Address:</td>
+                <td>
+             <input type="text" id="drop_address" class="form-control" placeholder="Dropping address" name="drop_address" required="">
+             </td>
+              </tr>
+              <tr>
+                <td>Vehicle Type:</td>
+                <td>
+                  <select name="requested_vehicle_model" class="form-control" id="vehicle_type">
+                  </select>
+              </td>
+              </tr>
+              <tr>
+                <td>Billing Base:</td>
+                <td>
+                  <select name="billing_base" class="form-control" id="billing_base_id">
+                  <option value="1" selected="">Direct Billing</option>
+                  </select>
+                </td>
+              </tr>
+             
+              <tr>
+                <td>Special Instruction accepted here:</td>
+                <td>
+             <input type="text" class="form-control" id="comment" placeholder="give a Note" name="comment"></td>
+              </tr>
+      <tr>
+        <td style="padding-top: 10px;padding-bottom:10px;">
+<label class="checkbox-inline"><input type="checkbox" id="sendSms" name="notify" value="Send SMS">Send SMS</label>
+</td>
+<td style="padding-top: 10px;padding-bottom:10px;">
+<label class="checkbox-inline"><input type="checkbox" id="sendEmail" name="notify" value="Send Email">Send Email</label>
+        </td>
+      </tr>
+        <tr>
+        <td><button type="button" id="save" class="btn btn-success" style="width:100%;">Book</button></td>
+        <td>
+        
+
+        <button type="reset" class="btn btn-primary" style="width:100%;">Clear</button> 
+        </td>
+        </tr>
+          </table>
+        </form>
+      </div>
+     </div>
+  </div>
+</div>
+  
+</section>
+
+{% endblock %}
+
+{% block javascript %}
+
+<script src="{% static 'dist/js/bootstrap-datetimepicker2.js' %}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDlfQ-TebMrVj3jrig4mb532dNNgBe7-IY&libraries=places&callback=initAutocomplete"
+         async defer></script>
+  <script>
+var dateform;
+
+
+
+    $(function () {
+      $('#datetimepicker1').datetimepicker({
+        format:'mm/dd/yyyy hh:ii',
+        startDate:new Date()
+      });
+    });
+
+    $(function(){
+
+        $("#bookingform").validate({
+        messages:{
+          guest_mobile:getMsg("#guest_mobile")
+        }
+      });
+
+      function getMsg(selector){
+        return $(selector).attr('data-msg');
+      }
+
+      $( "#save" ).click(function(e){
+        e.preventDefault();
+
+     var tim = $("#datetimepicker1").val();
+     var datetime = moment(tim).format("YYYY-MM-DDTHH:mm");
+     // console.log(datetime);
+
+        if($("#bookingform").valid()){
+
+      var create_booking = {
+    "booking_from": $("#booker_name").val(),
+    "booking_phoneno": $("#booker_phone").val(),
+    "booking_email": $("#booker_email").val(),
+    "guest_name": $("#guest_name").val(),
+    "guest_gender": $("input[name='gender']:checked").next('label').text(),
+    "guest_phoneno": $("#guest_mobile").val(),
+    "guest_email": $("#guest_email").val(),
+    "pickup_date_time": datetime,
+    "pick_up_location": $("#pickup_address").val(),
+    "drop_location": $("#drop_address").val(),
+    "requested_vehicle_model": $("#vehicle_type").find('option:selected').text(),
+    "comment": $("#comment").val(),
+    "created_by": {{user.id}},
+    "service_type": parseInt($("#service_type_id").find('option:selected').val()),
+    "category": parseInt($("#category_id").find('option:selected').val()),
+    "servicing_city": parseInt($("#city_id").find('option:selected').val()),
+    "billing_base": parseInt($("#billing_base_id").find('option:selected').val()),
+    "company": null,
+    "status":1
+      };
+
+        $.ajax({
+            url: '/rapido/api/get_bookings_list/',
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            contentType: 'application/json',
+            data: JSON.stringify(create_booking),
+            success: function(res) {
+                swal({
+                  title:"Booking done successfully!",
+                  text:"your booking ID is RTIPL-"+res.booking_id,
+                  icon:"success"
+                }).then(function(){
+                  if($("#sendEmail").prop("checked")==true && $("#sendSms").prop("checked")==true){
+                        $.getJSON('/rapido/sendbookingemail/'+res.id+'/', function(emailRes) {
+                          console.log(emailRes);
+                        });
+
+                        $.getJSON('/rapido/sendbookingsms/'+res.id+'/', function(smsRes) {
+                          if(smsRes.status==200){
+                            var response = true;
+                          }
+                        });
+                      }
+
+                 else if($("#sendEmail").prop("checked")==true){
+                        
+                        $.getJSON('/rapido/sendbookingemail/'+res.id+'/', function(emailRes) {
+                          console.log(emailRes);
+                        });
+                  } 
+
+                  else if($("#sendSms").prop("checked")==true){
+                          
+                        $.getJSON('/rapido/sendbookingsms/'+res.id+'/', function(smsRes) {
+                          if(smsRes.status==200){
+                            var response = true;
+                          }
+                        });
+                      }
+                  });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                if(jqXHR.status==400 || jqXHR.status==404 || jqXHR.status==500){
+                  swal ( "Oops" ,  "Something went wrong! Please try again" ,  "error" );
+                document.getElementById("bookingform").reset();
+                }
+            }
+        });
+        }
+      });
+
+    });
+
+var cityId,serviceTypeId,categoryJson = [];
+var categoryId,array = [],vehicle_varient;
+
+  // $('#service_type_id,#search,#city_id,#category_id').on('click',function(){
+    
+
+  // });
+
+$('#service_type_id,#city_id').on('click change focus',function(){
+  cityId = parseInt($("#city_id").find('option:selected').val());
+  serviceTypeId = parseInt($("#service_type_id").find('option:selected').val());
+
+  switch(serviceTypeId){
+    case 1: getCategoryId('/rapido/api/airportratecardbycity/',cityId);
+      break;
+    case 2: getCategoryId('/rapido/api/outstationratecardbycity/',cityId);
+      break;
+    case 3: getCategoryId('/rapido/api/cityratecardbycity/',cityId);
+      break;
+  }
+
+});
+
+  function getCategoryId(url,cityid){
+    $.getJSON(url + cityid, function(data) {
+            // console.log(cityid);
+            var j = false;
+          $.each(data, function(key, value) {
+            if ($('#category_id option[value="' + data[key].category.id + '"]').length == 0){
+                $('#category_id').append($('<option>', { 
+                  value: value.category.id,
+                  text : value.category.name 
+              }));
+            }
+            j= true;
+          });
+          if(j==false){
+            $('#category_id').empty();
+          }
+        });
+
+  }
+
+
+$('#category_id').on('click change focus',function(){
+categoryId = parseInt($("#category_id").find('option:selected').val());
+  switch(serviceTypeId){
+    case 1:getVehicle('/rapido/api/airportprice/',cityId,categoryId);
+      break;
+
+    case 2:getVehicle('/rapido/api/outstationprice/',cityId,categoryId)
+      break;
+
+    case 3:getVehicle('/rapido/api/cityprice/',cityId,categoryId);
+      break;
+
+  }
+});
+
+  function getVehicle(url,cityid,categoryid){
+  $('#vehicle_type').length = 0;
+        $.getJSON(url+cityid+'/'+categoryid,function(data)
+        {
+          var j = false;
+          $.each(data, function(key, value){
+
+            vehicle_varient = value.vehicle_varient;
+            array = vehicle_varient.split(',');
+            // console.log(array);  
+          
+          });
+
+          $.each(array,function(i){
+            if($('#vehicle_type option:contains('+array[i]+')').length==0){
+              
+            $('#vehicle_type').append('<option value="'+i+'">'+array[i]+'</option>');
+            }
+            j = true;
+          });
+
+          if(j==false){
+            $('#vehicle_type').empty();
+          }
+
+
+        });
+
+  }
+
+
+         //google location implementation
+
+
+
+var placeSearch, pickAddress,dropAddress, geocoder;
+
+function initAutocomplete() {
+  geocoder = new google.maps.Geocoder();
+  pickAddress = new google.maps.places.Autocomplete(
+      (document.getElementById('pickup_address'))/*,
+      {types: ['(cities)']}*/);
+
+  dropAddress = new google.maps.places.Autocomplete(
+      (document.getElementById('drop_address'))/*,
+      {types: ['(cities)']}*/);
+  dropAddress.addListener('place_changed',dropFillAddress);
+  pickAddress.addListener('place_changed', pickFillAddress);
+}
+
+function codeAddress(address) {
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == 'OK') {
+        console.log(results[0].geometry.location);
+      } else {
+        console.log('Geocode was not successful for the following reason: ' + status);
+      }
+    });
+  }
+
+function pickFillAddress() {
+  var place = pickAddress.getPlace();
+  // console.log(place.place_id);
+  //   codeAddress(document.getElementById('autocomplete').value);
+}
+
+
+function dropFillAddress() {
+  var newPlace = dropAddress.getPlace();
+  // console.log(newPlace.place_id);
+  //   codeAddress(document.getElementById('autocomplete').value);
+}
+//google location implementation ends
+  </script>
+
+{% endblock %}

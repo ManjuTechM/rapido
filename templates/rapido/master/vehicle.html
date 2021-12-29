@@ -1,0 +1,97 @@
+
+{% extends "rapido/master/master.html" %}
+{% block body_block %}
+<section class="content-header">
+   <h6>
+      <ol class="breadcrumb">
+         <li><a href="/rapido/master/"><i class="fa fa-dashboard"></i> Home</a></li>
+         <li class="active">Vehicle</li>
+         <li class="add_vehicle">
+            <a href="/rapido/add_vehicle/">
+            Add Vehicle</a>
+         </li>
+      </ol>
+   </h6>
+   <!--  <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">Category</li>
+      </ol> -->
+</section>
+<section class="content">
+   <div class="row">
+      <div class="col-xs-12">
+         <!-- /.box -->
+         <div class="box">
+            <div class="box-header">
+               <h3 class="box-title">Vehicle list</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+               <div class="table-responsive">
+                  <table id="example1" class="table table-bordered table-striped">
+                     <thead>
+                        <tr>
+                           <th>Vehicle Model</th>
+                           <th>vehicle colour</th>
+                           <th>Vehicle Belongs to</th>
+                           <th>vendor Phone no</th>
+                           <th>Vehicle No</th>
+                           <th>Seat Capacity</th>
+                           <th>Insurance expire date</th>
+                           <th>Vehicle engine no</th>
+                           <th>owner name & Phone no</th>
+                           <th>Edit</th>
+                           <th>View full details</th>
+                        </tr>
+                     </thead>
+                     <tbody>
+                        {% for v in vehicle_list %}
+                        <tr>
+                           <td>{{v.vehicle_modelname}}</td>
+                           <td>{{ v.vehicle_colour }}</td>
+                           <td>{{v.vehicle_belongsto.vendor_name}} , {{v.vehicle_belongsto.vendor_address.city}}</td>
+                           <td>{{v.vehicle_belongsto.vendor_phoneno}}</td>
+                           <td>{{v.vehicle_no}}</td>
+                           <td>{{v.seat_capacity}}</td>
+                           <td>{{v.insurance_expire_date}}</td>
+                           <td>{{ v.vehicle_engine_no }}</td>
+                           <td>{{ v.vehicle_ownername }},{{ v.vehicle_owner_phoneno}} </td>
+                           <td>Edit Details</td>
+                           <td><a href=""> view </a></td>
+                        </tr>
+                        {% endfor %}
+                     </tbody>
+                  </table>
+               </div>
+            </div>
+            <!-- /.box-body -->
+         </div>
+         <!-- /.box -->
+      </div>
+      <!-- /.col -->
+   </div>
+   <!-- /.row -->
+</section>
+{% endblock %}
+
+
+
+{% block javascript %}
+
+  <script>
+
+         $(function () {
+           $('#example1').DataTable({
+           dom: "<'row'<'col-sm-4'l><'col-sm-4'f><'col-sm-4'p>>" +
+         "<'row'<'col-sm-12'tr>>" +
+         "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+          });
+         
+           //search implementation
+         });
+
+  </script>
+
+  
+
+{% endblock %}

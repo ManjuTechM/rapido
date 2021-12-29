@@ -1,0 +1,262 @@
+{% extends "rapido/master/master.html" %}
+
+{% block body_block %}
+        <section class="content-header">
+          <h6>
+          <ol class="breadcrumb">
+            <li><a href="/rapido/master/"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Client</li>
+            <li><a href="/rapido/add_company_client/"> Add new client</a></li>
+          </ol>
+          </h6>
+        </section>
+
+
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <!-- /.box -->
+
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Company list</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                <th>Company-Type</th>
+                <th>Name</th>
+                <th>Phone no</th>
+                <th>E-mail</th>
+                <th>Address</th>
+                <th>Aggreement start-date</th>
+                <th>Aggreement end-date</th>
+                <th>documents</th>
+                <th>Manager name & phone no</th>
+                <!-- <th> Price set</th> -->
+                <th>Edit</th>
+                <th> View full details</th>
+                </tr>
+                </thead>
+                <tbody>
+        {% for v in company_client_list %}
+              <tr>
+                <td>{{v.company_type}}</td>
+                <td>{{v.company_name}}</td>
+                <td>{{v.company_phoneno}}</td>
+                <td>{{v.company_email}}</td>
+                <td>{{v.company_address.city}}, {{v.company_address.state}}</td>
+                <td>{{v.company_agreement_start_date}}</td>
+                <td>{{v.company_agreement_end_date}}</td>
+
+                {% if v.company_documents %}
+                <td  >yes</td>
+                {% else %}
+                <td  >No</td>
+                {% endif %}
+
+                <td>{{ v.company_manager_name }}, {{ v.company_manager_mobileno }} </td>
+                <!-- <td>{{ v.vehicle_ownername }},{{ v.vehicle_owner_phoneno}} </td> -->
+                <td><a href=""><span class="label label-primary">Edit Details</span></a></td> 
+                <td><a href="/rapido/admin_companydetail/{{v.id}}/"> view </a></td>             
+              </tr>
+            {% endfor %}
+               
+                </tbody>
+              </table>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+
+      <div class="row vendor_table">
+        <div class="table-responsive">
+          <table class="table table-bordered">
+            <thead class="bg-primary">
+              <tr>
+              </tr>
+            </thead>
+            <tbody>
+
+              
+            </tbody>
+          </table>
+        
+        </div>
+        
+      </div> <!-- row 2 -->
+
+
+                    {% if v.company_logo %}
+                      <img width=50 height=50 src="{{ v.company_logo.url }}"class="img-circle" />
+                    {% endif %}
+
+                <span class="pull-right">{{v.user.id}}
+                <a href="/rapido/set_client_rate_card/{{v.user.id}}/"> Edit</a>
+                </span>
+              <div class="clearfix"></div>
+            </div>
+            </div>
+            </div>
+          </div>  
+</div>
+
+  <!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+  <!-- Modal content-->
+    <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h3 class="modal-title">Add new Client</h3>
+          </div>
+        
+        <div class="modal-body">
+
+         <form class="form-item span8" id="item_form" method="post"
+             action="/rapido/company_client/" enctype="multipart/form-data">
+
+            {% csrf_token %}          
+      <table>
+      <br>
+          <tr>
+            <td>Company  Name:</td>
+            <td><input type="text" class="form-control" placeholder="company Name" name="company_name"  required=""></td>
+          </tr>
+          <tr>
+            <td>company type:</td>
+            <td>
+                <select name="company_type">
+            <option value="IT" selected class="form-control">IT</option>
+            <option value="Non IT" class="form-control">Non IT</option> 
+            <option value="Manufacturing" class="form-control">Manufacturing</option> 
+               </select>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Company logo:</td>
+            <td><input type="file" name="company_logo"></td>
+          </tr>
+
+          <tr>
+            <td>Company Email:</td>
+            <td><input type="email" placeholder=" Company Email id" name="company_email"></td>
+          </tr>
+
+          <tr>
+            <td>company phoneno:</td>
+            <td><input type="text" class="form-control" placeholder="company phoneno" name="company_phoneno" pattern="[0-9]*" maxlength="10" required=""  ></td>
+          </tr>
+
+          <tr>
+            <td>company Manager Name:</td>
+            <td><input type="text" class="form-control" placeholder="company_manager_name" name="company_manager_name"  required=""></td>
+          </tr>
+
+              <tr>
+                <td>company_manager_mobileno:</td>
+                <td><input type="text" class="form-control" placeholder="company_manager_mobileno" name="company_manager_mobileno" pattern="[0-9]{10}" maxlength="10" min="7000000000" max="9999999999" required=""  ></td>
+              </tr>
+
+              <tr>
+                <td>company manager Email-Id:</td>
+                <td><input type="email" class="form-control" placeholder="Manager Email" name="company_manager_email" required=""></td>
+              </tr>
+
+                <tr>
+                <td rowspan="3">Address</td>
+                <td>street name/no:<input type="text" class="form-control" placeholder="street_address" name="street_address"  required=""></td>
+                <td>landmark:<input type="text" class="form-control" placeholder="landmark" name="landmark"  required=""></td>
+              </tr>
+              <tr>
+                <td>area:<input type="text" class="form-control" placeholder="area" name="area"  required=""></td>
+                <td>city:<input type="text" class="form-control" placeholder="city" name="city"  required=""></td>
+              </tr>
+              <tr>
+                <td>state:<input type="text" class="form-control" placeholder="state" name="state" required=""></td>
+                <td>Country:<input type="text" class="form-control" name="country" value="India"></td>
+                <td>Pin code:<input type="text" class="form-control" placeholder="pincode" name="pincode" pattern="[0-9]{6}" required=""></td>
+            
+              </tr>
+
+              <tr>
+                <td>company agreement start Date</td>
+                <td><input type="date" class="form-control" name="company_agreement_start_date"  required=""></td>
+              </tr>
+
+              <tr>
+                <td>company agreement end Date:</td>
+                <td><input type="date" class="form-control" name="company_agreement_end_date"  required=""></td>
+              </tr>
+              <tr>
+                <td>Company payment type:</td>
+                <td><input type="text" class="form-control" placeholder="vendor_payment_type" name="company_payment_type"  required=""></td>
+              </tr>
+              <tr>
+                <td>travelling_time_treshhold:</td>
+                <td><input type="number" class="form-control" name="travelling_time_treshhold" required=""></td>
+              </tr>
+              <tr>
+                <td>upload Company Documents:</td>
+                <td><input type="file" name="company_documents" required=""></td>
+              </tr>
+
+            <td>Service Type </td>
+            <td>
+            <select name="service_type">
+            <option value="point_to_point">Point to Point </option>
+            <option value="garege_to_garege">Garege to Garege</option>
+            <option value="fixed_point">Fixed point</option>
+            </select>
+            </td>
+
+          </table>
+            <!-- Provide a button to click to submit the form. -->
+          <div class="modal-footer">
+            <div class="form-group">
+            <div class="col-xs-offset-3 col-xs-6">
+            <input class="btn btn-outline btn-success" type="submit" value="Save">
+            <input type="reset" class="btn btn-outline btn-primary" value="Reset">
+            </div>
+            </div>
+          </div>
+
+          </form>
+        </div>  
+    </div>
+  
+  </div>
+</div>
+<!--  Model close -->
+
+{% endblock %}
+
+
+{% block javascript %}
+
+  <script>
+
+         $(function () {
+           $('#example1').DataTable({
+           dom: "<'row'<'col-sm-4'l><'col-sm-4'f><'col-sm-4'p>>" +
+         "<'row'<'col-sm-12'tr>>" +
+         "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+          });
+         
+           //search implementation
+         });
+
+  </script>
+
+{% endblock %}

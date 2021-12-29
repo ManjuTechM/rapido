@@ -1,0 +1,228 @@
+{% extends "rapido/company/company.html" %}
+{% block body_block %}
+<style type="text/css">
+  #result {
+   position: absolute;
+   cursor: pointer;
+   overflow-y: auto;
+   max-height: 400px;
+   box-sizing: border-box;
+   z-index: 1001;
+  }
+  .link-class:hover{
+   background-color:#f1f1f1;
+  }
+
+.inputs { width: 34px; }
+
+
+  input.error{
+    border-color: red;
+  }
+
+  label.error{
+    color: red;
+    font-weight: 300 !important;
+  }
+
+  #datetimepicker1{
+    display: none;
+  }
+
+   </style>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading" style="padding: 1px 25px;">
+      <h4> Edit Booking details
+      <span class="pull-right">Type of Service: {{booking.service_type}}</span></h4> 
+      </div>
+            <!-- /.panel-heading -->
+      <div class="panel-body">
+
+        <form id="updateform">
+              <table class="table">
+                  <tr style="border: 1px ;background-color: #dddddd;">
+                    <th>Company : </th> <th>{{booking.company}}</th>
+                    <th>Date of Booking:</th> <td>{{booking.created_date}}</td>
+                  </tr>
+                  <tr>
+                    <th>Booking ID:</th><td>{{booking.booking_id}}</td> 
+                    <th>category : </th> <td>{{booking.category}}</td>
+                  </tr>
+                  <tr>
+                    <th>Servicing City:</th>
+
+                    <td>
+                      <select name="city" class="form-control" id="city_id">
+                      <option value="{{booking.servicing_city.id}}">{{booking.servicing_city}}
+                      </option>
+                      {% for c in service_place %}
+                      <option value={{c.id}}>{{c.name}}</option>
+                      {% endfor %}
+                      </select>
+                    </td>
+
+                    <th>Billing Base:</th>
+                    <td>
+                    <select name="billing_base" class="form-control" id="billing_base_id">
+                    <option value="{{booking.billing_base.id}}">{{booking.billing_base}}</option>
+                    {% for s in billing_base %}
+                    <option value="{{s.id}}" selected="">{{s.name}}</option>
+                    {% endfor %}
+                    </select>
+               
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>Booking from:</th><td><input type="text" id="booking_from" class="form-control" value="{{booking.booking_from}}" name="" required></td>
+                    <th>Booking Email:</th> <td><input type="text" id="booking_email" class="form-control" value="{{booking.booking_email}}" name="" required></td>
+
+                  </tr>
+                  <tr>
+                    <th>Booking Phone no:</th><td><input type="text" id="booking_phone" class="form-control" value="{{booking.booking_phoneno}}" name="" required></td>
+                    <th>Guest Name:</th><td><input type="text" id="guest_name" class="form-control" value="{{booking.guest_name}}" name="" required></td>
+                  </tr>
+                  <tr>
+
+                    <th>Guest Phone No:</th><td><input type="text" id="guest_phone" class="form-control" value="{{booking.guest_phoneno}}" name="" required></td>
+                    <th>Guest Email:</th><td><input type="text" id="guest_email" class="form-control" value="{{booking.guest_email}}" name="" required></td>  
+                  </tr>
+                  <tr>
+                    <th>PickUp date & time</th>
+                    <td>
+                    <span>{{booking.pickup_date_time}}</span><span style="display: none;" id="dateoriginal">{{booking.pickup_date_time|date:'Y-m-d H:i'}}</span> <a id="change" href="#">change</a>
+                      <div class='input-group date' id='datetimepicker1'>
+                        <input type='text' value="{{booking.pickup_date_time}}" class="form-control" />
+                        <span class="input-group-addon">
+                          <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                      </div>
+                    </td>
+                    <th> pickup location</th>
+                    <td><input type="text" id="pickup_location" class="form-control" value="{{booking.pick_up_location}}" name="" required></td>
+                  </tr>
+                  <tr>
+                    <th> drop location</th>
+                    <td><input type="text" id="drop_location" class="form-control" value="{{booking.drop_location}}" name="" required></td>
+
+                  <!--     <td><li>{{booking.drop_location.street_address}},{{booking.drop_location.area}},{{booking.drop_location.city}},{{booking.drop_location.state}}</li><li>{{booking.drop_location.pincode}}</li>
+                      </td>
+                      <th> land mark</th><td>{{booking.drop_location.landmark}}</td>
+ -->
+                    <th> requested vehicle</th><td><input class="form-control" type="text" value="{{booking.requested_vehicle_model}}" id="vehicle_model" name="" required></td>
+                 
+                  </tr>
+                  <tr>
+                <th>Status Your reason for changes:</th>
+                <td>
+                 <input type="text" class="form-control" value="{{booking.comment}}" id="comment" placeholder="give a Note" name="comment" required></td>
+                  </tr>
+
+        <td><button type="button" id="update" class="btn btn-success" style="width:100%;">Update</button></td>
+                  </table>
+            </form>
+    
+      </div>
+     </div>
+  </div>
+
+</div>
+
+
+{% endblock %}
+
+
+{% block javascript %}
+
+<script type="text/javascript">
+
+$("#datetimepicker1").hide();
+
+  $("#change").click(function(){
+    $("#datetimepicker1").show();
+    $("#dateoriginal").hide();
+    $(this).hide();
+  });
+
+    $(function () {
+      $('#datetimepicker1').datetimepicker({
+      });
+    });
+  
+    $(function(){
+
+        $("#updateform").validate();
+
+      $( "#update" ).click(function(e){
+        e.preventDefault();
+
+        var tim;
+        var datetime;
+
+        if($("#datetimepicker1").find("input").val()==""){
+          tim = $("#dateoriginal").text();
+          datetime = moment(tim).format("YYYY-MM-DDTHH:mm");
+          // datetime = Date.parse(tim);
+        }
+
+        else{
+          tim = $("#datetimepicker1").find("input").val();
+          datetime = moment(tim).format("YYYY-MM-DDTHH:mm");
+        }
+
+        if($("#update").valid()){
+
+      var update_booking = {
+          "booking_id": "{{booking.booking_id}}",
+          "updated_date": null,
+          "booking_from": $("#booking_from").val(),
+          "booking_phoneno": $("#booking_phone").val(),
+          "booking_email": $("#booking_email").val(),
+          "guest_name": $("#guest_name").val(),
+          "guest_gender": "on",
+          "guest_phoneno": $("#guest_phone").val(),
+          "guest_email": $("#guest_email").val(),
+          "pickup_date_time": datetime,
+          "pick_up_location": $("#pickup_location").val(),
+          "drop_location": $("#drop_location").val(),
+          "requested_vehicle_model": $("#vehicle_model").val(),
+          "comment": $("#comment").val(),
+          "created_by":{{booking.created_by.id}},
+          "updated_by": {{user.id}},
+          "service_type": {{booking.service_type.id}},
+          "category": {{booking.category.id}},
+          "servicing_city": {{booking.servicing_city.id}},
+          "billing_base": {{booking.billing_base.id}},
+          "status": {{booking.status.id}},
+          "company": {{booking.company.id}}
+        };
+        
+        $.ajax({
+            url: '/rapido/api/get_bookings_details/{{booking.id}}/',
+            method: 'PUT',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            contentType: 'application/json',
+            data: JSON.stringify(update_booking),
+            success: function(result) {
+                swal({
+                  title:"Changes has been updated!",
+                  icon:"success",
+                });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                if(jqXHR.status==500 || jqXHR.status==400){
+                  swal ( "Oops" ,  "Cab is already to assigned to this booking check it in dutyslip list" ,  "error" );
+                }
+            }
+        });
+        }
+      });
+
+    });
+
+</script>
+{% endblock %}

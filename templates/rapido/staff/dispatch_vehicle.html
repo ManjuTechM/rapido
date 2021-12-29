@@ -1,0 +1,135 @@
+{% extends "rapido/staff/staff.html" %}
+
+{% block body_block %}
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading" style="padding: 1px 25px;">
+      <h4> Dispatch Vehicle 
+      <span class="pull-right">Type of Service:{{duty_slip.booking.service_type}}</span></h4> 
+      </div>
+            <!-- /.panel-heading -->
+      <div class="panel-body">
+              <table class="table">
+                  <tr style="border: 1px ;background-color: #dddddd;">
+                    <th>Date of Booking:</th> <td>{{duty_slip.booking.date.date}}</td>
+
+                    <th>Booking ID:</th><td>{{duty_slip.booking.booking_id}}</td>
+                    
+                    <th>category : </th> <td>{{duty_slip.booking.category}}</td>
+
+                  </tr>
+                  <tr>
+                    <th>Booking from:</th><td>{{duty_slip.booking.booking_from}}</td>
+                    <th>Booking Email:</th> <td>{{duty_slip.booking.booking_email}}</td>
+                    <th>Booking Phone no:</th><td>{{duty_slip.booking.booking_phoneno}}</td>
+                  </tr>
+                  <tr>
+                    <th>Guest Name:</th><td>{{duty_slip.booking.guest_name}} </td>
+                    <th>Guest Phone No:</th><td>{{duty_slip.booking.guest_phoneno}}</td>
+                    <th>Guest Email:</th><td>{{duty_slip.booking.guest_email}}</td>
+  
+                  </tr>
+                  <tr>
+                    <th>PickUp date & time</th>
+                    <td><li>{{duty_slip.booking.pick_up_date }}</li><li>{{duty_slip.booking.pick_up_time}}</li> </td>
+                    <th> pickup location</th>
+                    <td>{{duty_slip.booking.pick_up_location }} </td>
+                     <!--  <td>
+                      <li>{{duty_slip.booking_id.pickup_up_location.street_address}},{{duty_slip.booking_id.pick_up_location.area}},{{duty_slip.booking_id.pick_up_location.city}},{{duty_slip.booking_id.pick_up_location.state}}</li><li>{{duty_slip.booking_id.pick_up_location.pincode}}
+                      </td> 
+                      <th> land mark</th><td>{{duty_slip.booking_id.pick_up_location.landmark}}</td>-->
+                  </tr>
+                  <tr>
+                    <th> drop location</th>
+                    <td>{{duty_slip.booking.drop_location}} </td>
+
+                     <!--  <td><li>{{duty_slip.booking_id.drop_location.street_address}},{{duty_slip.booking_id.drop_location.area}},{{duty_slip.booking_id.drop_location.city}},{{duty_slip.booking_id.drop_location.state}}</li><li>{{duty_slip.booking_id.drop_location.pincode}}</li>
+                      </td>
+                      <th> land mark</th><td>{{duty_slip.booking_id.drop_location.landmark}}</td> -->
+
+                    <th> requested vehicle</th><td>{{duty_slip.booking.requested_vehicle_model}}</td>       
+                  </tr>
+                  </table>
+                  <hr>
+
+              <table class="table">
+              {{duty_slip.duty_slip_id}}
+                  <tr style="border: 1px ;background-color: #dddddd;">
+                    <th>Trip sheet created by:</th><td>{{duty_slip.duty_slip_createdby.user}}</td>
+                    <th>Vendor:</th><td>{{duty_slip.vendor }},  {{duty_slip.vendor.vendor_type }} </td>
+                    <th>Created date</th><td>{{ duty_slip.date }}</td>
+                  </tr>
+                  <tr>
+                    <th>Vehicle Model:</th>
+                      <td>{{duty_slip.allocated_vehicle}}</td>
+                      <th>vehicle No:</th>
+                      <td>{{duty_slip.vehicle_no}}</td>
+                      <th>vehicle Colour:</th>
+                      <td>{{duty_slip.vehicle_colour}}</td>
+                    </tr>
+                    <tr>
+                        <td>chauffeur Name:</td>
+                        <td>{{duty_slip.chauffeur_name}}</td>
+                        <td>chauffeur phoneno:</td>
+                        <td>{{duty_slip.chauffeur_phoneno}}</td>
+                        <td>chauffeur Drivinglicense:</td>
+                        <td>{{duty_slip.chauffeur_drivinglicense}}</td>
+                    </tr>          
+              </table>
+
+              <table class="table">
+
+          <form class="form-item span8" id="item_form" method="post" action="/rapido/dispatch_vehicle/{{duty_slip.duty_slip_id}}/" enctype="multipart/form-data">
+          {% csrf_token %}          
+                <tr style="border: 1px ;background-color: #dddddd;">                      
+                <th>Date out:</th>
+                <td><input type="date" class="form-control" name="dateout"></td>
+                <th>Date In:</th>
+                <td><input type="date" class="form-control" name="datein"></td>
+                <th>Total Days:</th>
+                <td>      </td>
+                </tr>
+                <tr>
+                  <td>Opening Time:</td>
+                  <td><input type="time" class="form-control" name="openingtime"></td>
+                  <td>Closeing Time:</td>
+                  <td><input type="text" class="form-control" name="closingtime"></td>
+                  <td>Total Hours:</td>
+                  <td>     </td>
+                </tr>
+
+                <tr>
+                  <td>Point Opening time:</td>
+                  <td><input type="time" class="form-control" name="potime"></td>
+                  <td>Point Closing time:</td>
+                  <td><input type="text" class="form-control" name="pctime"></td>
+                  <td>Total time:</td>
+                  <td>     </td>
+                </tr>
+
+                <tr>
+                  <td>Point Opening Km:</td>
+                  <td><input type="number" class="form-control" name="pokm"></td>
+                  <td>Point Closing Km:</td>
+                  <td><input type="number" class="form-control" name="pckm"></td>
+                  <td>Total Km:</td>
+                  <td> </td>
+                </tr>
+                <tr>
+                <td></td> 
+                <td><button class="btn btn-success">print</button></td>
+                <td><button class="btn btn-success">close</button></td>
+            </tr>
+
+
+          </form>
+
+      </div>
+     </div>
+  </div>
+
+</div>
+
+{% endblock %}

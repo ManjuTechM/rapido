@@ -1,0 +1,83 @@
+{% extends "expans/admincategory.html" %}
+
+{% block navbar %}
+ <div class="col-sm-12">
+
+    <h4><u>{{ category_name }}:</u></h4>
+
+
+    <br/>
+
+    <div id="items">
+        {% if items %}
+        <ul>
+            {% for item in items %}
+            <li>
+                      {% if item.picture %}
+                        <img width=25 height=25 src="{{ item.picture.url }}" class="img-circle"/>
+                      {% endif %}
+                <a href="#">{{item.name}}</a>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <strong>No items currently in this category.</strong><br/>
+        {% endif %}
+    </div>
+
+    
+    <button class="btn btn-outline btn-primary"  data-toggle="modal" data-target="#myModal">Add a new Item</button>
+    
+
+    </div>
+
+            <!-- Modal -->
+            <div class="modal fade" id="myModal" role="dialog">
+              <div class="modal-dialog">
+              
+                <!-- Modal content-->
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3 class="modal-title">Add new Item</h3>
+                  </div>
+                
+                <div class="modal-body">
+      
+                 <form class="form-item span8" id="item_form" method="post"
+                     action="/expans/category/{{category_name_url}}/add_item/" enctype="multipart/form-data">
+ 
+                    {% csrf_token %}          
+        
+                    <div class="form-group">
+                    <label class="control-label col-xs-4">Item Name:</label>
+                    <div class="col-xs-6">
+                    <input type="text" class="form-control" placeholder="item name" name="name"  value="" required="">
+                    </div>
+                    </div>
+        
+                    <div class="form-group">
+                        <label class="control-label col-xs-4">Add Item image:</label>
+                        <div class="col-xs-6">
+                          <input  type="file" required="" name="picture">
+                        </div>
+                    </div>
+                      <!-- Provide a button to click to submit the form. -->
+                  
+                    <div class="modal-footer">
+                      <div class="form-group">
+                      <div class="col-xs-offset-3 col-xs-6">
+                      <input class="btn btn-outline btn-success" type="submit" value="Save">
+                      <input type="reset" class="btn btn-outline btn-primary" value="Reset">
+                      </div>
+                      </div>
+
+                    </div>
+                  </form>
+                </div>  
+              </div>
+            </div>
+            </div>
+            <!--  Model close -->
+
+{% endblock %}

@@ -1,0 +1,256 @@
+{% extends "rapido/sales/salesbase.html" %}
+
+{% block body_block %}
+
+
+<section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="pull-right">
+                </div><br/>
+                <div class="panel panel-default">
+                        <div class="box-header">
+                          <h3 class="box-title">Company list</h3>
+                          <button class="btn btn-primary pull-right" data-toggle="modal" data-target="#myModal"><i class="fa fa-plus"></i>Add</button>
+                        </div>
+                    <div class="panel-body">
+                <div class="table-responsive">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                  <tr>
+                  <th>Company-Type</th>
+                  <th>Name</th>
+                  <th>Phone no</th>
+                  <th>E-mail</th>
+                  <th>Address</th>
+                  <th>Aggreement start-date</th>
+                  <th>Aggreement end-date</th>
+                  <th>documents</th>
+                  <th>Manager name & phone no</th>
+                  <!-- <th> Price set</th> -->
+                  <th>Edit</th>
+                  <th> View full details</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+          {% for v in company_client_list %}
+                <tr>
+                  <td>{{v.company_type}}</td>
+                  <td>{{v.company_name}}</td>
+                  <td>{{v.company_phoneno}}</td>
+                  <td>{{v.company_email}}</td>
+                  <td>{{v.company_address.city}}, {{v.company_address.state}}</td>
+                  <td>{{v.company_agreement_start_date}}</td>
+                  <td>{{v.company_agreement_end_date}}</td>
+  
+                  {% if v.company_documents %}
+                  <td  >yes</td>
+                  {% else %}
+                  <td  >No</td>
+                  {% endif %}
+                  <td>{{ v.company_manager_name }}, {{ v.company_manager_mobileno }} </td>
+                  <!-- <td>{{ v.vehicle_ownername }},{{ v.vehicle_owner_phoneno}} </td> -->
+                  <td><a href="/rapido/sales_set_ratecard/{{v.id}}"><span class="label label-primary">Edit Details</span></a><br/><span style="cursor:pointer;" data-toggle="modal"  data-target="#Modal" class="label label-success">Set Rules</span></td> 
+                  <!-- <td><a href="/rapido/admin_companydetail/{{v.id}}/"> view </a></td> -->
+                  <td><a href="/rapido/sales_companydetail/{{v.id}}/"> view </a></td>                                                
+                </tr>
+              {% endfor %}
+                 
+                  </tbody>
+                </table>
+                </div>
+                </div>
+                </div>
+                </div>
+              </div>
+              <!-- set rules -->
+              <div class="modal fade" id="myModal" role="dialog">
+                  <div class="modal-dialog">
+                  
+                <!-- Modal content-->
+                  <div class="modal-content">
+                        <div class="modal-header">
+                          <button type="button" class="close" data-dismiss="modal">&times;</button>
+                          <h3 class="modal-title">Add new Client</h3>
+                        </div>
+                      
+                      <div class="modal-body">
+                            <form class="form-item span8" id="item_form" method="post"
+                                action="/rapido/sales_addCompany/" enctype="multipart/form-data">
+                   
+                               {% csrf_token %}          
+                         <table>
+                         <br>
+                             <tr>
+                               <td>Company  Name:</td>
+                               <td><input type="text" class="form-control" placeholder="company Name" name="company_name"  required=""></td>
+                             </tr>
+                             <tr>
+                               <td>Company Type:</td>
+                               <td>
+                                   <select name="company_type">
+                                   {% for ct in company_type_list %}
+                               <option value={{ct.id}} class="form-control">{{ct.name}}</option>
+                                   {% endfor %}
+                                  </select>
+                               </td>
+                             </tr>
+                   
+                             <tr>
+                               <td>Company logo:</td>
+                               <td><input type="file" name="company_logo"></td>
+                             </tr>
+                   
+                             <tr>
+                               <td>Company Email:</td>
+                               <td><input type="email" class="form-control" placeholder=" Company Email id" name="company_email"></td>
+                             </tr>
+                   
+                             <tr>
+                               <td>Company phoneno:</td>
+                               <td><input type="text" class="form-control" placeholder="company phoneno" name="company_phoneno" pattern="[0-9]*" maxlength="10" required=""  ></td>
+                             </tr>
+                   
+                             <tr>
+                               <td>Company Manager Name:</td>
+                               <td><input type="text" class="form-control" placeholder="company_manager_name" name="company_manager_name"  required=""></td>
+                             </tr>
+                   
+                                 <tr>
+                                   <td>Manager Mobileno:</td>
+                                   <td><input type="text" class="form-control" placeholder="company_manager_mobileno" name="company_manager_mobileno" pattern="[0-9]{10}" maxlength="10" min="7000000000" max="9999999999" required=""  ></td>
+                                 </tr>
+                   
+                                 <tr>
+                                   <td>Manager Email-Id:</td>
+                                   <td><input type="email" class="form-control" placeholder="Manager Email" name="company_manager_email" required=""></td>
+                                 </tr>
+                   
+                                   <tr>
+                                   <td rowspan="4">Address</td>
+                                   <td>Street name/no:<input type="text" class="form-control" placeholder="street_address" name="street_address"  required=""></td>
+                                 </tr>
+                                 <tr>
+                                    <td>Landmark:<input type="text" class="form-control" placeholder="landmark" name="landmark"  required=""></td>
+                                 </tr>
+                                 <tr>
+                                   <td>Area:<input type="text" class="form-control" placeholder="area" name="area"  required=""></td>
+                                </tr>
+                                <tr>
+                                   <td>state:<select id="listBox" class="form-control" name="state" onchange='selct_district(this.value)'></select></td>
+                                 </tr>
+                                 <tr>
+                                   <td>City:<select id='secondlist' class="form-control" name="city"></select></td>
+                                   <td>Country:<input type="text" class="form-control" name="country" value="India"></td>
+                                   <td>Pin code:<input type="text" class="form-control" placeholder="pincode" name="pincode" pattern="[0-9]{6}" required=""></td>
+                               
+                                 </tr>
+                   
+                                 <tr>
+                                   <td>Company agreement start Date</td>
+                                   <td><input type="text" id="agreement_start" class="form-control" required=""><input type="text" style="display: none;" id="actual_agreement_start" class="form-control" name="company_agreement_start_date"  required=""></td>
+                                 </tr>
+                   
+                                 <tr>
+                                   <td>Company agreement end Date:</td>
+                                   <td><input type="text" id="agreement_end" class="form-control" required=""><input type="text" style="display: none;" id="actual_agreement_end" class="form-control" name="company_agreement_end_date"  required=""></td>
+                                 </tr>
+                                 <tr>
+                                   <td>Company payment type:</td>
+                                   <td><input type="text" class="form-control" placeholder="vendor_payment_type" name="company_payment_type"  required=""></td>
+                                 </tr>
+                                 <tr>
+                                   <td>Travelling_time_treshhold:</td>
+                                   <td><input type="number" class="form-control" name="travelling_time_treshhold" required=""></td>
+                                 </tr>
+                                 <tr>
+                                   <td>Upload Company Documents:</td>
+                                   <td><input type="file" name="company_documents" ></td>
+                                 </tr>
+                   
+                                 <tr>
+                                   <td>GST No:</td>
+                                   <td><input type="text" name="gst" required="" ></td>
+                                 </tr>
+                                 <tr>
+                                   <td>PAN No:</td>
+                                   <td><input type="text" name="pan" required=""></td>
+                                 </tr>
+                                    <tr>
+                                        <td></td>
+                                        <td><button type="save" class="btn btn-success" style="width:100%;">Save</button></td>
+                                    </tr>
+                                </table>
+                            </form>
+                      </div>  
+                  </div>
+                
+                </div>
+              </div>
+              <!--  Model close -->
+     </section>
+
+
+
+{% endblock %}
+
+
+
+{% block javascript %}
+
+  <script>
+
+         $(function () {
+           $('#example1').DataTable({
+           dom: "<'row'<'col-sm-4'l><'col-sm-4'f><'col-sm-4'p>>" +
+         "<'row'<'col-sm-12'tr>>" +
+         "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+          });
+         
+           //search implementation
+         });
+
+    $(function () {
+      $("#agreement_start").datepicker(
+         { dateFormat: 'dd-mm-yy',
+           onSelect:function(){
+            var date = $(this).val().split("-").reverse().join("-");
+            $("#actual_agreement_start").val(date);
+           }
+         }
+       );
+
+      $("#agreement_end").datepicker(
+         { dateFormat: 'dd-mm-yy',
+           onSelect:function(){
+            var date = $(this).val().split("-").reverse().join("-");
+            $("#actual_agreement_end").val(date);
+           }
+         }
+       );
+
+      $("#agreement_start").keyup(function(){
+        $("#actual_agreement_start").val($(this).val().split("-").reverse().join("-"));
+
+        $("#actual_agreement_end").val($("#agreement_end").val().split("-").reverse().join("-"));
+      });
+
+
+      $("#agreement_end").keyup(function(){
+        $("#actual_agreement_start").val($("#agreement_start").val().split("-").reverse().join("-"));
+
+        $("#actual_agreement_end").val($(this).val().split("-").reverse().join("-"));
+      });
+
+      $("#item_form").submit(function() {
+
+            $(this).children('#agreement_start,#agreement_end').remove();
+      });
+
+    });
+
+      $("#item_form").validate();
+
+  </script>
+
+{% endblock %}

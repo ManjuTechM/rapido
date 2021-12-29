@@ -1,0 +1,358 @@
+{% extends "rapido/company/company.html" %}
+
+{% block body_block %}
+<style type="text/css">
+   #city_list{
+   background-color: #347ab7;
+   }
+</style>
+
+<div class="row">
+    <div class="col-sm-12">
+      <div class="col-lg-12 col-md-12">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+        
+            <h4>Client Name: {{ company.company_name }}<span class="pull-right">{{ company.company_address.area }} ,{{ company.company_address.city }}
+            </span></h4>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<div class="row">
+   <div class="col-sm-12">
+      <div class="col-lg-12 col-md-12">
+         <div class="panel panel-primary">
+            <div class="panel-heading">
+               <h4>
+                  Select city:
+                  <select id="city_list" name="category">
+                     {% for c in city_list %}
+                     <option value={{c.id}}>{{c.name}}</option>
+                     {% endfor %}
+                  </select>
+               </h4>
+            </div>
+         </div>
+      </div>
+   </div>
+   <h3>{{message}}</h3>
+   <div class="col-lg-12 col-md-12 col-sm-12">
+      <div class="nav-tabs-custom">
+         <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab_1" data-toggle="tab">Airport Transfers</a></li>
+            <li><a href="#tab_2" data-toggle="tab">Out station</a></li>
+            <li><a href="#tab_3" data-toggle="tab">City Usage</a></li>
+         </ul>
+         <div class="tab-content">
+            <div class="tab-pane active" id="tab_1">
+               <div class="panel panel-default">
+                  <div class="panel-heading" style="padding: 1px 15px;">
+                     <h4>Airport Transfers</h4>
+                  </div>
+                  <!-- /.panel-heading -->
+                  <div class="panel-body">
+                     <div class="table-responsive">
+                        <table class="table">
+                           <thead>
+                              <tr>
+                                 <th>Category</th>
+                                 <th>Service Type</th>
+                                 <th>slab</th>
+                                 <th>Base Fare</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              {% for c in cat_list %}
+                              <tr>
+                                 <td><span class="cat_id">{{c.id}}</span>.{{c.name}}</td>
+                                 <td class="ast"></td>
+                                 <td>Airport</td>
+                                 <td class="base_rate"><!-- <input type="text" class="base_rate form-control" name="base_rate"/> --></td>
+                              </tr>
+                              {% endfor %}
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <!-- /.tab-pane -->
+            <div class="tab-pane" id="tab_2">
+               <div class="panel panel-default">
+                  <div class="panel-heading" style="padding: 1px 15px;">
+                     <h4>Out station</h4>
+                  </div>
+                  <!-- /.panel-heading -->
+                  <div class="panel-body">
+                     <div class="table-responsive">
+                        <table class="table">
+                           <thead>
+                              <tr>
+                                 <th>Category</th>
+                                 <th>Service Type</th>
+                                 <th>Min Km/Day </th>
+                                 <th>Per Km </th>
+                                 <th>Extra Km</th>
+                                 <th>day batta</th>
+                                 <th>night batta</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              {% for c in cat_list %}
+                              <tr>
+                                 <td><span class="cat_id1">{{c.id}}</span>.{{c.name}}</td>
+                                 <td class="ost"></td>
+                                 <td class="minkm"></td>
+                                 <td class="perkm"></td>
+                                 <td class="extrakm"></td>
+                                 <td class="day_bata"></td>
+                                 <td class="night_bata"></td>
+                              </tr>
+                              {% endfor %}
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+            </div>
+            <!-- /.tab-pane -->
+            <div class="tab-pane" id="tab_3">
+               <div class="panel panel-default">
+                  <div class="panel-heading" style="padding: 1px 15px;">
+                  <h4>City Usage</h4>
+                     <span style="display: none;">select slab:</span><br/><select style="display: none;" id="slab" multiple>
+                      {% for s in slab_list %}
+                       <option id=slab{{s.id}} value={{s.id}}>{{s.name}}</option>
+                       {% endfor %}
+                     </select>
+                  </div>
+                  <!-- /.panel-heading -->
+                  <div class="panel-body">
+                     <div class="table-responsive">
+                        <table class="table">
+                           <thead>
+                              <tr id="thcount">
+                                 <th>Category</th>
+                                 <th>Service Type</th>
+                                 <th class="addSlab" style="display: none;"></th>
+                                 <th> Extra Km </th>
+                                 <th> Extra Hrs</th>
+                                 <th>Night Bhatta</th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              {% for r in cat_list %}
+                              <tr id="trcount">
+                                 <td>{{r.name}}</td>
+                                 <td class="cst"></td>
+                                 <td class="slab_data" style="display: none;"></td>
+                                 <td class="city_extra_km"><!-- <input class="city_extra_km form-control" type="text" name="extrakm"> --></td>
+                                 <td class="city_extra_hrs"><!-- <input class="city_extra_hrs form-control" type="text" name="extrahrs"> --></td>
+                                 <td class="city_nightbatta"><!-- <input class="city_nightbatta form-control" type="text" name="nightbatta"> --></td>
+                              </tr>
+                              {% endfor %}
+                           </tbody>
+                        </table>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!-- /.tab-pane -->
+      </div>
+      <!-- /.tab-content -->
+   </div>
+</div>
+
+<!--  Model close -->
+{% endblock %}
+
+{% block javascript %}
+<script type="text/javascript">
+   
+   var cat_id = document.getElementsByClassName("cat_id");
+   
+   var cat_id1 = document.getElementsByClassName("cat_id1");
+   var minkm = document.getElementsByClassName("minkm");
+   var perkm = document.getElementsByClassName("perkm");
+   var extrakm = document.getElementsByClassName("extrakm");
+   var day_bata = document.getElementsByClassName("day_bata");
+   var night_bata = document.getElementsByClassName("night_bata");
+   var base_rate = document.getElementsByClassName("base_rate");
+   var ast = document.getElementsByClassName("ast");
+   var ost = document.getElementsByClassName("ost");
+   var cst = document.getElementsByClassName("cst");
+   var city_extra_km = document.getElementsByClassName("city_extra_km");
+   var city_nightbatta = document.getElementsByClassName("city_nightbatta");
+   var city_extra_hrs = document.getElementsByClassName("city_extra_hrs");
+   var token = '{{ csrf_token }}';
+   
+   
+
+ $('#city_list').on('click', function() {
+    var cityid = $('#city_list option:selected').val();
+    
+    $.getJSON('/rapido/api/companyairportratecardbycity/{{company.id}}/' + cityid, function(data) {
+        for (var i = 0; i < cat_id.length; i++) {
+            var j = false;
+            // if(data.length==0){
+            //   base_rate[i].value = "";
+            // }
+
+            $.each(data, function(key, value) {
+                if (parseInt(cat_id[i].innerHTML) == value.category.id) {
+                    base_rate[i].innerHTML = value.base_rate;
+                    ast[i].innerHTML = value.service_type.name;
+                    j = true;
+                }
+
+            });
+            if (j == false) {
+                base_rate[i].innerHTML = "";
+                ast[i].innerHTML = "";
+            }
+
+        }
+    });
+
+    $.getJSON('/rapido/api/companyoutstationratecardbycity/{{company.id}}/' + cityid, function(data) {
+
+        for (var i = 0; i < cat_id.length; i++) {
+            var j = false;
+
+            $.each(data, function(key, value) {
+                if (parseInt(cat_id1[i].innerHTML) == value.category.id) {
+                    minkm[i].innerHTML = value.min_km;
+                    perkm[i].innerHTML = value.perkm_rate;
+                    extrakm[i].innerHTML = value.extrakm_rate;
+                    day_bata[i].innerHTML = value.day_batta;
+                    night_bata[i].innerHTML = value.night_batta;
+                    ost[i].innerHTML = value.service_type.name;
+                    j = true;
+                }
+
+            });
+            if (j == false) {
+                minkm[i].innerHTML = "";
+                perkm[i].innerHTML = "";
+                extrakm[i].innerHTML = "";
+                day_bata[i].innerHTML = "";
+                night_bata[i].innerHTML = "";
+                ost[i].innerHTML = "";
+            }
+
+        }
+    });
+
+    $.getJSON('/rapido/api/companycityratecardbycity/{{company.id}}/' + cityid, function(data) {
+
+  //remove columns of slabs if exists
+    var optioncount=0;
+      $('#slab option').each(function() {
+          optioncount++;
+      });
+
+    var spans = document.querySelectorAll('#thcount th');
+
+    var colCount = 0;
+
+    //count no. of columns in cityusage
+    $('#thcount th').each(function() {
+        colCount++;
+    });
+    //count no. of columns in cityusage end
+
+    //avoid adding duplicate slabs
+    var thpresent = false;
+    for(var a=0;a<optioncount;a++)
+     {
+        var sample = document.querySelectorAll('#slab option');
+        var slab_id = sample[a].value;
+
+            for (var k = 0; k < colCount; k++) {
+              console.log(spans[k].className);
+                if (('slab'+slab_id) == spans[k].className) {
+                    $('.slab'+slab_id).remove();
+                    $('.slab_dat'+slab_id).remove();
+                    console.log("remove");
+                }
+            }
+
+     } 
+
+    if (thpresent == false) {
+        $('.close').click(function() {
+            $(this).parent().remove();
+            $('.slab_dat').remove();
+        });
+    } else {
+
+        alert("slab already added");
+    }
+    //avoid adding duplicate slabs end
+
+//remove columns of slabs if exists end    
+
+    //count no. of columns in cityusage
+var unique_slabs = [];
+            $.each(data, function(key, value) 
+            {
+                if ($.inArray(value.slab.id, unique_slabs) > -1)
+                {
+                    // console.log("There's a match!");
+                }
+                                
+                else 
+                {
+                    unique_slabs.push(value.slab.id, value.slab.name);
+
+                }
+            });
+
+
+                for (var n = 0; n <= (unique_slabs.length - 1); n += 2) 
+                {
+
+                    var text2 = $("<th class='slab" + unique_slabs[n] + "'>" + unique_slabs[n + 1] + "</th>");
+                    var text3 = $("<td class='slab_dat" + unique_slabs[n] + "'><span class='slabdata" + unique_slabs[n] + "'></span></td>");
+
+                    $('.addSlab').last().before(text2);
+                    $('.slab_data').before(text3);
+                }            
+
+        for (var i = 0; i < cat_id.length; i++) 
+        {
+            var j = false;
+            $.each(data, function(key, value) 
+            {
+                if(parseInt(cat_id1[i].innerHTML)==value.category.id)
+                {
+                   city_extra_km[i].innerHTML = value.extra_kmrate;
+                   city_extra_hrs[i].innerHTML = value.extra_hrrate;
+                   city_nightbatta[i].innerHTML = value.night_batta;
+                   cst[i].innerHTML = value.service_type.name;
+                   document.getElementsByClassName("slabdata"+value.slab.id)[i].innerHTML = value.base_rate;
+                   j=true;
+                }
+
+            });
+            if(j==false)
+            {
+              city_extra_km[i].innerHTML = "";
+              city_extra_hrs[i].innerHTML = "";
+              city_nightbatta[i].innerHTML = "";
+              cst[i].innerHTML = "";
+            }
+
+        }
+    });
+
+
+});
+   
+
+   
+</script>
+{% endblock %}

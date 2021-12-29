@@ -1,0 +1,99 @@
+{% extends "rapido/staff/staff.html" %}
+
+{% block body_block %}
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading" style="padding: 1px 25px;">
+      <h4> Create Duty slip 
+      <span class="pull-right">Type of Service:{{booking.service_type}}</span></h4> 
+      </div>
+            <!-- /.panel-heading -->
+      <div class="panel-body">
+              <table class="table">
+                  <tr style="border: 1px ;background-color: #dddddd;">
+                    <th>Date of Booking:</th> <td>{{booking.date.date}}</td>
+
+                    <th>Booking ID:</th><td>{{booking.booking_id}}</td>
+                    
+                    <th>category : </th> <td>{{booking.category}}</td>
+
+                  </tr>
+                  <tr>
+                    <th>Booking from:</th><td>{{booking.booking_from}}</td>
+                    <th>Booking Email:</th> <td>{{booking.booking_email}}</td>
+                    <th>Booking Phone no:</th><td>{{booking.booking_phoneno}}</td>
+                  </tr>
+                  <tr>
+                    <th>Guest Name:</th><td>{{booking.guest_name}} </td>
+                    <th>Guest Phone No:</th><td>{{booking.guest_phoneno}}</td>
+                    <th>Guest Email:</th><td>{{booking.guest_email}}</td>  
+                  </tr>
+                  <tr>
+                    <th>PickUp date & time</th><td><li>{{booking.pick_up_date }}</li><li>{{booking.pick_up_time}}</li> </td>
+                    <th> pickup location</th>
+                    <td>{{booking.pick_up_location}} </td>
+          <!--             <td>
+                      <li>{{booking.pickup_up_location.street_address}},{{booking.pick_up_location.area}},{{booking.pick_up_location.city}},{{booking.pick_up_location.state}}</li><li>{{booking.pick_up_location.pincode}}
+                      </td>
+                      <th> land mark</th><td>{{booking.pick_up_location.landmark}}</td> -->
+                  </tr>
+                  <tr>
+                    <th> drop location</th>
+                    <td>{{booking.drop_location}} </td>
+
+                  <!--     <td><li>{{booking.drop_location.street_address}},{{booking.drop_location.area}},{{booking.drop_location.city}},{{booking.drop_location.state}}</li><li>{{booking.drop_location.pincode}}</li>
+                      </td>
+                      <th> land mark</th><td>{{booking.drop_location.landmark}}</td>
+ -->
+                    <th> requested vehicle</th><td>{{booking.requested_vehicle_model}}</td>
+                 
+                  </tr>
+                  </table>
+                  <hr>
+                  <h5> Allocate the Vehicle and chauffeur</h5>
+                  <hr>
+
+          <form class="form-item span8" id="item_form" method="post" action="/rapido/create_duty_slip/{{booking.booking_id}}/" enctype="multipart/form-data">
+
+          {% csrf_token %}          
+
+                  <table>
+                      <input type="hidden" value={{booking.category.id}} name="category"></input>
+                      <tr style="border: 1px ;background-color: #dddddd;">                      
+                      <th>Select Vendor:</th>
+                      <td>
+                      <select name="vendor">
+                      {% for c in vendor %}
+                      <option value={{c.id}}>{{c.vendor_name}},{{c.vendor_type}}</option>
+                      {% endfor %}
+                      </select>
+                      </td>
+                      <th>Vehicle Model:</th>
+                      <td><input type="text" class="form-control" name="allocated_vehicle" placeholder="vehicle model name" required=""></td>
+                      <th>vehicle No:</th>
+                      <td><input type="text" class="form-control" name="vehicle_no" placeholder="vehicle No" required=""></td>
+                      <th>vehicle Colour:</th>
+                      <td><input type="text" class="form-control" name="vehicle_colour" placeholder="vehicle colour" required=""></td>
+                      </tr>
+                      <tr>
+                        <td>chauffeur Name:</td>
+                        <td><input type="text" class="form-control" placeholder="chauffeur Name" name="chauffeur_name"  required=""></td>
+                        <td>chauffeur phoneno:</td>
+                        <td><input type="text" class="form-control" placeholder="chauffeur phoneno" name="chauffeur_phoneno" pattern="[0-9]{10}" maxlength="10" min="7000000000" max="9999999999" required=""  ></td>
+                        <td>chauffeur Drivinglicense:</td>
+                        <td><input type="text" class="form-control" placeholder="chauffeur Drivinglicense" name="chauffeur_drivinglicense"></td>
+                      </tr>          
+                      <tr>
+                      <td><button class="btn btn-success">Assign</button></td>
+                  </tr>
+              </table>
+          </form>
+      </div>
+     </div>
+  </div>
+
+</div>
+
+{% endblock %}

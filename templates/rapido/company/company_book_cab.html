@@ -1,0 +1,302 @@
+{% extends "rapido/company/company.html" %}
+
+{% block body_block %}
+    <section class="content-header">
+      <h6>
+      <ol class="breadcrumb">
+        <li><a href="/rapido/company/"><i class="fa fa-dashboard"></i> Home </a></li>
+        <li class="active"><a href="/rapido/booking_history/">View Bookings </a></li>
+        <li><a href="/rapido/company_bookcab/"> Create Booking </a></li>
+<!--         <li><a href="/rapido/admin_view_all_booking/"> View All Bookings</a></li>
+ -->      </ol>
+      </h6>
+    </section>
+<style type="text/css">
+  
+  input.error{
+    border-color: red;
+  }
+
+  label.error{
+    color: red;
+    font-weight: 300 !important;
+  }
+
+</style>
+<section>
+
+<div class="row">
+  <div class="col-lg-10">
+    <div class="panel panel-default">
+      <div class="panel-heading" style="padding: 1px 15px;">
+      <h4> Book A Cab </h4>
+      </div>
+      <div class="panel-body">
+        <form id="bookingform">
+      <table>
+      <br>
+               <tr>
+                <td>Company  Name:</td>
+                <td>{{company.company_name}} </td>
+               </tr>
+                      <tr>
+              <td>Service Type:</td>
+              <td>
+                <select name="service_type" class="form-control" id="service_type_id">
+                {% for service in service_type %}
+                <option value="{{service.id}}">{{service.name}}</option>
+                {% endfor %}
+                </select>
+              </td>
+          </tr>
+
+          <tr>
+              <td>Vehicle category:</td>
+              <td>
+                <select name="category" class="form-control" id="category_id">
+                {% for c in cat_list %}
+                <option value={{c.id}}>{{c.name}}</option>
+                {% endfor %}
+                </select>
+              </td>
+          </tr>
+
+          <tr>
+              <td>Service needed In:</td>
+              <td>
+                <select name="city" class="form-control" id="city_id">
+                {% for c in service_place %}
+                <option value={{c.id}}>{{c.name}}</option>
+                {% endfor %}
+                </select>
+              </td>
+          </tr>
+
+          <tr>
+            <td>Booker Name:</td>
+            <td><input type="text" id="booker_name" class="form-control" placeholder="booker name" name="booking_from" ></td>
+          </tr>
+
+          <tr>
+            <td>Booker Mobileno:</td>
+            <td><input type="text" id="booker_phone" class="form-control" placeholder="booker mobileno" name="booking_phoneno" pattern="[0-9]{10}" maxlength="10" min="7000000000" max="9999999999"></td>
+          </tr>
+
+          <tr>
+            <td>Booker Email-Id:</td>
+            <td><input type="email" id="booker_email" class="form-control" placeholder="booker Email" name="booking_email"></td>
+          </tr>
+          <tr>
+            <td>Guest Name:</td>
+            <td><input type="text" id="guest_name" class="form-control" placeholder="Guest name" name="guest_name"  required=""></td>
+          </tr>
+          <tr>
+            <td>Gender:</td>
+            <td>
+               <input type="radio" name="gender" id="male"> 
+                <label for="m">Male</label>
+                
+                <input type="radio" name="gender" id="female"> 
+                <label for="f">Female</label>
+             </td>
+          </tr>
+
+          <tr>
+            <td>Guest Mobileno:</td>
+            <td><input type="text" id="guest_mobile" class="form-control" placeholder="Guest mobileno" name="guest_phoneno" pattern="[0-9]{10}" maxlength="10" min="7000000000" max="9999999999" required=""  ></td>
+          </tr>
+
+          <tr>
+            <td>Guest Email-Id:</td>
+            <td><input type="email" id="guest_email" class="form-control" placeholder="Guest Email" name="guest_email" required=""></td>
+          </tr>
+
+              <tr>
+                <td>Pick up date & Time</td>
+                <td><div class='input-group date' id='datetimepicker1'>
+                    <input type='text' class="form-control" required="" />
+
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div></td>
+              </tr>
+
+              <tr>
+                <td>Pick-up Address:</td>
+                <td>
+             <input type="text" id="pickup_address" class="form-control" placeholder="Complete address" name="pickup_address" required=""></td>
+              </tr>
+
+              <tr>
+                <td>Drop Address:</td>
+                <td>
+             <input type="text" id="drop_address" class="form-control" placeholder="Dropping address" name="drop_address">
+             </td>
+              </tr>
+              <tr>
+                <td>Vehicle Type:</td>
+                <td>
+                  <select name="requested_vehicle_model" class="form-control" id="vehicle_type">
+                  <option value="swift">swift</option>
+                  <option value="innova">innova</option>
+                  </select>
+              </td>
+              </tr>
+              <tr>
+                <td>Billing Base:</td>
+                <td>
+                  <select name="billing_base" class="form-control" id="billing_base_id">
+                  {% for s in billing_base %}
+                  <option value="{{s.id}}" selected="">{{s.name}}</option>
+                  {% endfor %}
+                  </select>
+              </tr>
+             
+              <tr>
+                <td>Special Instruction accepted here:</td>
+                <td>
+             <input type="text" class="form-control" id="comment" placeholder="give a Note" name="comment"></td>
+              </tr>
+        <tr>
+        <td><button type="button" id="save" class="btn btn-success" style="width:100%;">Book</button></td>
+        <td>
+        
+
+        <button type="reset" class="btn btn-primary" style="width:100%;">Clear</button> 
+        </td>
+        </tr>
+          </table>
+        </form>
+      </div>
+     </div>
+  </div>
+</div>
+  
+</section>
+
+{% endblock %}
+
+{% block javascript %}
+   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDlfQ-TebMrVj3jrig4mb532dNNgBe7-IY&libraries=places&callback=initAutocomplete"
+         async defer></script>
+ 
+  <script>
+
+
+    $(function () {
+      $('#datetimepicker1').datetimepicker({
+        format:'MM/DD/YYYY HH:mm'
+      });
+    });
+
+
+    $(function(){
+
+        $("#bookingform").validate();
+
+      $( "#save" ).click(function(e){
+        e.preventDefault();
+
+             var tim = $("#datetimepicker1").find("input").val();
+     var datetime = moment(tim).format("YYYY-MM-DDTHH:mm");
+
+
+        if($("#bookingform").valid()){
+
+      var create_booking = {
+    "booking_from": $("#booker_name").val(),
+    "booking_phoneno": $("#booker_phone").val(),
+    "booking_email": $("#booker_email").val(),
+    "guest_name": $("#guest_name").val(),
+    "guest_gender": $("input[name='gender']:checked").attr('id'),
+    "guest_phoneno": $("#guest_mobile").val(),
+    "guest_email": $("#guest_email").val(),
+    "pickup_date_time": datetime,
+    "pick_up_location": $("#pickup_address").val(),
+    "drop_location": $("#drop_address").val(),
+    "requested_vehicle_model": $("#vehicle_type").find('option:selected').val(),
+    "comment": $("#comment").val(),
+    "created_by": {{user.id}},
+    "service_type": parseInt($("#service_type_id").find('option:selected').val()),
+    "category": parseInt($("#category_id").find('option:selected').val()),
+    "servicing_city": parseInt($("#city_id").find('option:selected').val()),
+    "billing_base": parseInt($("#billing_base_id").find('option:selected').val()),
+    "company": {{company.id}},
+    "status":1
+      };
+
+        $.ajax({
+            url: '/rapido/api/get_bookings_list/',
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            contentType: 'application/json',
+            data: JSON.stringify(create_booking),
+            success: function(res) {
+                swal("Thank you!", "Your booking is "+res.booking_id+" and details has been sent to registered mail Id and phone number!", "success");
+                  $.getJSON('/rapido/bookingemail/'+res.id+'/', function(data) {
+                    console.log(data);
+                  });
+                document.getElementById("bookingform").reset();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                if(jqXHR.status==400 || jqXHR.status==404 || jqXHR.status==500){
+                  swal ( "Oops" ,  "Something went wrong! Please try again" ,  "error" );
+                document.getElementById("bookingform").reset();
+                }
+            }
+        });
+        }
+      });
+
+    });
+
+
+         //google location implementation
+
+
+
+var placeSearch, pickAddress,dropAddress, geocoder;
+
+function initAutocomplete() {
+  geocoder = new google.maps.Geocoder();
+  pickAddress = new google.maps.places.Autocomplete(
+      (document.getElementById('pickup_address'))/*,
+      {types: ['(cities)']}*/);
+
+  dropAddress = new google.maps.places.Autocomplete(
+      (document.getElementById('drop_address'))/*,
+      {types: ['(cities)']}*/);
+  dropAddress.addListener('place_changed',dropFillAddress);
+  pickAddress.addListener('place_changed', pickFillAddress);
+}
+
+function codeAddress(address) {
+    geocoder.geocode( { 'address': address}, function(results, status) {
+      if (status == 'OK') {
+        console.log(results[0].geometry.location);
+      } else {
+        console.log('Geocode was not successful for the following reason: ' + status);
+      }
+    });
+  }
+
+function pickFillAddress() {
+  var place = pickAddress.getPlace();
+  // console.log(place.place_id);
+  //   codeAddress(document.getElementById('autocomplete').value);
+}
+
+
+function dropFillAddress() {
+  var newPlace = dropAddress.getPlace();
+  // console.log(newPlace.place_id);
+  //   codeAddress(document.getElementById('autocomplete').value);
+}
+//google location implementation ends
+
+  </script> 
+{% endblock %}
+

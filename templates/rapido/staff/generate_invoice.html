@@ -1,0 +1,286 @@
+{% extends "rapido/staff/staff.html" %}
+
+{% block body_block %}
+
+<!DOCTYPE html>
+<html lang="en" ng-app="myapp">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>validate</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+        crossorigin="anonymous">
+    <link rel="stylesheet" href="test2.css">
+
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand">
+                    <href="/" id="nav"><b><h4>Form Validation</h4></b>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <div id="main" class="container main-content" ng-controller="appcontroller">
+        <div class=" col-md-offset-2">
+            <!--Panel -->
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <!-- FORM -->
+                    <form name="theForm" method="POST" novalidate>
+                        <div class="form-group">
+                            <div name="date">
+                                <label for="Start date">Start Date</label> <input type="text" ng-model="firstDate" datepicker/>
+                                <label for="End date"> End date </label><input type="text" name="date" ng-model="secondDate"
+                                    datepicker/>
+                                <button ng-click="dayDiff(firstDate,secondDate)">calculate</button>
+                                <h4>Day Difference: {{dayDifference}} </h4>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="start Time">Start Time</label>
+                            <input type="time" ng-model="startime">
+                            <label for="End Time">End Time</label>
+                            <input type="time" ng-model="endtime">
+                            <button ng-click="timeDiff(startime,endtime)">Calculate</button><br> {{hourdiff}} hours:{{mindiff}}
+                            minutes
+                        </div>
+
+                        <!--vehicle-number-->
+                        <div class="form-group" style="margin-top:20px" ng-class="{}">
+                            <label for="start Time">Starting Kilometers</label>
+                            <input type="number" ng-model="skilo">
+                            <label for="End Time">Ending Kilometers</label>
+                            <input type="number" ng-model="ekilo">
+                            <button ng-click="kmdiff(skilo,ekilo)">Calculate</button><br> {{kmsdiff}} KMS
+                        </div>
+                        <div class="form-group">
+                            <label for="Package">Package</label> Rs.7000
+                        </div>
+                        <div class="form-group">
+                            <label for="Extra kms">Extra kms</label>
+                            <input type="number" ng-model="xtrakm">
+                        </div>
+                        <div class="form-group">
+                            <label for="Extra hours">Extra hours</label>
+                            <input type="number" ng-model="xtrahour">
+                        </div>
+                        <div class="form-group">
+                            <label for="Parking">Parking</label>
+                            <input type="number" ng-model="parking">
+                        </div>
+                        <div class="form-group">
+                            <label for="Others">Others</label>
+                            <input type="number" ng-model="others">
+                        </div>
+                        <div class="form-group">
+                            <label for="GST">GST</label> 13%
+                        </div>
+                        <br> <label for="Total">Total</label> {{total}}
+
+                        <!-- SUBMIT BUTTON -->
+                    </form><br>
+                    <button type="submit" class="btn btn-primary" ng-click="onSubmit(xtrakm,xtrahour,parking,others)">Submit</button>
+                </div>
+                <!--panel end-->
+            </div>
+        </div>
+
+    </div>
+    <!-- /container -->
+</body>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+    crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.0/angular.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+    crossorigin="anonymous"></script>
+<script src="script2.js"></script>
+
+</html>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading" style="padding: 1px 25px;">
+      <h4> Create Invoice 
+      <span class="pull-right">Type of Service:{{duty_slip.booking.service_type}}</span></h4> 
+      </div>
+            <!-- /.panel-heading -->
+      <div class="panel-body">
+              <table class="table">
+                  <tr style="border: 1px ;background-color: #dddddd;">
+                    <th>Date of Booking:</th> <td>{{duty_slip.booking.date.date}}</td>
+
+                    <th>Booking ID:</th><td>{{duty_slip.booking.booking_id}}</td>
+                    
+                    <th>category : </th> <td>{{duty_slip.booking.category}}</td>
+
+                  </tr>
+                  <tr>
+                    <th>Booking from:</th><td>{{duty_slip.booking.booking_from}}</td>
+                    <th>Booking Email:</th> <td>{{duty_slip.booking.booking_email}}</td>
+                    <th>Booking Phone no:</th><td>{{duty_slip.booking.booking_phoneno}}</td>
+                  </tr>
+                  <tr>
+                    <th>Guest Name:</th><td>{{duty_slip.booking.guest_name}} </td>
+                    <th>Guest Phone No:</th><td>{{duty_slip.booking.guest_phoneno}}</td>
+                    <th>Guest Email:</th><td>{{duty_slip.booking.guest_email}}</td>
+  
+                  </tr>
+                  <tr>
+                    <th>PickUp date & time</th>
+                    <td><li>{{duty_slip.booking.pick_up_date }}</li><li>{{duty_slip.booking.pick_up_time}}</li> </td>
+                    <th> pickup location</th>
+                    <td>{{duty_slip.booking.pick_up_location }} </td>
+                     <!--  <td>
+                      <li>{{duty_slip.booking_id.pickup_up_location.street_address}},{{duty_slip.booking_id.pick_up_location.area}},{{duty_slip.booking_id.pick_up_location.city}},{{duty_slip.booking_id.pick_up_location.state}}</li><li>{{duty_slip.booking_id.pick_up_location.pincode}}
+                      </td> 
+                      <th> land mark</th><td>{{duty_slip.booking_id.pick_up_location.landmark}}</td>-->
+                  </tr>
+                  <tr>
+                    <th> drop location</th>
+                    <td>{{duty_slip.booking.drop_location}} </td>
+
+                     <!--  <td><li>{{duty_slip.booking_id.drop_location.street_address}},{{duty_slip.booking_id.drop_location.area}},{{duty_slip.booking_id.drop_location.city}},{{duty_slip.booking_id.drop_location.state}}</li><li>{{duty_slip.booking_id.drop_location.pincode}}</li>
+                      </td>
+                      <th> land mark</th><td>{{duty_slip.booking_id.drop_location.landmark}}</td> -->
+
+                    <th> requested vehicle</th><td>{{duty_slip.booking.requested_vehicle_model}}</td>       
+                  </tr>
+                  </table>
+                  <hr>
+{{duty_slip.duty_slip_id}}
+              <table class="table">
+                  <tr style="border: 1px ;background-color: #dddddd;">
+                    <th>Trip sheet created by:</th><td>{{duty_slip.duty_slip_createdby}}</td>
+                    <th>Vendor:</th><td>{{duty_slip.vendor }},  {{duty_slip.vendor.vendor_type }} </td>
+                    <th>Created date</th><td>{{ duty_slip.date }}</td>
+                  </tr>
+                  <tr>
+                    <th>Vehicle Model:</th>
+                      <td>{{duty_slip.allocated_vehicle}}</td>
+                      <th>vehicle No:</th>
+                      <td>{{duty_slip.vehicle_no}}</td>
+                      <th>vehicle Colour:</th>
+                      <td>{{duty_slip.vehicle_colour}}</td>
+                    </tr>
+                    <tr>
+                        <td>chauffeur Name:</td>
+                        <td>{{duty_slip.chauffeur_name}}</td>
+                        <td>chauffeur phoneno:</td>
+                        <td>{{duty_slip.chauffeur_phoneno}}</td>
+                        <td>chauffeur Drivinglicense:</td>
+                        <td>{{duty_slip.chauffeur_drivinglicense}}</td>
+                    </tr>          
+              </table>
+
+              <table class="table">
+
+          <form class="form-item span8" id="item_form" method="post" action="/rapido/generate_invoice/{{duty_slip.duty_slip_id}}/" enctype="multipart/form-data">
+          {% csrf_token %}          
+                <tr style="border: 1px ;background-color: #dddddd;">                      
+                <th>Date out:</th>
+                <td><input type="date" id="first" class="form-control" name="date_out" required=""></td>
+                <th>Date In:</th>
+                <td><input type="date" id="second" class="form-control" name="date_in" required=""></td>
+                <th>Total Days:</th>
+                <td>      </td>
+                </tr>
+
+                <tr>
+                  <td>Opening Time:</td>
+                  <td><input type="time" class="form-control" name="opening_time"  required=""></td>
+                  <td>Closeing Time:</td>
+                  <td><input type="time" class="form-control" name="closing_time" required=""></td>
+                  <td>Total Hours:</td>
+                  <td>     </td>
+                </tr>
+
+                <tr>
+                  <td>Point Opening time:</td>
+                  <td><input type="time" class="form-control" name="potime"  required=""></td>
+                  <td>Point Closing time:</td>
+                  <td><input type="time" class="form-control" name="pctime" required=""></td>
+                  <td>Total time:</td>
+                  <td>     </td>
+                </tr>
+
+                <tr>
+                  <td>Point Opening Km:</td>
+                  <td><input type="number" class="form-control" name="point_opening_km" required="" ></td>
+                  <td>Point Closing Km:</td>
+                  <td><input type="number" class="form-control" name="point_closing_km" required="" ></td>
+                  <td>Total Km:</td>
+                  <td> </td>
+                </tr>
+
+                <tr>
+                  <td>Package:</td>
+                  <td>:</td>
+                  <td>Package rate:</td>
+                  <td>: </td>
+                  <td>:Driver Batta: </td>
+                  <td>: </td>
+                </tr>
+                <tr>
+                  <td>Extra KM run:</td>
+                  <td>:</td>
+                  <td>Extra KM rate:</td>
+                  <td>:</td>
+                  <td>Extra KM amount:</td>
+                  <td>:</td>
+                </tr>
+
+                <tr>
+                  <td>Extra Hour run:</td>
+                  <td>:</td>
+                  <td>Extra Hour rate:</td>
+                  <td>:</td>
+                  <td>Extra Hour amount:</td>
+                  <td>:</td>
+                </tr>
+
+                <tr>
+                  <td>Parking & tollgate:</td>
+                  <td><input type="number" class="form-control" name="parking"></td>
+                  <td>Itinerary:</td>
+                  <td><input type="number" class="form-control" name="Itinerary"></td>
+                  <td>others:</td>
+                  <td><input type="number" class="form-control" name="others"></td>
+                </tr>
+
+                <tr>
+                  <td>Miscellaneous:</td>
+                  <td><input type="number" class="form-control" name="miscellaneous"></td>
+                  <td>GST: 5%</td>
+                  <td>  </td>
+                  <td>Total Amount to be paid:</td>
+                  <td> </td>
+                </tr>
+
+
+
+
+
+                <tr>
+                <td><button class="btn btn-success">create invoice</button></td>
+            </tr>
+
+
+          </form>
+
+      </div>
+     </div>
+  </div>
+
+</div>
+
+{% endblock %}

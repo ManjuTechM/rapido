@@ -1,0 +1,343 @@
+<title id="pageTitle"></title>
+{% extends "rapido/master/master.html" %}
+{% block body_block %}
+{% load static %}
+
+<!-- Main content -->
+  <section class="invoice" style="padding-left: 10px;">
+    <table style="width:100%; border-bottom:1px solid #a7a6a6;">
+      <tr class="logo_td">
+        <td colspan="6">
+        <h3 class="rapido">Rapido Travels India Pvt. Ltd.</h3>
+        <p>#314, 1st Floor, 10th Main, 15th Cross, <br> 5th Phase, J.P. Nagar, Bangalore - 560 078.</p>
+        <p>Ph : 080 - 26595567, 26585567</p>
+        <p>E-mail : bookings@rapidotravels.co.in</p>
+        <p>www.rapidotravels.co.in</p>
+        </td>
+        <td colspan="3"></td>
+        <td colspan="3"><img src="{% static 'images/invoice_logo.png'%}" style="float:right;"></td>
+      </tr>
+      <tr>
+        <td colspan="6"></td>       
+        <td colspan="1"><h4>TAX INVOICE</h4> </td>
+        <td colspan="1"></td>
+        <td colspan="2"></td>
+        <td colspan="2"></td>
+        <td colspan="1"></td>
+        <td colspan="1"></td>
+      </tr>
+    </table>
+    
+
+    <table style="width:100%;">
+      <tr>
+        <th colspan="1"></th>
+        <th colspan="6"></th> 
+        <th colspan="1"></th>
+        <th colspan="1"></th>
+        <th colspan="1"></th>
+        <th colspan="1"></th>
+        <th colspan="1"></th>
+      </tr>
+      <tr>
+        <td colspan="1">Company</td>
+        <td colspan="6">{{ booking.client_name}}</td>       
+        <td colspan="1"></td>
+        <td colspan="1">Booking No</td>
+        <td colspan="1" id="bookingIdhe">{{booking.booking_id}}</td>
+        <td colspan="1">Invoice No</td>
+        <td colspan="1" > {{ booking.booking_id|slice:"6:" }} </td>
+      </tr>
+      <tr>
+        <td colspan="1">Car Used By</td>
+        <td colspan="9">{{ booking.user_name }}</td>       
+        <td colspan="1">Invoice Date</td>
+        <!-- <td colspan="1" id="todayDate"></td> -->
+        <td colspan="1">{{today}}</td>
+      </tr>
+      <tr style="border-bottom:1px solid #a7a6a6;">
+        <td colspan="1">Booked By</td>
+        <td colspan="6">{{ booking.booked_by }}</td>
+        <td colspan="1"></td>
+        <td colspan="1">Requested Branch</td>
+        <td colspan="1">{{ booking.city }}</td>
+        <td colspan="1">Used In</td>
+        <td colspan="1">{{ booking.city_used }}</td>
+      </tr>
+      
+      <!-- ============================= -->
+      
+      <tr>
+        <td colspan="1">Car No.</td>
+        <td colspan="6">{{ booking.vehicle_no }}</td>
+        <td colspan="1"></td>
+        <td colspan="1">Car Allotted</td>
+        <td colspan="1">{{ booking.vehicle_request }}</td>
+        <td colspan="1">DS No.</td>
+        <td colspan="1">{{ booking.booking_id|slice:"6:" }}</td>
+      </tr>
+      
+      <tr>
+        <td colspan="1">Package</td>
+        <td colspan="6">{{booking.slab_used}}</td>
+        <td colspan="1"></td>
+        <td colspan="1">Car Billed</td>
+        <td colspan="1">{{ booking.vehicle_request }}</td>       
+        <td colspan="1">Pkg rate (<i class="fa fa-rupee"></i>)</td>
+        <td colspan="1" align="right">{{ booking.base_slab_rate }}</td>
+      </tr>     
+      <tr>
+        <td colspan="1">Km Used</td>
+        <td colspan="6">{{booking.total_km}}</td>
+        <td colspan="1"></td>
+        <td colspan="1">Extra Km:</td>
+        <td colspan="1">{{booking.extra_km_run}} Km X <i class="fa fa-rupee"></i>{{booking.extra_km_rate}} </td>
+        <td colspan="1">Total Extra Km (<i class="fa fa-rupee"></i>)</td>
+        <td colspan="1" align="right">{{booking.extra_km_amt}}</td>
+      </tr>     
+      <tr>
+        <td colspan="1">FGR</td>
+        <td colspan="6">{{booking.fgr}}</td>
+        <td colspan="1"></td>
+        <td colspan="1"></td>
+        <td colspan="1"></td>
+        <td colspan="1"></td>
+        <td colspan="1"></td>
+      </tr>     
+      <tr>
+        <td colspan="1">Hr(s) Used</td>
+        <td colspan="6">{{booking.total_hour}}</td>
+        <td colspan="1"> </td>
+        <td colspan="1">Extra Hr(s) </td>
+        <td colspan="1">{{booking.extra_hr_run}} Hrs X<i class="fa fa-rupee"></i> {{booking.extra_hour_rate}}</td>
+        <td colspan="1">Total Extra Hr (<i class="fa fa-rupee"></i>)</td>
+        <td colspan="1" align="right">{{booking.extra_hr_amt}}</td>
+      </tr>
+      <tr style="width:100%; border-bottom:1px solid #a7a6a6;">
+        <td colspan="1">Car Used On</td>
+        <td colspan="6">{{booking.date_of_usage}}</td>
+        <td colspan="1"></td>
+        <td colspan="1"></td>
+        <td colspan="1"></td>
+        <td colspan="1">Sub Total</td>
+        <td colspan="1" align="right">{{booking.total_amount}}</td>
+      </tr>
+      
+      
+      <!-- ============================= -->
+      
+      <tr>
+        <td colspan="1">Out Station Allowance ({{booking.no_of_days}} Days)</td>
+        <td colspan="6">{{booking.day_batta}}</td>
+        <td colspan="1"></td>
+        <td colspan="1">Night Allowance</td>  
+        <td colspan="1">{{booking.night_batta}}</td>
+        <td colspan="1">Fuel Surcharge Impact*</td>
+        <td colspan="1" align="right">0.0</td>
+      </tr>
+      <tr>
+        <td colspan="1">Permit</td>
+        <td colspan="6">0</td>
+        <td colspan="1"></td>
+        <td colspan="1">Parking-Toll/Interstate-Tax</td>
+        <td colspan="1">{{booking.interstate_tax}}</td> 
+        <td colspan="1">miscellaneous</td>
+        <td colspan="1" align="right">0.0 </td>
+      </tr>
+      <tr style="width:100%; border-bottom:1px solid #a7a6a6;">
+        <td colspan="1"></td>
+        <td colspan="6"></td>
+        <td colspan="1"></td>
+        <td colspan="1"></td>  
+        <td colspan="1"></td>
+        <td colspan="1">Others total</td>
+        <td colspan="1" align="right">{{booking.interstate_tax}}</td>
+      </tr>
+      
+      
+      <!-- ============================= -->
+      
+      
+      
+      <tr>
+        <td colspan="7">PAN : AAICR1074L</td>
+        <td colspan="1"></td>
+        <td colspan="1"></td>
+        <td colspan="1"></td>
+        <td colspan="1"></td> 
+        <td colspan="1"></td>
+      </tr>
+      <tr>
+        <td colspan="7">Service Tax No. : AAICR1074LSD001</td>
+        <td colspan="2">[CGST 2.5%:{{booking.cgst}}]</td>
+        <td colspan="1">Total</td>
+        <td colspan="1"></td> 
+        <td colspan="1" id="total" align="right">{{booking.total}} </td>
+      </tr>
+      <tr>
+        <td colspan="7">GST NO. : 29AAICR1074LIZY</td> 
+        <td colspan="2">[ SGST 2.5%: {{booking.sgst}}]</td>
+        <td colspan="1">GST</td>
+        <td colspan="1">5.0%</td>
+        <td colspan="1" align="right">{{booking.gst}}</td>
+      </tr>
+      <tr>
+        <td colspan="7">SAC code: 9966</td>
+        <td colspan="1"></td>
+        <td colspan="1"></td>
+        <td colspan="1">Total Amount</td>
+        <td colspan="1"></td>
+        <td colspan="1" align="right">{{booking.total_bill_amount}}</td>
+      </tr>   
+      <tr>
+        <td colspan="6">Service Tax Category : Rent-A-Cab</td>
+        <td colspan="1"></td>
+        <td colspan="1"></td>
+        <td colspan="1"></td>
+        <td colspan="2"></td>       
+        <td colspan="1" align="right"></td>
+      </tr>   
+      <tr style="width:100%; border-bottom:1px solid #a7a6a6;">
+        <td colspan="9">All Cheques / Drafts to be drawn in favor of Rapido Travels India Pvt. Ltd.</td>
+        <td colspan="1">Discount</td>
+        <td colspan="1"></td>  
+        <td colspan="1" align="right">{{dutyslip.discount}}</td>
+      </tr>
+      <tr>
+        <td colspan="9"></td>
+        <td colspan="1"><strong>Net Payable</strong></td>
+        <td colspan="1"></td> 
+        <td colspan="1" align="right">{{booking.total_bill_amount}}</td>
+      </tr>     
+    </table>
+    
+      
+      <!-- ============================= -->
+      
+    
+    <table style="width:100%;">
+      <tr>
+        <td colspan="4">
+          <p style="font-weight:600 !important;">Billing Address</p>
+          <p>{{ booking.billing_address}}</p>
+          <p>GST NO. {{ booking.company_gst}}</p>
+          <p>PAN NO. {{booking.company_pan}}</p>
+        </td>
+        <td colspan="1" style="width: 20%;"></td>     
+        <td colspan="5" class="text-center">
+          <p style="font-weight:600 !important;">For Rapido Travels India Pvt. Ltd.</p>
+        </td>     
+      </tr>
+      <tr>
+        <td colspan="4"> </td>
+        <td colspan="4"> </td>     
+        <td colspan="4">
+          <p style="text-align:center; padding-top:5%;">Authorised Signatory</p>
+        </td>     
+      </tr>
+    </table>
+    
+    <table style="width:100%; font-size:10px !important;">
+      <tr>
+        <td colspan="10">
+          <p>1. Dutyslip / Statement of Usage enclosed in original.</p>
+          <p>2. In case of any dispute the same must be brought into our notice in writing 7 days from the date of submission.</p>
+          <p>3. All bills must be paid within 7 days of billing or within contracted payment period to avoid levy of 18% interest.</p>
+          <p>4. All disputes are subject to Bangalore jurisdiction only.</p>
+          <p class="note">Note :- We welcome your feedback on feedback@rapidotravels.co.in</p>
+          <p>Regd. Off. #314, 1st Floor, 10th Main, 15th Cross, 5th Phase, JP Nagar, Bangalore - 560078.</p><br/>
+          <p class="text-center">This is system generated E-bill,no need of signature.Incase of any queries please contact accounts@rapido.co.in within 7 days.</p>
+        </td>         
+      </tr>
+    </table>  
+  </section>
+  <div class="pagebreak"> </div>
+    
+    <div class="row no-print">
+      <div class="col-xs-10">
+        <div class="col-xs-5">
+          
+        </div>
+        <div class="center-block col-xs-2">
+         <a href="#" target="_blank" class=" btn btn-success" onclick="window.print()"> <i class="fa fa-print"></i> Print</a>
+         </div>
+        <div class="col-xs-5"></div>
+      </div>
+    </div>
+<style type="text/css">
+.pagebreak { page-break-before: always; }
+  table{
+    border-spacing: 0 !important;
+    text-align: left;
+  }
+  td, th{
+    //border:1px solid #a7a6a6;
+    /*border-bottom:1px solid #a7a6a6;*/
+    font-weight:500 !important;
+  }
+  td{
+    padding: 3px;
+    font-size: 13px;
+  }
+  .rapido{
+    margin-top:0 !important;
+    margin-bottom: 10px !important;
+  }
+  p{
+    margin-top: 0 !important;
+    margin-bottom:6px !important; 
+  }
+  thead img{
+    //width:100% !important;
+  }
+  .reporting{
+    border-bottom: transparent;
+    //border-right: transparent;
+    border-top: transparent;
+  }
+  .note{
+    border:1px solid #a7a6a6;
+    padding:5px;
+    text-align:center;
+    font-weight:600;
+  }
+  header,aside{
+    display: none;
+  }
+  .content-wrapper,.main-footer{
+    margin-left: 0;
+  }
+  .master-title{
+    display: none !important;
+  }
+  @media print{
+    td{
+      font-size: 10px;
+      padding: 5px;
+    }
+    footer{
+      display: none;
+    }
+  }
+</style>
+
+{% endblock %}
+
+
+{% block javascript %}
+<script type="text/javascript">
+$(function(){
+$("#todayDate").text(moment().format("MMM Do YY"));
+  
+})
+
+window.print();
+var bookingIdhe = document.getElementById("bookingIdhe").innerHTML;
+console.log(bookingIdhe.substr(8,8));
+document.getElementById("dutyslipNo").innerHTML = bookingIdhe.substr(10,10);
+document.getElementById("invoiceNo").innerHTML = bookingIdhe.substr(10,10);
+
+document.getElementById("pageTitle").innerHTML = bookingIdhe;
+</script>
+
+{% endblock %}

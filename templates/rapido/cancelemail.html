@@ -1,0 +1,96 @@
+<!DOCTYPE HTML>
+<html lang="en-US">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+	<title>Rapido</title>	
+	<link rel='shortcut icon' type='image/x-icon' href="https://drive.google.com/uc?export=view&id=14IIUAygvRil5H2tpYZtXy_MKfTSjbzrf" />	
+</head>
+<body style=" display:block; margin:0 auto; width:700px; padding-bottom:2%; font-family:'Trebuchet MS', Helvetica, sans-serif !important; font-size:14px !important; background: #e4e3e3;">
+	<header style="background: rgba(0, 0, 0, 0.8); padding-top: 4px; padding-bottom: 3px; padding-left: 6px; height: 60px; padding-right: 4px;">
+		<div style="width:50%; float:left;" class="logo"><a href="index.html" class="active"><img style="width:41%;" src="https://drive.google.com/uc?export=view&id=1jSv-O89KiHC5BKPoUkrHnuQxwXvWJQyX"></a></div>
+		<div class="callus" style="width:50%; float:left;">
+			<ul style="float: right;">
+				<li style="list-style-type: none;">
+					<a style="color: #fff; display: inline-block; text-transform: uppercase; text-decoration: none;" href="tel:080-26595567"> <img src="https://drive.google.com/uc?export=view&id=1OKzKWzStV5nRCAfvAfoEe96-Pm2AbFy0">
+						<span style="display: inline-block; vertical-align: middle; margin-left: 5px; margin-top: -14px;">
+							<span>Call us 24 x 7</span> </br>
+							<label style="display: block; margin-bottom: 0px; margin-left: 5px;">080-26595567</label>
+						</span>
+					</a>
+				</li>
+			</ul>
+		</div>
+	</header>
+	<section class="section_1" style="padding:10px; background:white; height:135px;">
+		<div class="col-md-6 col-text" style="width:50%;float:left;">
+			<h1 style="padding-left: 12px;"> Make your rides more pleasant and meaningful </h1>
+			<p style="line-height: 22px;margin-top: 0 !important; margin-bottom:6px !important;">We value your time and also your moments, at Rapido we want to make your rides better.</p>
+		</div>
+		<div class="col-md-6 main_img" style="width:50%;float:left;">
+			<img style="width: 100%;" src="https://drive.google.com/uc?export=view&id=1OZzt9xiaE5pXZc9WwAHC2grDn5sDmtjL">
+		</div>
+	</section>
+	
+	<section style="background: #fff;padding: 2%;" class="section_2">
+		<p style="margin-top: 0 !important; margin-bottom:6px !important;">Dear Sir / Madam,</p>
+		<h3 style="padding-left: 12px;">Greetings from Rapido…!</h3>
+		<p style="margin-top: 0 !important; margin-bottom:0;">
+		As per your request, we are cancelling your existing booking :RTIPL-{{booking.servicing_city.city_code}}-{{booking.booking_id}}.Please note that if you have any concern / clarification required on above said subject you are requested to reach us  at: 080 – 26595567 or reply to this e-mail: bookings@rapidotravels.co.in </p>
+		<p> You’re booking stands cancelled however the charges are applied as per cancellation policy.</p>
+	</section>
+	
+	<table style="
+		border-spacing: 0 !important;
+		text-align: left;
+		width:100%;
+		background:white;">
+		<tr>
+			<td colspan="4" style="border:1px solid #a7a6a6; font-weight:500 !important; padding:6px;font-weight:600 !important;">Booking No</td>
+			<td colspan="4" style="border:1px solid #a7a6a6; font-weight:500 !important; padding:6px;">:RTIPL-{{booking.servicing_city.city_code}}-{{booking.booking_id}}</td>
+		</tr>
+		<tr>
+			<td colspan="4" style="border:1px solid #a7a6a6; font-weight:500 !important; padding:6px;font-weight:600 !important;">Client Name</td>
+			<td colspan="4" style="border:1px solid #a7a6a6; font-weight:500 !important; padding:6px;">:{{booking.company}}</td>
+		</tr>
+		<tr>
+			<td colspan="4" style="border:1px solid #a7a6a6; font-weight:500 !important; padding:6px;font-weight:600 !important;">Guest Name</td>
+			<td colspan="4" style="border:1px solid #a7a6a6; font-weight:500 !important; padding:6px;">:{{booking.guest_name}}</td>
+		</tr>
+		<tr>
+			<td colspan="4" style="border:1px solid #a7a6a6; font-weight:500 !important; padding:6px;font-weight:600 !important;">Reporting Time</td>
+			<td colspan="4" style="border:1px solid #a7a6a6; font-weight:500 !important; padding:6px;">:{{booking.pickup_date_time}}</td>
+		</tr>
+		<tr>
+			<td colspan="4" style="border:1px solid #a7a6a6; font-weight:500 !important; padding:6px;font-weight:600 !important;">Guest Contact No</td>
+			<td colspan="4" style="border:1px solid #a7a6a6; font-weight:500 !important; padding:6px;">:{{booking.guest_phoneno}}</td>
+		</tr>
+		<tr>
+			<td colspan="4" style="border:1px solid #a7a6a6; font-weight:500 !important; padding:6px;font-weight:600 !important;">Car Type</td>
+			<td colspan="4" style="border:1px solid #a7a6a6; font-weight:500 !important; padding:6px;">:{{booking.requested_vehicle_model}}</td>
+		</tr>
+		<tr>
+			<td colspan="4" style="border:1px solid #a7a6a6; font-weight:500 !important; padding:6px;font-weight:600 !important;">Pickup Address</td>
+			<td colspan="4" style="border:1px solid #a7a6a6; font-weight:500 !important; padding:6px;">:{{booking.pick_up_location}} </td>
+		</tr>
+		<tr>
+			<td colspan="4" style="border:1px solid #a7a6a6; font-weight:500 !important; padding:6px;font-weight:600 !important;">Status</td>
+			<td colspan="4" style="border:1px solid #a7a6a6; font-weight:500 !important; padding:6px;">:Booking Cancelled</td>
+		</tr>		
+	</table>
+	
+	<section class="section_3" style="background: #fff;padding: 2%;">
+		<p style="margin-top: 0 !important; margin-bottom:6px !important;font-weight:600 !important;">For any assistance:</p>
+		<p style="margin-top: 0 !important; margin-bottom:6px !important;">Booking / Car Details : <a href="mailto:Bookings@rapidotravels.co.in">bookings@rapidotravels.co.in</a> &nbsp; / &nbsp; <a href="mailto:pramod.cr@rapidotravels.co.in">pramod.cr@rapidotravels.co.in</a></p>
+		<p style="margin-top: 0 !important; margin-bottom:6px !important;">Contact No : 7625059665 / 7625059667</p>
+		<p style="margin-top: 0 !important; margin-bottom:6px !important;padding-top:10px;">Thanks & Regards</p>
+		<p style="margin-top: 0 !important; margin-bottom:6px !important;font-weight:600 !important;">Rapido Travels India Pvt Ltd.,</p>		
+	</section>
+	
+	
+	
+	
+	
+</body>
+</html>

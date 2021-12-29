@@ -1,0 +1,272 @@
+{% extends "rapido/master/master.html" %}
+{% block body_block %}
+<style type="text/css">
+   
+input.error
+{
+    border-color: red;
+}
+
+label.error
+{
+    color: red;
+    font-weight: 300 !important;
+}
+</style>
+<section class="content-header">
+   <h6>
+      <ol class="breadcrumb">
+         <li><a href="/rapido/master/"><i class="fa fa-dashboard"></i> Home</a></li>
+         <li><a href="/rapido/vendor/">Vendor</a></li>
+         <li> Add Vendor</a></li>
+      </ol>
+   </h6>
+   <!--  <ol class="breadcrumb">
+      <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+      <li class="active">Category</li>
+      </ol> -->
+</section>
+<section>
+   <div class="row">
+      <div class="col-lg-10">
+         <div class="panel panel-default">
+            <div class="panel-heading" style="padding: 1px 15px;">
+               <h4> Add new vendor </h4>
+            </div>
+            <h5> {{message}}</h5>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+               <form class="form-item span8" id="vendor_form" method="post">
+                  {% csrf_token %}          
+                  <table>
+                     <br>
+                     <tr>
+                        <td>vendor type:</td>
+                        <td>
+                           <select name="vendor_type" id="vendor_type" class="form-control">
+                              {% for vt in vendor_type_list %}
+                              <option value={{vt.id}} selected class="form-control">{{vt.name}}</option>
+                              {% endfor %}
+                           </select>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>vendor Name:</td>
+                        <td><input type="text" id="vendor_name" class="form-control" placeholder="Vendor Name" name="vendor_name" required=""></td>
+                     </tr>
+                     <tr>
+                        <td>vendor joined date:</td>
+                        <td><input type='text' class="form-control" id="join_date" required="" /><input type="text" id="actual_join_date" style="display: none;" name="vendor_joined_date"/></td>
+                     </tr>
+                     <tr>
+                        <td>vendor phoneno:</td>
+                        <td><input type="text" id="vendor_phoneno" class="form-control" placeholder="vendor phoneno" name="vendor_phoneno" pattern="[0-9]{10}" maxlength="10" data-msg="please enter 10 digit mobile number" required=""></td>
+                     </tr>
+                     <tr>
+                        <td>vendor Email-Id:</td>
+                        <td><input type="email" id="vendor_email" class="form-control" placeholder="vendor Email" name="vendor_email" required=""></td>
+                     </tr>
+                     <tr>
+                        <td rowspan="3">Address</td>
+                        <td>street name/no:<input type="text" id="street" class="form-control" placeholder="street_address" name="street_address"></td>
+                        <td>landmark:<input type="text" id="landmark" class="form-control" placeholder="landmark" name="landmark" required=""></td>
+                     </tr>
+
+      <div id="selection">
+                     <tr>
+                        <td>area:<input type="text" id="area" class="form-control" placeholder="area" name="area" required=""></td>
+                        <td>State:
+                        <select id="listBox" class="form-control" name="state" onchange='selct_district(this.value)' required=""></select>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>city:<select id='secondlist' class="form-control" name="city"></select></td>
+                        <td>Pin code:<input type="text" id="pincode" class="form-control" placeholder="pincode" name="pincode" pattern="[0-9]{6}" required=""></td>
+                        <td>Country:<input type="text" id="country" class="form-control" name="country" value="India" required=""></td>
+                     </tr>
+                  </div>
+                     <tr>
+                        <td>vendor agreement start Date</td>
+                        <td><input type='text' class="form-control" id="start_date" required="" /><input type="text" style="display: none;" id="actual_start_date" name="vendor_agreement_start_date" class="form-control" /></td>
+                     </tr>
+                     <tr>
+                        <td>Vendor agreement end Date:</td>
+                        <td><input type='text' class="form-control" id="end_date" required="" /><input type="text" style="display:none;" id="actual_end_date" name="vendor_agreement_end_date" class="form-control" /></td>
+                     </tr>
+                     <tr>
+                        <td>vendor payment type:</td>
+                        <td><input type="text" id="payment_type" class="form-control" placeholder="vendor_payment_type" name="vendor_payment_type" required=""></td>
+                     </tr>
+                     <tr>
+                        <td>upload Vendor Documents:</td>
+                        <td><input type="file" name="vendor_documents"></td>
+                     </tr>
+                     <tr>
+                        <td>vendor picture:</td>
+                        <td><input type="file" name="vendor_picture"></td>
+                     </tr>
+                     <tr>
+                        <td>Bank Name:</td>
+                        <td><input type="text" id="bank_name" class="form-control" placeholder="Bank Name" name="bank_name" ></td>
+                     </tr>
+                     <tr>
+                        <td>Beneficiary Account Name:</td>
+                        <td><input type="text" id="account_name" class="form-control" placeholder="Beneficiary Name" name="beneficiary_account_name"></td>
+                     </tr>
+                     <tr>
+                        <td>Account Number:</td>
+                        <td><input type="text" id="account_number" class="form-control" placeholder="Account Number" name="accountno"></td>
+                     </tr>
+                     <tr>
+                        <td>IFSC:</td>
+                        <td><input type="text" id="isfc_code" class="form-control" placeholder="IFSC code" name="ifsc"></td>
+                     </tr>
+                     <!-- Provide a button to click to submit the form. -->
+                     <tr>
+                        <td><button type="text" class="btn btn-success" style="width:100%;">Save</button></td>
+                        <td>
+                           <button type="reset" class="btn btn-primary" style="width:100%;">Clear</button> 
+                           <!--       <input class="btn btn-outline btn-success" type="submit" value="Save">
+                              <input type="reset" class="btn btn-outline btn-primary" value="Reset">-->
+                        </td>
+                     </tr>
+                  </table>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
+{% endblock %}
+
+
+{% block javascript %}
+
+  <script>
+
+    $(function(){
+
+      setDatePicker("#join_date","#actual_join_date");
+      setDatePicker("#start_date","#actual_start_date");
+      setDatePicker("#end_date","#actual_end_date");
+
+      function setDatePicker(date1,date2){
+
+      $(date1).datepicker(
+         { dateFormat: 'dd-mm-yy',
+           onSelect:function(){
+            var date = $(this).val().split("-").reverse().join("-");
+            $(date2).val(date);
+           }
+         }
+       );
+
+      }
+
+      sendDate("#join_date","#actual_join_date","#actual_start_date","#start_date","#actual_end_date","#end_date");
+      sendDate("#start_date","#actual_start_date","#actual_join_date","#join_date","#actual_end_date","#end_date");
+      sendDate("#end_date","#actual_end_date","#actual_start_date","#start_date","#actual_join_date","#join_date");
+
+      function sendDate(date1,date2,date3,date4,date5,date6){
+        $(date1).keyup(function(){
+          $(date2).val($(this).val().split("-").reverse().join("-"));
+          $(date3).val($(date4).val().split("-").reverse().join("-"));
+          $(date5).val($(date6).val().split("-").reverse().join("-"));
+        }); 
+      }
+
+      $("#vendor_form").validate({
+        messages:{
+          vendor_phoneno:getMsg("#vendor_phoneno")
+        }
+      });
+
+      function getMsg(selector){
+        return $(selector).attr('data-msg');
+      }
+
+
+      $("#vendor_form").submit(function(e) {
+          e.preventDefault();
+      var vendor_name = $("#vendor_name").val();
+      var vendor_joined_date = $("#actual_join_date").val();
+      var vendor_phoneno = $("#vendor_phoneno").val();
+      var vendor_email = $("#vendor_email").val();
+      var vendor_street = $("#street").val();
+      var vendor_landmark = $("#landmark").val();
+      var vendor_city = $("#secondlist option:selected").val();
+      var vendor_area = $("#area").val();
+      var vendor_state = $("#listBox option:selected").val();
+      var vendor_type = $("#vendor_type option:selected").val();
+      var vendor_pincode = $("#pincode").val();
+      var vendor_country = $("#country").val();
+      var vendor_agreement_start_date = $("#actual_start_date").val();
+      var vendor_agreement_end_date = $("#actual_end_date").val();
+      var vendor_payment_type = parseInt($("#payment_type").val());
+      var vendor_bank_name = $("#bank_name").val();
+      var vendor_account_name = $("#account_name").val();
+      var vendor_account_number = $("#account_number").val();
+      var vendor_isfc_code = $("#isfc_code").val();
+            // $(this).children('#join_date,#start_date,#end_date').remove();
+            var add_vendor;
+
+            add_vendor = {
+        "vendor_name":vendor_name,
+        "vendor_address":{
+            "street_address":vendor_street,
+            "landmark":vendor_landmark,
+            "city":vendor_city,
+            "state":vendor_state,
+            "pincode":vendor_pincode,
+            "area":vendor_area,
+            "country":vendor_country,
+            "created_by":{{user.id}}
+        },
+        "vendor_phoneno":vendor_phoneno ,
+        "vendor_email":vendor_email,
+        "vendor_picture":null,
+        "vendor_joined_date":vendor_joined_date,
+        "vendor_payment_type":vendor_payment_type,
+        "vendor_agreement_start_date": vendor_agreement_start_date,
+        "vendor_agreement_end_date": vendor_agreement_end_date,
+        "vendor_documents":null,
+        "bank_name":vendor_bank_name,
+        "beneficiary_account_name":vendor_account_name,
+        "accountno":vendor_account_number,
+        "ifsc":vendor_isfc_code,
+        "vendor_type":vendor_type,
+        "created_by":{{user.id}}
+    };
+
+    if($("#vendor_form").valid()){
+
+      ajaxCall();
+
+    }
+
+
+
+    function ajaxCall(){
+
+      $.ajax({
+        url: '/rapido/api/addvendor/',
+        method: 'POST',
+        headers:{'X-CSRFToken':'{{ csrf_token }}'},                  
+        contentType : 'application/json',
+        data: JSON.stringify(add_vendor),
+        success:function(res){
+          swal({
+            title:"Vendor created successfully!",
+            icon:"success",
+          });
+          }
+        });
+    }
+});
+    
+    });
+        // $("#vendor_form").validate();
+
+  </script>
+
+{% endblock %}

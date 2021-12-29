@@ -1,0 +1,276 @@
+{% extends "rapido/master/master.html" %}
+{% block body_block %}
+{% load static %}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="{% static 'dist/css/bootstrap-datetimepicker.min.css' %}">
+<style>
+.actived{
+  color: #000;
+  font-weight: bold;
+}
+  label.error{
+    color:red;
+  }
+  input.error{
+    border-color:red;
+  }
+</style>
+    <section class="content-header">
+      <h6>
+        <ol class="breadcrumb">
+          <li>CloseTrip</li>
+          <li class="actived">Receive TripSheet</li>
+        </ol>
+      </h6>
+     <!--  <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Category</li>
+      </ol> -->
+    </section>
+
+   <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <!-- /.box -->
+
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Pending to receive trip sheets on :
+              <span id="filterDate"><b>{{fromdate}}</b></span></h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th >Date</th>
+                  <th >Booking ID</th>
+                  <th >Type of Service</th>
+                  <th>Company</th>
+                  <th >Guest Name</th>
+                  <th >Chauffeur Name</th>
+                  <th >Chauffeur Phone no</th>
+                  <th >Car No $ Model</th>
+                  <th >status</th>
+                  <th >view details</th>
+                  <th >Receive trip sheet</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for b in dutyslip_list %}
+ 
+                    <tr>
+                      <td>{{b.created_date.date}}</td>
+            
+                      <td class="test_id">RTPL-{{b.booking.servicing_city.city_code}}-{{b.booking.booking_id}}</td> 
+
+                      <td>{{b.booking.service_type}} </td>
+                      <td>{{b.booking.company}}</td>
+                      <td>{{b.booking.guest_name}}</td>
+                      <td>{{b.chauffeur_name}} </td>
+                      <td>{{b.chauffeur_phoneno}}</td>
+                      <td>{{b.vehicle_no}} , {{b.allocated_vehicle}} </td>
+                      <td><span class="label label-success">{{b.status}}</span></td>
+                      <td><a href=""><span class="label label-primary">view</span></a></td> 
+                 
+                      <td><button data-toggle="modal" data-target="#receive{{b.booking.booking_id}}" class="receive_trip btn btn-success">Receive</button></td>
+                                      
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+
+<!-- receive trip sheet form in modal -->
+{% for b in dutyslip_list %}
+
+<div id="receive{{b.booking.booking_id}}" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Modal Header</h4>
+      </div>
+      <div class="modal-body">
+        <form id="form{{b.booking.booking_id}}">
+          <label for="datein">DateIn</label>
+            <input type="text" id="datein" name="datein" required="">
+          <label for="dateout">DateOut</label>
+            <input type="text" id="dateout" name="dateout" required="">
+          <div class="row">
+            <div class="col-md-12">
+          TimeOut:
+                <div class='col-md-6 input-group date' id='start_time'>
+                    <input type='text' class="form-control" placeholder="Opening Time" required="" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                </div>
+          TimeIn:
+                <div class='col-md-6 input-group date' id='end_time'>
+                    <input type='text' class="form-control" placeholder="Closing Time" required="" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                </div>
+            </div>
+          </div>
+          <input type="text" placeholder="openingkm" class="form-control" name="openingkm" required="" />
+          <input type="text" placeholder="closingkm" class="form-control" name="closingkm" required="" />        
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" onclick="recieveTrip('{{b.booking.booking_id}}');">Save</button>
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endfor %}
+<!-- receive trip sheet form in modal -->
+
+{% endblock %}
+
+{% block javascript %}
+
+      <script src="{% static 'dist/js/bootstrap-datetimepicker.js' %}"></script>
+  <script>
+
+$(function () {
+  $('#example1').DataTable({
+  dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-3 toolbar'><'col-sm-3'p>>" +
+"<'row'<'col-sm-12'tr>>" +
+"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+ });
+
+$("div.toolbar").html('<div id="reportrange" data-url="/rapido/admin_receivetrip_list/" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;<span></span> <b class="caret"></b></div>');
+  //search implementation
+});
+
+//date range picker 
+$(function() {
+
+var start = ($("#filterDate").text()=="")?moment():moment($("#filterDate").text());
+var end = moment();
+var startDate;
+var endDate;
+var url;
+
+function cb(start, end) {
+$('#reportrange span').html(start.format('MMMM D, YYYY'));
+startDate = start.format('YYYY-MM-DD');
+endDate = end.format('YYYY-MM-DD');
+// console.log(startDate);
+// console.log(endDate);
+
+// $.get(url,function(data){
+
+//   console.log(data);
+//   // $("html").html(data);
+// });
+}
+
+$('#reportrange').daterangepicker({
+startDate: start,
+singleDatePicker:true
+}, cb);
+
+$('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+console.log(picker.startDate.format('YYYY-MM-DD'));
+console.log(picker.endDate.format('YYYY-MM-DD'));
+dataUrl = $("#reportrange").attr("data-url");
+url=dataUrl+startDate+"/"+endDate+"/";
+console.log(url);
+location.href=url;
+
+});
+
+cb(start, end);
+// location.href=url;
+
+});
+
+
+    var dateFormat = "mm/dd/yy",
+      from = $( "#datein" )
+        .datepicker({
+          defaultDate: "+1w",
+          changeMonth: true,
+          numberOfMonths: 2
+        })
+        .on( "change", function() {
+          to.datepicker( "option", "minDate", getDate( this ) );
+        }),
+      to = $( "#dateout" ).datepicker({
+        defaultDate: "+1w",
+        changeMonth: true,
+        numberOfMonths: 2
+      })
+      .on( "change", function() {
+        from.datepicker( "option", "maxDate", getDate( this ) );
+      });
+ 
+    function getDate( element ) {
+      var date;
+      try {
+        date = $.datepicker.parseDate( dateFormat, element.value );
+      } catch( error ) {
+        date = null;
+      }
+ 
+      return date;
+    }
+
+    //timepicker
+
+            $(function () {
+                $('#start_time').datetimepicker({
+                    format:'HH:mm'
+                });
+
+                $('#end_time').datetimepicker({
+                    format:'HH:mm'
+                });
+            });
+//================recieve trip sheet======================
+        function recieveTrip(bookingid){
+
+          console.log(bookingid);
+    
+        if($("#form"+bookingid).valid()){
+          $.ajax({            //send json-object to api and read response
+              url: '/rapido/receive_tripsheet/'+bookingid+"/",
+              method: "POST",
+              data: $("#form"+bookingid).serialize(),
+              success: function(res) {
+                console.log(res);
+                  swal({
+                    title:"received TripSheet",
+                    icon:"success"
+                  }).then((will)=>{
+                    if(will){
+                      location.reload();
+                    }
+                  });
+              }
+          });
+        }
+    
+    }      
+  </script>
+
+
+
+
+{% endblock %}

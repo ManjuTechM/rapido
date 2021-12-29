@@ -1,0 +1,87 @@
+{% extends "rapido/master/master.html" %}
+
+{% block body_block %}
+
+        <section class="content-header">
+          <h6>
+          <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Category</li>
+          </ol>
+          </h6>
+         <!--  <ol class="breadcrumb">
+            <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li class="active">Category</li>
+          </ol> -->
+        </section>
+
+      <div class="row">
+      
+      {% if cat_list %}
+        {% for cat in cat_list %}
+
+        <div class="col-lg-4 col-xs-6">
+          <!-- small box -->
+          <div class="small-box bg-aqua">
+            <div class="inner">
+              <h4><b>{{ cat.name }}</b></h4>
+              <p style="visibility: hidden;">go</p>
+            </div>
+            <div class="icon">
+                {% if cat.picture %}
+                 <img width=80 height=80 src="{{ cat.picture.url }}"  alt="">
+                {% endif %}
+            </div>
+            <a href="#" class="small-box-footer">{{ cat.name }}<i class="fa fa-arrow-circle-right"></i></a>
+          </div>
+        </div>
+
+          {% endfor %}
+         {% else %}
+        <!-- /.col -->
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="fa fa-google-plus"> </i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text">No categories at present</span>
+              <span class="info-box-number"><a href="/rapido/add_category/">create New category</a></span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+          <!-- /.info-box -->
+        </div>
+
+      {% endif %}
+        <div class="col-md-3 col-sm-6 col-xs-12">
+          <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="fa fa-plus"> </i></span>
+
+            <div class="info-box-content">
+              <span class="info-box-text"></span>
+              <span class="info-box-number"><a href="/rapido/add_category/">create New category</a></span>
+            </div>
+            <!-- /.info-box-content -->
+          </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+
+  <div class="row">
+    <div class="col-xs-12">
+        {% block divbar1 %}
+
+        {% endblock %}
+    </div>
+    <div class="col-sm-6">
+
+        {% block navbar %}
+
+        {% endblock %}
+    </div>
+  </div>
+
+
+
+{% endblock %}
+

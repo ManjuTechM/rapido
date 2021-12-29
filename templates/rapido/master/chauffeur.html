@@ -1,0 +1,306 @@
+{% extends "rapido/master/master.html" %}
+
+{% block body_block %}
+<style type="text/css">
+  #result {
+   position: absolute;
+   cursor: pointer;
+   overflow-y: auto;
+   max-height: 400px;
+   box-sizing: border-box;
+   z-index: 1001;
+  }
+  .link-class:hover{
+   background-color:#f1f1f1;
+  }
+
+.inputs { width: 34px; }
+
+input.error
+{
+    border-color: red;
+}
+
+label.error
+{
+    color: red;
+    font-weight: 300 !important;
+}
+   </style>
+
+    <section class="content-header">
+      <h6>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Chauffeur</li>
+        <li data-toggle="modal" data-target="#myModal"><a href="#"> Add a new Chauffeur </a></li>
+      </ol>
+      </h6>
+     <!--  <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Category</li>
+      </ol> -->
+    </section>
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <!-- /.box -->
+
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Chauffeur list</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th >Name</th>
+                  <th >Phone No</th>
+                  <th >Belongs to</th>
+                  <th >vendor Phone no</th>
+                  <th >Driving License</th>
+                  <th >Badge No</th>
+                  <th >Address</th>
+                  <th >likes</th>
+                  <th > View full details</th>
+                </tr>
+                </thead>
+                <tbody>
+          {% for c in chauffeur_list %}
+              <tr>
+                <td >{{c.chauffeur_name}}</td>
+                <td >{{c.chauffeur_phoneno}}</td>
+                <td >{{c.chauffeur_belongsto.vendor_name}} , {{c.chauffeur_belongsto.vendor_address.city}}</td>
+                <td >{{c.chauffeur_belongsto.vendor_phoneno}}</td>
+                <td >{{c.chauffeur_drivinglicense}}</td>
+                <td >{{c.chauffeur_badgeno}}</td>
+                <td >{{c.chauffeur_address.city}}</td>
+                <td >{{ c.likes }}</td>
+                <td ><a href=""> view </a></td>             
+              </tr>
+            {% endfor %}
+                </tbody>
+              </table>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+
+
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h3 class="modal-title">Add new chauffeur</h3>
+        </div>
+      
+      <div class="modal-body">
+
+       <form class="form-item span8" id="item_form" method="post"
+           action="/rapido/chauffeur/" enctype="multipart/form-data">
+
+          {% csrf_token %}          
+
+      <table>
+      <br>
+
+          <tr>
+            <td>whom chauffeur:</td>
+            <td>
+    <input type="text" id="vensearch" placeholder="Select Chauffeur" class="form-control" required/>
+
+    <input type="text" id="vendorid" style="display: none;" name="chauffeur_type">
+
+   <ul class="list-group" id="result"></ul>
+
+      <!-- 
+            <select name="chauffeur_type">
+            {% for t in vendor_list %}
+            <option value={{t.id}} class="form-control">{{t.vendor_name}} </option>
+            {% endfor %}
+            </select> -->
+      
+
+            </td>
+          </tr>
+      <br>
+          <tr>
+            <td>chauffeur Name:</td>
+            <td><input type="text" class="form-control" placeholder="chauffeur Name" name="chauffeur_name"  required=""></td>
+          </tr>
+
+          <tr>
+            <td>chauffeur phoneno:</td>
+            <td><input type="text" class="form-control" placeholder="chauffeur phoneno" name="chauffeur_phoneno" pattern="[0-9]{10}" maxlength="10" min="7000000000" max="9999999999" required=""  ></td>
+          </tr>
+
+          <tr>
+            <td>chauffeur Drivinglicense:</td>
+            <td><input type="text" class="form-control" placeholder="chauffeur Drivinglicense" name="chauffeur_drivinglicense" required=""></td>
+          </tr>          
+          <tr>
+            <td>drivinglicense_expire_date</td>
+            <td><input type="text" id="expire_date" class="form-control" placeholder="chauffeur_drivinglicense_expire_date" required=""><input type="text" id="actual_expire_date" class="form-control" placeholder="chauffeur_drivinglicense_expire_date" style="display: none;" name="chauffeur_drivinglicense_expire_date"></td>
+          </tr>
+
+          <tr>
+            <td>chauffeur Badgeno:</td>
+            <td><input type="text" class="form-control" placeholder="chauffeur Badgeno" name="chauffeur_badgeno"  required=""></td>
+          </tr>
+
+          <tr>
+            <td>chauffeur Badge_expired_date:</td>
+            <td><input type="text" id="badge_date" class="form-control" placeholder="chauffeur_badge_expired_date" required=""><input type="text" id="actual_badge_date" class="form-control" placeholder="chauffeur_badge_expired_date" style="display: none;" name="chauffeur_badge_expired_date"  required=""></td>
+          </tr>
+    
+              <tr>
+                <td rowspan="3">Address</td>
+                <td>street name/no:<input type="text" class="form-control" placeholder="street_address" name="street_address"  required=""></td>
+                <td>landmark:<input type="text" class="form-control" placeholder="landmark" name="landmark"  required=""></td>
+              </tr>
+              <tr>
+                <td>Area:<input type="text" class="form-control" placeholder="area" name="area"  required=""></td>
+                <td>State:<select id="listBox" class="form-control" name="state" onchange='selct_district(this.value)'></select></td>
+              </tr>
+              <tr>
+                <td>City:<select id='secondlist' class="form-control" name="city"></select></td>
+                <td>Country:<input type="text" class="form-control" name="country" value="India"></td>
+                <td>Pin code:<input type="text" class="form-control" placeholder="pincode" name="pincode" pattern="[0-9]{6}" required=""></td>
+            
+              </tr>
+
+          <tr>
+            <td>chauffeur image:</td>
+            <td><input type="file" name="chauffeur_picture"></td>
+          </tr>
+          </table>
+            <!-- Provide a button to click to submit the form. -->
+        
+          <div class="modal-footer">
+            <div class="form-group">
+            <div class="col-xs-offset-3 col-xs-6">
+            <input class="btn btn-success" type="submit" value="Save">
+            <input type="reset" class="btn btn-primary" value="Reset">
+            </div>
+            </div>
+
+          </div>
+        </form>
+      </div>  
+    </div>
+  </div>
+  </div>
+  <!--  Model close -->
+
+{% endblock %}
+
+
+
+{% block javascript %}
+
+  <script>
+
+
+    $(function () {
+
+
+      function datePick(source, destination) {  //this function is for datepicker 
+
+          $(source).datepicker({
+              dateFormat: 'dd-mm-yy',
+              onSelect: function() {
+                  var date = $(this).val().split("-").reverse().join("-");  //format of date changes to yy-mm-dd
+                  $(destination).val(date);
+              }
+          });
+
+      }
+
+      datePick("#expire_date", "#actual_expire_date");
+      datePick("#badge_date", "#actual_badge_date");
+      
+      function keyUpDate(arg1, arg2, arg3, arg4) {
+          $(arg1).keyup(function() {
+              $(arg2).val($(this).val().split("-").reverse().join("-"));
+
+              $(arg3).val($(arg4).val().split("-").reverse().join("-"));
+          });
+      }
+
+      keyUpDate("#expire_date","#actual_expire_date","#actual_badge_date","#badge_date");
+      keyUpDate("#badge_date","#actual_badge_date","#actual_expire_date","#expire_date");
+
+      $("#item_form").submit(function() {
+
+            $(this).children('#expire_date,#badge_date').remove();
+      });
+
+    });
+
+
+
+        $("#item_form").validate();
+
+         $(function () {
+           $('#example1').DataTable({
+           dom: "<'row'<'col-sm-4'l><'col-sm-4'f><'col-sm-4'p>>" +
+         "<'row'<'col-sm-12'tr>>" +
+         "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+          });
+         
+           //search implementation
+         });
+
+
+         
+         //vendor search
+         $(document).ready(function(){
+         $.ajaxSetup({ cache: false });
+         $('#vensearch').keyup(function(){
+         $('#result').html('');
+         $('#state').val('');
+         var searchField = $('#vensearch').val();
+         var expression = new RegExp(searchField, "i");
+         $.getJSON('/rapido/api/add_vendor/', function(data) {
+          $.each(data, function(key, value){
+           if (value.vendor_name.search(expression) != -1 || value.vendor_phoneno.search(expression) != -1)
+           {
+             $('#result').append('<li class="list-group-item link-class">'+value.vendor_name+' | '+value.vendor_phoneno+'</li>');
+             $('#vendorid').val(value.id);
+           }
+           else{
+             event.preventDefault();
+           }
+          });   
+         });
+         });
+         
+         $('#result').on('click', 'li', function() {
+         var click_text = $(this).text();
+         $('#vensearch').val(click_text);
+         $("#result").html('');
+         });
+         });
+         //vendor search ends
+
+
+
+  </script>
+
+{% endblock %}
+
+

@@ -1,0 +1,882 @@
+{% extends "rapido/master/master.html" %}
+{% block body_block %}
+{% load static %}
+<link rel="stylesheet" href="{% static 'dist/css/bootstrap-datetimepicker.min.css' %}">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<!-- Main content -->
+<style type="text/css">
+   table{
+   border-spacing: 0 !important;
+   text-align: left;
+   }
+   td, th{
+   border:1px solid #a7a6a6;
+   font-weight:500 !important; 
+   padding:4px;
+   }
+   .rapido{
+   margin-top:0 !important;
+   margin-bottom: 10px !important;
+   }
+   p{
+   margin-top: 0 !important;
+   margin-bottom:4px !important; 
+   }
+   thead img{
+   //width:100% !important;
+   }
+   .reporting{
+   border-bottom: transparent;
+   //border-right: transparent;
+   border-top: transparent;
+   }
+
+   .input-group-addon{
+    padding: 4px 12px;
+   }
+
+  input.error{
+    border-color: red;
+  }
+
+  label.error{
+    color: red;
+    font-weight: 300 !important;
+  }
+</style>
+
+<section class="invoice">
+   <table>
+      <thead>
+         <tr>
+            <th style="width:50%;">
+               <h3 class="rapido">Rapido Travels India Pvt. Ltd.</h3>
+               <p>#314, 1st Floor, 12th Main, 15th Cross, <br> 5th Phase, J.P. Nagar, Bangalore - 560 078.</p>
+               <p>Ph : 080 - 26595567, 26585567</p>
+               <p>E-mail : bookings@rapidotravels.co.in</p>
+               <p>www.rapidotravels.co.in</p>
+            </th>
+            <th>Trip Sheet {{dutyslip.id}} : {{dutyslip.booking.booking_id}}</th>
+            <th> <img src="{% static 'images/invoice_logo.png'%}"></th>
+         </tr>
+      </thead>
+      <tbody>
+         <tr>
+            <td style="width:40%; border-right: 0 !important;"> Service City <span id="city_id">{{dutyslip.booking.servicing_city.id}}</span> :{{dutyslip.booking.servicing_city.name}} </td>
+            <td style="width:40%; border-left:0 !important;">Booking ID:RTPL-{{dutyslip.booking.servicing_city.city_code}}-{{dutyslip.booking.booking_id}} </td>
+            <td style="width:20%;">PAN No. : AAICR1074L</td>
+         </tr>
+         <tr>
+            <td style="width:40%; border-right: 0 !important;">Company {{dutyslip.booking.company.id}}:{{dutyslip.booking.company}} </td>
+            <td style="width:40%; border-left:0 !important;"> created by:{{dutyslip.booking.created_by}} </td>
+            <td style="width:20%;">Service Tax : </td>
+         </tr>
+         <tr>
+            <td style="width:40%; border-right: 0 !important;">User :  {{dutyslip.booking.guest_name}} </td>
+            <td style="width:40%; border-left:0 !important;">Contact :{{dutyslip.booking.guest_phoneno}} </td>
+            <td style="width:40%;"> </td>
+         </tr>
+         <tr>
+            <td style="width:20%; border-right: 0 !important;">Booked by : {{dutyslip.booking.booking_from}}</td>
+            <td style="width:50%; border-left:0 !important; border-right: 0 !important;">Contact : {{dutyslip.booking.booking_phoneno}} </td>
+            <td style="width:20%; border-left:0 !important;">category <span id="category_id">{{dutyslip.booking.category.id}}</span>: {{dutyslip.booking.category}} </td>
+         </tr>
+      </tbody>
+   </table>
+      <form id="calculateform">
+   <table style="width:100%;">
+      <tr>
+         <td colspan="3">Point of Origin : </td>
+         <td colspan="3">Flight No : </td>
+         <td colspan="3">ETA : </td>
+         <td colspan="3" class="reporting" style="font-weight:600 !important;">Rental Type <span id="rentaltype_id">{{dutyslip.booking.service_type.id}}</span> : {{dutyslip.booking.service_type}} </td>
+      </tr>
+      <tr>
+         <td colspan="4">Chauffeur Name:{{dutyslip.chauffeur_name}}</td>
+         <td colspan="4">Chauffeur Mobile :{{dutyslip.chauffeur_phoneno}}</td>
+         <td colspan="4">Car No. :</td>
+      </tr>
+      <tr>
+         <td colspan="4">Car Booked : {{dutyslip.booking.requested_vehicle_model}}</td>
+         <td colspan="4">Car Alloted : {{dutyslip.allocated_vehicle}} </td>
+         <td colspan="4">Report Time : {{dutyslip.booking.pickup_date_time}}</td>
+      </tr>
+      <tr>
+         <td colspan="12" class="reporting" style="font-weight:600 !important;">Reporting Address :  {{dutyslip.booking.pick_up_location}}</td>
+      </tr>
+      <tr>
+         <td colspan="4">Date in : <input id="pick_date" type="text" name="datein" onchange="cal()" style="width:65%;"> </td>
+         <td colspan="4">Date Out : <input id="drop_date" type="text" name="dateout" onchange="cal()" style="width:65%;"> </td>
+         <td colspan="4">Total Days : <input type="text" id="numdays2" name="totaldays" style="width:65%;" readonly> </td>
+      </tr>
+      <tr>
+         <td colspan="4">Opening Time:{{dutyslip.opening_time}}
+                <div class='input-group date' id='start_time'>
+                    <input type='text' placeholder="Opening Time" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                </div></td>
+         <td colspan="4">Closing Time:
+                <div class='input-group date' id='end_time'>
+                    <input type='text' placeholder="Closing Time" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                </div></td>
+         <td colspan="4">Total Hrs.: <input type="text" id="setup_hours" name="totalhrs" style="width:65%;" readonly=""> </td>
+      </tr>
+      <!--     <tr>
+         <td colspan="4">Opening Time : </td>
+         <td colspan="4">Closing Time : </td>  
+         <td colspan="4">Total Hrs. : </td>
+         </tr> 
+         -->    
+      <tr>
+         <td colspan="4">Point opening Time : 
+                <div class='input-group date' id='pointopeningtime'>
+                    <input type='text' value="0" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                </div></td>
+         <td colspan="4">Point Closing Time : 
+                <div class='input-group date' id='pointclosingtime'>
+                    <input type='text' value="0" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                </div> </td>
+         <td colspan="4">Total PTP Hrs. : <input type="text" id="ptp_hours" name="ptptotalhrs" style="width:65%;" readonly=""> </td>
+      </tr>
+      <tr>
+         <td colspan="4">Point opening KM : <input type="text" id="pointopeningkm" name="openingkm" style="width:65%;"> </td>
+         <td colspan="4">Point Closing KM : <input type="text" id="pointclosingkm" name="closingkm" style="width:65%;"></td>
+         <td colspan="4">Total PTP KM : <input type="text" id="ptptotalkm" name="ptptotalkm" style="width:65%;" readonly=""> + <span id="pfgr_km"></span></td>
+      </tr>
+      <!--     <tr>
+         <td colspan="4">KM Out : </td>
+         <td colspan="4">KM In : </td> 
+         
+         <td colspan="4">Total KM : </td>
+         </tr>
+         -->    
+      <tr>
+         <td colspan="4">KM Out : <input type="text" id="kmout" name="kmout" style="width:65%;" required=""></td>
+         <td colspan="4">KM In : <input type="text" id="kmin" name="kmin" style="width:65%;" required=""></td>
+         <td colspan="4">Total KM : <input type="text" id="totalkm" name="totalkm" style="width:65%;" readonly=""> + <span id="fgr_km"></span></td>
+      </tr>
+  </table>
+    </form>
+    <table style="width: 100%;">
+      <tr>
+         <td colspan="4" style="font-weight:600 !important;">Tariff Details :
+          <span id="ptpAlertMsg" style="color:red;"></span></td>
+         <td colspan="4">
+          <select class="form-control" id="slab_options">
+         </select>
+       </td>
+         <td colspan="4"><button id="calculate"> Calculate </button></td>
+      </tr>
+      <tr>
+         <td colspan="4">Package (<i class="fa fa-rupee"></i>): <span id="package"> </span> </td>
+         <td colspan="4">Parking  and Toll(<i class="fa fa-rupee"></i>): <input type="text" value="0" id="parking" name="parking" style="width:65%;"></td>
+         <td colspan="4">CGST- 2.5%  : <span id="cgst_tax" name="servicetax" style="width:65%;"></span></td>
+      </tr>
+      <tr>
+         <td colspan="4">Extra KM (<i class="fa fa-rupee"></i>): <span id="extrakm"> </span></td>
+         <td colspan="4">Other Charges (<i class="fa fa-rupee"></i>): <input type="text" id="other_charges" value="0" name="othercharges" style="width:50%;"></td>
+         <td colspan="4">SGST- 2.5% : <span id="sgst_tax" name="servicetax" style="width:65%;"></span></td>
+      </tr>
+      <tr>
+         <td colspan="4">Extra Hrs. (<i class="fa fa-rupee"></i>):<span id="extrahour"> </span></td>
+         <td colspan="4">Permit (<i class="fa fa-rupee"></i>): <input type="text" id="permit" name="permit" value="0" style="width:65%;"></td>
+         <td colspan="4">GST- 5% : <span id="gst_tax" name="servicetax" style="width:65%;"></span></td>
+      </tr>
+      <tr>
+         <td colspan="4">Day Bhatta (<i class="fa fa-rupee"></i>): <input type="text" id="day_bata" name="daybata" value="0" style="width:65%;"></td>
+         <td colspan="4"><p id="showcharge" style="cursor: pointer;color:blue;">Check charges</p><span></span></td>
+         <td colspan="4">Total (<i class="fa fa-rupee"></i>)<span id="total"></span></td>
+      </tr>
+      <tr>
+         <td colspan="4">Night Bhatta (<i class="fa fa-rupee"></i>): <input type="text" id="night_bata" value="0" name="Nightbata" style="width:65%;"></td>
+         <td colspan="4"><div id="charges" style="display: none;">Day Bhatta:<span id="dbata"></span> | Night Bhatta:<span id="nbata"></span> | Min KM:<span id="minkm"></span>| KM Rate:<span id="kmrate"></span></div></td>
+         <td colspan="4">Discount (<i class="fa fa-rupee"></i>): <input type="text" id="discount" name="discount" value="0" style="width:65%;"></td>
+      </tr>
+      <tr>
+         <td colspan="8" style="text-align: right; font-weight:600 !important;">Amount to be Paid (<i class="fa fa-rupee"></i>)</td>
+         <td colspan="4"><span name="amount_paid" id="finalamt"></span></td>
+      </tr>
+      <tr>
+         <td colspan="4">Payment Mode :</td>
+         <td colspan="4">
+            <select>
+               <option>Direct Payment</option>
+               <option>Bill to Company</option>
+            </select>
+         </td>
+         <td colspan="4"></td>
+         <!-- <td colspan="8">Direct Payment / Indirect Payment </td> -->
+      </tr>
+      <tr>
+         <td colspan="12" style="font-weight:600 !important;">To be filled by the customer (Mandatory)</td>
+      </tr>
+      <tr>
+         <td colspan="6">Opening Time : <input type="text" name="openingtime" style="width:65%;"></td>
+         <td colspan="6">Opening KM : <input type="text" name="openingkm" style="width:65%;"></td>
+      </tr>
+      <tr>
+         <td colspan="6">Closing Time : <input type="text" name="closingtime" style="width:65%;"></td>
+         <td colspan="6">Closing KM : <input type="text" name="closingkm" style="width:65%;"></td>
+      </tr>
+      <tr>
+         <td colspan="4" style="font-weight:600 !important;">Next Requirement : </td>
+         <td colspan="4">Date : <input type="date" name="date" style="width:65%;"> </td>
+         <td colspan="4">Time : <input type="text" name="time" style="width:65%;"> </td>
+      </tr>
+      <tr>
+         <td colspan="12">Address : <input type="text" name="address" style="width:65%;"> </td>
+      </tr>
+      <tr>
+         <td colspan="12" style="text-align:center; border-bottom:transparent !important; padding-bottom: 18px;"> I Confirm that i am responsible for full payment of this bill in the event that this bill is not paid <br> by the organisation person indicated
+         </td>
+      </tr>
+      <tr>
+         <td colspan="6" style="border-top:transparent !important; border-right:transparent !important;">Standard Terms & Conditions Applicable </td>
+         <td colspan="6" style="border-top:transparent !important; text-align:center; border-left:transparent !important;">Customer Signature </td>
+      </tr>
+      <tr>
+         <td colspan="12">
+            <p>Customer Feedback :</p>
+            <p>1. Did your car report on time : Yes / No</p>
+            <p>2. Is the car quality up to your expectation : Yes / No</p>
+            <p style="font-weight:600; text-align:center;">We welcome your feedback on : bookings@rapidotravels.co.in</p>
+         </td>
+      </tr>
+   </table>
+   <br/><br/>
+   <!-- this row will not appear when printing -->
+   <div class="row no-print">
+      <div class="col-xs-12">
+        <button class="center-block btn btn-success" id="save_trip"><i class="fa fa-print"></i>Save Trip</button>
+      </div>
+   </div>
+</section>  
+{% endblock %}
+
+{% block javascript %}
+      <script src="{% static 'dist/js/bootstrap-datetimepicker.js' %}"></script>
+
+<script type="text/javascript">
+
+//date range picker
+
+ $(function(){
+        $("#drop_date").datepicker({ dateFormat: 'dd-mm-yy' });
+        $("#pick_date").datepicker({ dateFormat: 'dd-mm-yy' }).bind("change",function(){
+            var minValue = $(this).val();
+            minValue = $.datepicker.parseDate("dd-mm-yy", minValue);
+            minValue.setDate(minValue.getDate());
+            $("#drop_date").datepicker( "option", "minDate", minValue );
+        });
+    });
+//date range picker end
+
+//time picker
+            $(function () {
+                $('#start_time').datetimepicker({
+                    format:'HH:mm'
+                });
+            });
+
+
+            $(function () {
+                $('#end_time').datetimepicker({
+                    format:'HH:mm'
+                });
+            });
+
+
+            $(function () {
+                $('#pointopeningtime').datetimepicker({
+                    format:'HH:mm'
+                });
+            });
+
+
+            $(function () {
+                $('#pointclosingtime').datetimepicker({
+                    format:'HH:mm'
+                });
+            });
+//time picker end
+
+  //show bata charges
+    $("#showcharge").click(function(){
+      $("#charges").toggle();
+    });
+//show bata charges end
+var companyid = "{{dutyslip.booking.company.id}}";
+
+var ptpAlert = false; //to check whether the trip sheet is point to point or not
+
+$(document).ready(function(){
+if(document.getElementById("rentaltype_id").innerHTML=="3" && !(companyid)){
+    $.getJSON('/rapido/api/cityprice/'+city_id+'/'+category_id,function(data)
+    {
+      var no_slabs = [];
+      $.each(data, function(key, value) {
+        $('#slab_options').append($('<option>', { 
+          value: value.slab.id,
+          text : value.slab.name 
+      }));
+    });
+  });
+}
+
+else if(document.getElementById("rentaltype_id").innerHTML=="3" && companyid){
+    $.getJSON('/rapido/api/companycityprice/{{dutyslip.booking.company.id}}/'+city_id+'/'+category_id,function(data){
+      $.each(data, function(key, value) {
+        if(value.service_type.id==1){ //to check whether the trip sheet is point to point or not
+          ptpAlert = true; //to check whether the trip sheet is point to point or not
+        }
+        $('#slab_options').append($('<option>', { 
+          value: value.slab.id,
+          text : value.slab.name 
+      }));
+    });
+        if(ptpAlert==true){ //to check whether the trip sheet is point to point or not
+    alert("This is point to point trip sheet. PTP kms and hours fields are Mandatory!!!");
+    $("#ptpAlertMsg").text("This is point to point trip sheet. PTP kms and hours fields are Mandatory!!!");    
+  }
+
+    });
+}
+
+else{
+  $('#slab_options').css("display","none");
+  }
+});
+
+   var dropdt;
+   var pickdt;
+   var start_time;
+   var end_time;
+   var drop_dt;
+   var pick_dt;
+   var diff;
+   var package;
+   var package_name;
+   var extra_km;
+   var extra_hr;
+   var parkings;
+   var other_charge;
+   var permit;
+   var day_batta;
+   var night_batta;
+   var discount;
+   var total;
+   var cgst;
+   var sgst;
+   var gst;
+   var gtotal; 
+   var finalamt;
+   var city_id;
+   var category_id;
+   var package_id;
+   var extrakm_id;
+   var extrahour_id;
+   var basekm,minkm,perkmrate,extrakmrate,totaldays,totalkm,newdropdt,newpickdt,fgr;
+   var extrarate_perkm=0,extrarate_perhr=0,extrahr_run=0,extrakm_run=0,subtotal=0;
+   var ptpopeningtime,ptpclosingtime,ptpopeningkm,ptpclosingingkm,ptpdiff,ptptotalkm;
+   var km_used,hrs_used; //for companies with ptp and rapido ptp
+
+        function GetDays(){
+
+          dropdt = $("#drop_date").datepicker("getDate");
+          pickdt = $("#pick_date").datepicker("getDate");
+          newdropdt = ($("#drop_date").val()).split("-").reverse().join("-");
+          newpickdt = ($("#pick_date").val()).split("-").reverse().join("-");
+          if(dropdt<pickdt){
+            return false;
+          }
+          // console.log(parseInt((dropdt - pickdt) / (24 * 3600 * 1000)));
+          return parseInt((dropdt - pickdt) / (24 * 3600 * 1000));
+        }
+   
+        function cal()
+        {
+            if(document.getElementById("drop_date")){
+                var res;
+                res = GetDays();
+   
+                if(res==false){
+                  document.getElementById("numdays2").value=1;
+                }
+                else{
+                document.getElementById("numdays2").value=GetDays()+1;
+                    
+                }
+            }  
+        }        
+
+
+        $('#start_time,#end_time,#drop_date,#pick_date,#pointopeningtime,#pointclosingtime').on('change dp.change',function() 
+   {
+    start_time = $('#start_time').find("input").val();
+    end_time = $('#end_time').find("input").val();
+    ptpopeningtime = $('#pointopeningtime').find("input").val();
+    ptpclosingtime = $('#pointclosingtime').find("input").val();
+
+    drop_dt = $('#drop_date').val();
+    pick_dt = $('#pick_date').val();
+    diff = Math.floor(( new Date(newdropdt +" " + end_time) - new Date(newpickdt +" " + start_time) ) / 1000 / 60 / 60);
+
+   ptpdiff = Math.floor(( new Date(newdropdt +" " + ptpclosingtime) - new Date(newpickdt +" " + ptpopeningtime) ) / 1000 / 60 / 60);
+
+   if(diff==NaN){
+    console.log("hello");
+    $('#setup_hours').val("{{dutyslip.total_hrs}}");
+   }
+   $('#setup_hours').val(diff);
+
+   $('#ptp_hours').val(ptpdiff);
+   });
+
+        $('#kmin,#kmout').on('keyup',function(){
+            $('#totalkm').val(($('#kmin').val())-($('#kmout').val()));
+        });
+
+
+        $('#pointopeningkm,#pointclosingkm').on('keyup',function(){
+            $('#ptptotalkm').val(($('#pointclosingkm').val())-($('#pointopeningkm').val()));
+        });
+
+   
+        $('#parking,#other_charges,#permit,#day_bata,#night_bata,#discount').on('keyup',function(){
+              package =  parseInt($('#package').text());
+              extra_km =  parseInt($('#extrakm').text());
+              extra_hr =  parseInt($('#extrahour').text());
+              parkings =  parseInt($('#parking').val());
+              other_charge =  parseInt($('#other_charges').val());
+              permit =  parseInt($('#permit').val());
+              day_batta = parseInt($('#day_bata').val());
+              night_batta = parseInt($('#night_bata').val());
+              discount = $('#discount').val();
+              total =package+extra_hr+extra_km+day_batta+night_batta+parkings+other_charge+permit;
+              subtotal =package+extra_hr+extra_km; //for invoice purpose(subtotal)
+              cgst = (total*0.025).toFixed(3);
+              sgst = (total*0.025).toFixed(3);
+              gst = (total*0.05).toFixed(3);
+              $("#cgst_tax").text(cgst);
+              $("#sgst_tax").text(sgst);
+              $("#gst_tax").text(gst);
+              gtotal = (total * 0.05)+total; 
+              $("#total").text(gtotal);
+              finalamt = parseFloat(gtotal) - parseFloat(discount);
+              $('#finalamt').text(finalamt);
+
+        });
+
+        //standard rate_card airport related
+
+         city_id = document.getElementById("city_id").innerHTML;
+         category_id = document.getElementById("category_id").innerHTML;
+         package_id = document.getElementById("package").innerHTML;
+
+         extrakm_id = document.getElementById("extrakm").innerHTML;
+         extrahour_id = document.getElementById("extrahour").innerHTML;
+
+$('#calculate').on('click', function() {
+
+  if($('#calculateform').valid()){
+   
+
+    totaldays = document.getElementById("numdays2").value;
+    // console.log(totaldays);
+    totalkm = document.getElementById("totalkm").value;
+
+    // console.log(totalkm);
+    // console.log(typeof($("#rentaltype_id").text()));
+    switch ($("#rentaltype_id").text()) {
+        case '1':
+
+            package_name = "{{dutyslip.booking.service_type}}";
+
+            if (companyid) {
+
+                $.getJSON('/rapido/api/companyairportprice/{{dutyslip.booking.company.id}}/' + city_id + '/' + category_id, function(data) {
+                    $.each(data, function(key, value) {
+                        console.log(document.getElementById("package").innerHTML = value.base_rate);
+                        document.getElementById("extrahour").innerHTML = 0;
+                        document.getElementById("extrakm").innerHTML = 0;
+                    });
+
+                });
+
+            } else {
+
+                $.getJSON('/rapido/api/airportprice/' + city_id + '/' + category_id, function(data) {
+                    $.each(data, function(key, value) {
+                        console.log(document.getElementById("package").innerHTML = value.base_rate);
+                        document.getElementById("extrahour").innerHTML = 0;
+                        document.getElementById("extrakm").innerHTML = 0;
+                    });
+
+                });
+            }
+            break;
+            //outstation rate card start
+
+        case '2':
+
+
+            package_name = "{{dutyslip.booking.service_type}}";
+
+
+            if (companyid) {
+
+                $.getJSON('/rapido/api/companyoutstationprice/{{dutyslip.booking.company.id}}/' + city_id + '/' + category_id, function(data) {
+                    $.each(data, function(key, value) {
+                        basekm = value.min_km * totaldays;
+                        document.getElementById("dbata").innerHTML = value.day_batta;
+                        document.getElementById("nbata").innerHTML = value.night_batta;
+                        document.getElementById("minkm").innerHTML = value.min_km;
+                        document.getElementById("kmrate").innerHTML = value.perkm_rate;
+                        if (totalkm <= basekm) {
+                            console.log(document.getElementById("package").innerHTML = basekm * (value.perkm_rate));
+                            document.getElementById("extrahour").innerHTML = 0;
+                            document.getElementById("extrakm").innerHTML = 0;
+
+                        } else {
+                            extrarate_perkm = value.extrakm_rate;
+                            var baserate = basekm * (value.perkm_rate);
+                            var extrarate = (totalkm - basekm) * (value.extrakm_rate);
+                            extrakm_run = totalkm - basekm;
+                            document.getElementById("extrakm").innerHTML = extrarate;
+                            document.getElementById("extrahour").innerHTML = 0;
+                            console.log(document.getElementById("package").innerHTML = baserate);
+                        }
+
+                    });
+
+                });
+
+            } else {
+
+                $.getJSON('/rapido/api/outstationprice/' + city_id + '/' + category_id, function(data) {
+                    $.each(data, function(key, value) {
+                        basekm = value.min_km * totaldays;
+                        document.getElementById("dbata").innerHTML = value.day_batta;
+                        document.getElementById("nbata").innerHTML = value.night_batta;
+                        document.getElementById("minkm").innerHTML = value.min_km;
+                        document.getElementById("kmrate").innerHTML = value.perkm_rate;
+                        if (totalkm <= basekm) {
+                            console.log(document.getElementById("package").innerHTML = basekm * (value.perkm_rate));
+                            document.getElementById("extrahour").innerHTML = 0;
+                            document.getElementById("extrakm").innerHTML = 0;
+
+                        } else {
+                            extrarate_perkm = value.extrakm_rate;
+                            var baserate = basekm * (value.perkm_rate);
+                            var extrarate = (totalkm - basekm) * (value.extrakm_rate);
+                            extrakm_run = totalkm - basekm;
+                            document.getElementById("extrakm").innerHTML = extrarate;
+                            document.getElementById("extrahour").innerHTML = 0;
+                            console.log(document.getElementById("package").innerHTML = baserate);
+                        }
+
+                    });
+
+                });
+            }
+            break;
+
+            //outstation rate card end
+
+
+            //cityusage rate card start
+
+        case '3':
+
+                package_name = $('#slab_options option:selected').text();
+
+                    if(companyid){
+
+                      $.getJSON('/rapido/api/companycityprice/{{dutyslip.booking.company.id}}/'+city_id+'/'+category_id,function(data)
+                      {
+
+                         $.each(data, function(key, value)
+                         {
+                            fgr = value.fgr;
+
+                          if($('#slab_options option:selected').val()==value.slab.id){
+
+                            totalkm = parseInt(document.getElementById("totalkm").value);
+                            ptptotalkm = parseInt(document.getElementById("ptptotalkm").value);
+                            totalhr = parseInt(document.getElementById("setup_hours").value);
+
+                            if(value.service_type.id==1)
+                            {
+                             km_used = ptptotalkm;
+                             hrs_used = ptpdiff;
+                            }
+                            else{
+                              km_used = totalkm;
+                              hrs_used = totalhr;
+                            }
+
+                            // console.log(document.getElementById("package").innerHTML = value.base_rate);
+                            // document.getElementById("extrahour").innerHTML = 0;
+                            // document.getElementById("extrakm").innerHTML = 0;
+                            var base_rate = value.base_rate;
+                            var extra_kmrate; 
+                            var extra_hrrate;
+                            totalusedkm = km_used + parseInt(fgr);
+                            document.getElementById("fgr_km").innerHTML= fgr;
+                            document.getElementById("package").innerHTML = base_rate;
+                            document.getElementById("nbata").innerHTML = value.night_batta;
+                            if(totalusedkm<=(value.slab.id)*10 || hrs_used<=(value.slab.id) )
+                            {
+                              if(totalusedkm>(value.slab.id)*10){
+                                extrakm = totalusedkm-(value.slab.id*10);
+                                extrakm_run = extrakm;
+                                extrarate_perkm = value.extra_kmrate;
+                                extra_kmrate = extrakm*(value.extra_kmrate);
+                              }
+                              else{
+                                extrakm = 0;
+                                extra_kmrate =0;
+                                extrakm_run =0;
+                              }
+
+                              if(hrs_used>value.slab.id){
+                                extrahr = hrs_used-(value.slab.id);
+                                extrahr_run = extrahr;
+                                extra_hrrate = extrahr*(value.extra_hrrate);
+                                extrarate_perhr = value.extra_hrrate;
+                              }
+
+                              else{
+                                extrahr = 0;
+                                extra_hrrate = 0;
+                                extrahr_run = 0;
+                              }
+
+                               document.getElementById("extrakm").innerHTML = extra_kmrate;
+                              document.getElementById("extrahour").innerHTML = extra_hrrate;
+                            }
+                            else{
+                                extrakm = totalusedkm-(value.slab.id*10);
+                                extrakm_run = extrakm;
+                                extrarate_perkm = value.extra_kmrate;
+                                extra_kmrate = extrakm*(value.extra_kmrate);
+                                extrahr = hrs_used-(value.slab.id);
+                                extra_hrrate = extrahr*(value.extra_hrrate);
+                                extrahr_run = extrahr;
+                                extrarate_perhr = value.extra_hrrate;
+                               document.getElementById("extrakm").innerHTML = extra_kmrate;
+                              document.getElementById("extrahour").innerHTML = extra_hrrate;                             
+                            }
+                          }
+                         });
+
+                      });
+                    }
+
+                    else{
+                      $.getJSON('/rapido/api/cityprice/'+city_id+'/'+category_id,function(data)
+                      {
+
+                         $.each(data, function(key, value)
+                         {
+
+                            fgr = value.fgr;
+                            totalkm = document.getElementById("totalkm").value;
+                            ptptotalkm = document.getElementById("ptptotalkm").value;
+                            totalhr = document.getElementById("setup_hours").value;
+
+
+                            console.log(totalhr+","+ptpdiff);  
+                            if(value.service_type.id==1)
+                            {
+                             km_used = ptptotalkm;
+                             hrs_used = ptpdiff;
+                            }
+                            else{
+                              km_used = totalkm;
+                              hrs_used = totalhr;
+                            }
+
+                          if($('#slab_options option:selected').val()==value.slab.id){
+
+                            // console.log(document.getElementById("package").innerHTML = value.base_rate);
+                            // document.getElementById("extrahour").innerHTML = 0;
+                            // document.getElementById("extrakm").innerHTML = 0;
+                            document.getElementById("fgr_km").innerHTML= fgr;
+                            var base_rate = value.base_rate;
+                            var extra_kmrate; 
+                            var extra_hrrate;
+                            totalusedkm = km_used + parseInt(fgr);
+                            document.getElementById("package").innerHTML = base_rate;
+                            document.getElementById("nbata").innerHTML = value.night_batta;
+                            
+                            if(totalusedkm<=(value.slab.id)*10 || hrs_used<=(value.slab.id) ){
+                              if(totalusedkm>(value.slab.id)*10){
+                                var extrakm = totalusedkm-(value.slab.id*10);
+                                extra_kmrate = extrakm*(value.extra_kmrate);
+                                extrakm_run = extra_km;
+                                extrarate_perkm = value.extra_kmrate;
+                              }
+                              else{
+                                extrakm = 0;
+                                extra_kmrate =0;
+                              }
+
+                              if(hrs_used>value.slab.id){
+                                var extrahr = hrs_used-(value.slab.id);
+                                extrahr_run = extrahr;
+                                extra_hrrate = extrahr*(value.extra_hrrate);
+                                extrarate_perhr = value.extra_hrrate;
+                              }
+
+                              else{
+                                extrahr = 0;
+                                extra_hrrate =0;
+                              }
+
+                               document.getElementById("extrakm").innerHTML = extra_kmrate;
+                              document.getElementById("extrahour").innerHTML = extra_hrrate;
+                            }
+                            else{
+                                extrakm = totalusedkm-(value.slab.id*10);
+                                extra_kmrate = extrakm*(value.extra_kmrate);
+                                extrakm_run = extra_km;
+                                extrarate_perkm = value.extra_kmrate;
+                                extrahr = hrs_used-(value.slab.id);
+                                extrahr_run = extrahr;
+                                extrarate_perhr = value.extra_hrrate;
+                                extra_hrrate = extrahr*(value.extra_hrrate);
+                               document.getElementById("extrakm").innerHTML = extra_kmrate;
+                              document.getElementById("extrahour").innerHTML = extra_hrrate;                             
+                            }
+                          }
+                         });
+
+                      });
+                    }
+                    break;
+    }
+  }
+    //city usage rate card end
+});
+
+$( "#save_trip" ).click(function(){
+
+
+  var save_trip = {
+    "created_by":{{user.id}},
+    "allocated_vehicle": "{{dutyslip.allocated_vehicle}}",
+    "vehicle_colour": "{{dutyslip.vehicle_colour}}",
+    "vehicle_no": "{{dutyslip.vehicle_no}}",
+    "chauffeur_name": "{{dutyslip.chauffeur_name}}",
+    "chauffeur_phoneno": "{{dutyslip.chauffeur_phoneno}}",
+    "chauffeur_drivinglicense": "{{dutyslip.chauffeur_drivinglicense}}",    
+    "booking": {{dutyslip.booking.id}},
+    "vendor": {{dutyslip.vendor.id}},
+    "category": {{dutyslip.category.id}},
+    "date_out": newdropdt,
+    "date_in": newpickdt,
+    "total_days": parseInt(document.getElementById("numdays2").value),
+    "opening_time": $("#start_time").find("input").val(),
+    "closing_time": $("#end_time").find("input").val(),
+    "total_hrs": parseInt($("#setup_hours").val()),
+    "opening_km": parseInt($("#kmout").val()),
+    "closing_km": parseInt($("#kmin").val()),
+    "total_kms": parseInt($("#totalkm").val()),
+    "point_opening_km": parseInt($("#pointclosingkm").val()),
+    "point_closing_km": parseInt($("#pointopeningkm").val()),
+    "total_point_kms":ptptotalkm,
+    "point_opening_hrs": $("#pointopeningtime").find("input").val(),
+    "point_closing_hrs": $("#pointclosingtime").find("input").val(),
+    "total_point_hrs":ptpdiff,
+    "package_rate": parseInt(document.getElementById("package").innerHTML),
+    "extra_hr": extrahr_run,
+    "extra_km": extrakm_run,
+    "extra_km_rate": extrarate_perkm,
+    "extra_hr_rate": extrarate_perhr,
+    "parking": parkings,
+    "itinerary": null,
+    "miscellaneous": other_charge,
+    "cgst_percentage":2.5,
+    "sgst_percentage":2.5,
+    "cgst_Rs": parseFloat($("#cgst_tax").text()),
+    "sgst_Rs": parseFloat($("#sgst_tax").text()),
+    "gst_percentage":5,
+    "gst_Rs": parseFloat($("#gst_tax").text()),
+    "discount": parseInt($("#discount").val()),
+    "total_amount": parseInt($("#total").text()),
+    "amount_tobe_paid":parseInt($("#finalamt").text()),
+    "status": 4,
+    "package":package_name,
+    "fgr":parseInt($("#fgr_km").text()),
+    "nightbhatta":night_batta,
+    "daybhatta":day_batta,
+    "subtotal":subtotal,
+    "discount":discount,
+    "extra_km_runrate":extra_km,
+    "extra_hr_runrate":extra_hr,
+    "permit":permit,
+    "hrs_used":hrs_used,
+    "km_used":km_used
+
+};
+
+console.log(save_trip);
+
+if($("#finalamt").text()==""){
+  alert("please Calculate");
+}
+
+else {
+
+        $.ajax({
+            url: '/rapido/api/get_dutyslip_details/{{dutyslip.id}}/',
+            method: 'PUT',
+            headers: {
+                'X-CSRFToken': '{{ csrf_token }}'
+            },
+            contentType: 'application/json',
+            data: JSON.stringify(save_trip),
+            success: function(res) {
+                swal({
+                  title:"Trip sheet Saved!",
+                  icon:"success",
+                  buttons:["Not now","View Invoice"]
+                }).then((willDelete) => {
+                    $.get( "/rapido/admin_close_tripsheet/{{dutyslip.booking.booking_id}}", function( data ) {
+                        });
+                      if (willDelete) {
+                        window.location.href="/rapido/admin_invoice/{{dutyslip.booking.booking_id}}/";
+                      } else {
+                        window.location.href="/rapido/admin_closetrip_list/";
+                      }
+                    });
+            },
+            error:  
+ 
+
+              function(jqXHR, textStatus, errorThrown) {
+                if(jqXHR.status==500 || jqXHR.status==400){
+                  swal ( "Oops" ,  "select date and km properly" ,  "error" );
+                }
+            }
+        });
+
+      }
+
+    });
+         //standard rate_card airport related end
+ 
+</script>
+{% endblock %}

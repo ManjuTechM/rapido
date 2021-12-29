@@ -1,0 +1,98 @@
+{% extends "rapido/company/company.html" %}
+{% block body_block %}
+
+    <section class="content-header">
+      <h6>
+      <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Invoice</li>
+      </ol>
+      </h6>
+    </section>
+  
+  <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <!-- /.box -->
+
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Invoice list</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                <th >Date</th>
+                  <th >Booking ID</th>
+                  <th >Type of Service</th>
+                  <th >Category</th>
+                  <th >Guest Name</th>
+                  <th >Guest PhoneNo</th>
+                  <th >PickUp date & time</th>
+                  <th >Dutyslip No</th>
+                  <th >Chauffeur Name</th>
+                  <th >Chauffeur Phone no</th>
+                  <th >Car No $ Model</th>
+                  <th >status</th>
+                  <th >view details</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for b in booking_list %}
+ 
+                    <tr>
+                      <td>{{b.created_date.date}}</td>
+            
+                      <td><a href="">RTPL-{{b.servicing_city.city_code}}-{{b.booking_id}}</a></td> 
+
+                      <td>{{b.service_type}} </td>
+                      <td>{{b.category}}</td>
+                      <td>{{b.guest_name}} </td>
+                      <td>{{b.guest_phoneno}}</td>
+                      <td>{{b.pickup_date_time}}</td>
+                      <td>{{b.dutyslip.dutyslip_id}}</td>
+                      <td>{{b.dutyslip.chauffeur_name}} </td>
+                      <td>{{b.dutyslip.chauffeur_phoneno}}</td>
+                      <td>{{b.dutyslip.vehicle_no}} , {{b.allocated_vehicle}} </td>
+                      <td><span class="label label-success">{{b.dutyslip.status}}</span></td>
+                      <td><a href="/rapido/admin_invoice/{{b.booking_id}}/"><span class="label label-primary">view</span></a></td>                                       
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+
+
+{% endblock %}
+
+
+
+{% block javascript %}
+
+  <script>
+
+         $(function () {
+           $('#example1').DataTable({
+           dom: "<'row'<'col-sm-4'l><'col-sm-4'f><'col-sm-4'p>>" +
+         "<'row'<'col-sm-12'tr>>" +
+         "<'row'<'col-sm-5'i><'col-sm-7'p>>",
+          });
+         
+           //search implementation
+         });
+
+  </script>
+
+{% endblock %}

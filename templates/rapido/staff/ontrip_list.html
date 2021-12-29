@@ -1,0 +1,204 @@
+{% extends "rapido/staff/staff.html" %}
+{% block body_block %}
+{% load static %}
+<style type="text/css">
+    .red{color:#e60b0b}
+  .green{color:#269212}
+  .actived{
+    color: #000;
+    font-weight: bold;
+  }
+  #loader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url('{% static 'images/preloader.gif'%}') 50% 50% no-repeat rgb(249,249,249);
+    opacity: .8;
+    display: none;
+}
+</style>
+
+
+    <section class="content-header">
+      <h6>
+        <ol class="breadcrumb">
+          <li>Dutyslip</li>
+          <li class="actived">OnTrip on
+              <span id="filterDate">{{date}}</span></li>
+        </ol>
+      </h6>
+     <!--  <ol class="breadcrumb">
+        <li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+        <li class="active">Category</li>
+      </ol> -->
+    </section>
+
+
+<div id="loader"></div>
+   <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+          <!-- /.box -->
+
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">On trip list</h3>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+              <div class="table-responsive">
+              <table id="example1" class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                  <th >Action</th>
+                  <th >Trip on</th>
+                  <th >PickUp date & time</th>
+                  <th >Booking ID</th>
+                  <th >Type of Service</th>
+                  <th>Company</th>
+                  <th >Category</th>
+                  <th >Guest Name</th>
+                  <th >Guest PhoneNo</th>
+                  <th >Dutyslip No</th>
+                  <th >Chauffeur Name</th>
+                  <th >Chauffeur Phone no</th>
+                  <th >Car No $ Model</th>
+                  <th >status</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for b in dutyslip_list %}
+ 
+                    <tr>
+                        <td>
+                            <div class="dropdown">
+                          <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown"><i class="fa fa-gear"></i> Options</button>
+                          <ul class="dropdown-menu">
+                              <!-- <li><a href="#"><i class="fa fa-car"></i>All Details</a></li> -->
+                            <li><a href="/rapido/staff_viewdutyslip_detail/{{b.booking.booking_id}}/"><i class="fa fa-car"></i>ReAssign</a></li>
+                            <li><a href="/rapido/staff_closetrip/{{b.booking.booking_id}}/"><i class="fa fa-car"></i>Close Trip</a></li>
+                            <li><a href="/rapido/staff_dutyslip/{{b.booking.booking_id}}/"><i class="fa fa-car"></i>Print-Tripsheet</a></li>
+                            <!-- <li class="cancelReason" data-toggle='modal' data-target='#cancel{{b.booking_id}}'><a><i class="fa fa-close"></i>Cancel</a></li> -->
+                          </ul>
+                        </div>
+                        </td>
+                        <td>{{b.created_date}}</td>
+                        <td>{{b.booking.pickup_date_time}}</td>
+                      <td><a href="">RTPL-{{b.booking.servicing_city.city_code}}-{{b.booking.booking_id}}</a></td>
+                      <td>{{b.booking.service_type}} </td>
+                      <td>{{b.booking.company}}</td>
+                      <td>{{b.category}}</td>
+                      <td>{{b.booking.guest_name}}<br>
+                      ------------
+                      {% if b.dutyslipsms.emailsent == 1 %}
+                      <p><i class="fa fa-history green"></i></p>
+                      <p style="color: green;cursor:pointer;" onclick="sendTripEmail({{b.id}});" >sent </p>
+                      {% else %}
+                      <p style="color: red;cursor: pointer;" onclick="sendTripEmail({{b.id}});" ><i class="fa fa-address-card-o red"></i> Send now </p>
+                      {% endif %}
+                      
+                      </td>
+                      <td>{{b.booking.guest_phoneno}}<br>
+                      ------------
+                      {% if b.dutyslipsms.usersmssent == 1 %}
+                      <p><i class="fa fa-history green"></i></p>
+                      <p style="color: green;cursor:pointer;" onclick="sendTripSmsUser({{b.id}});">sent </p>
+                      {% else %}
+                      <p style="color: red;cursor: pointer;" onclick="sendTripSmsUser({{b.id}});"><i class="fa fa-envelope-o red"></i> Send now </p>
+                      {% endif %}
+
+                      </td>
+                      <td>{{b.booking.booking_id}}</td>
+                      <td>{{b.chauffeur_name}} </td>
+                      <td>{{b.chauffeur_phoneno}}<br>
+
+                    ------------
+                      {% if b.dutyslipsms.driversmssent == 1 %}
+                      <p><i class="fa fa-history green"></i></p>
+                      <p style="color: green;cursor:pointer;" onclick="sendTripSmsDriver({{b.id}});">sent </p>
+                      {% else %}
+                      <p style="color: red;cursor: pointer;" onclick="sendTripSmsDriver({{b.id}});"><i class="fa fa-envelope-o red"></i> Send now </p>
+                      {% endif %}
+                      </td>
+                      <td>{{b.vehicle_no}} <br>{{b.allocated_vehicle}} </td>
+                      <td><span class="label label-success">{{b.status}}</span></td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              </div>
+            </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+ 
+{% endblock %}
+
+{% block javascript %}
+
+  <script>
+
+$(function () {
+  $('#example1').DataTable({
+  dom: "<'row'<'col-sm-3'l><'col-sm-3'f><'col-sm-3 toolbar'><'col-sm-3'p>>" +
+"<'row'<'col-sm-12'tr>>" +
+"<'row'<'col-sm-5'i><'col-sm-7'p>>",
+ });
+
+$("div.toolbar").html('<div id="reportrange" data-url="/rapido/staff_ontrip_list/" class="pull-right" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 100%"><i class="glyphicon glyphicon-calendar fa fa-calendar"></i>&nbsp;<span></span> <b class="caret"></b></div>');
+  //search implementation
+});
+
+//date range picker 
+$(function() {
+
+var start = ($("#filterDate").text()=="")?moment():moment($("#filterDate").text());
+var end = moment();
+var startDate;
+var endDate;
+var url;
+
+function cb(start, end) {
+$('#reportrange span').html(start.format('MMMM D, YYYY'));
+startDate = start.format('YYYY-MM-DD');
+endDate = end.format('YYYY-MM-DD');
+// console.log(startDate);
+// console.log(endDate);
+
+// $.get(url,function(data){
+
+//   console.log(data);
+//   // $("html").html(data);
+// });
+}
+
+$('#reportrange').daterangepicker({
+startDate: start,
+singleDatePicker:true
+}, cb);
+
+$('#reportrange').on('apply.daterangepicker', function(ev, picker) {
+console.log(picker.startDate.format('YYYY-MM-DD'));
+console.log(picker.endDate.format('YYYY-MM-DD'));
+dataUrl = $("#reportrange").attr("data-url");
+url=dataUrl+startDate+"/"+endDate+"/";
+console.log(url);
+location.href=url;
+
+});
+
+cb(start, end);
+// location.href=url;
+
+});
+
+  </script>
+{% endblock %}

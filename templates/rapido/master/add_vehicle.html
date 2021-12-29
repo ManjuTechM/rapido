@@ -1,0 +1,229 @@
+{% extends "rapido/master/master.html" %}
+{% block body_block %}
+<style type="text/css">
+  #result {
+   position: absolute;
+   cursor: pointer;
+   overflow-y: auto;
+   max-height: 400px;
+   box-sizing: border-box;
+   z-index: 1001;
+  }
+  .link-class:hover{
+   background-color:#f1f1f1;
+  }
+ 
+.inputs { width: 34px; }
+
+input.error
+{
+    border-color: red;
+}
+
+label.error
+{
+    color: red;
+    font-weight: 300 !important;
+}
+   </style>
+<section class="content-header">
+   <h6>
+      <ol class="breadcrumb">
+         <li><a href="/rapido/master/"><i class="fa fa-dashboard"></i> Home</a></li>
+         <li><a href="/rapido/vehicle/"> Vehicle</a></li>
+         <li class="active"> Add Vehicle</li>
+      </ol>
+   </h6>
+</section>
+<section>
+   <div class="row">
+      <div class="col-lg-10">
+         <div class="panel panel-default">
+            <div class="panel-heading" style="padding: 1px 15px;">
+               <h4> Add new vehicle </h4>
+            </div>
+            <h5> {{message}}</h5>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+               <form class="form-item span8" id="item_form" method="post"
+                  action="/rapido/add_vehicle/" enctype="multipart/form-data">
+                  {% csrf_token %}          
+                  <table>
+                     <br>
+
+
+                     <tr>
+                        <td>Vehicle belongs to which vendor:</td>
+                        <td>
+    <input type="text" id="vensearch" placeholder="Select vendor" class="form-control" required/>
+
+    <input type="text" id="vendorid" style="display: none;" name="vehicle_belongsto">
+
+   <ul class="list-group" id="result"></ul>
+<!--                            <select name="vehicle_belongsto">
+                              {% for v in vendor_list %}
+                              <option value={{v.id}}>{{v.vendor_name}}</option>
+                              {% endfor %}
+                           </select> -->
+                        </td>
+                     </tr>
+                     
+
+                     <br>
+                     <tr>
+                        <td>Vehicle category:</td>
+                        <td>
+                           <select class="form-control" name="category">
+                              {% for c in cat_list %}
+                              <option value={{c.id}}>{{c.name}}</option>
+                              {% endfor %}
+                           </select>
+                        </td>
+                     </tr>
+
+                     <tr>
+                        <td>Vehicle Model Name:</td>
+                        <td>
+                          <select class="form-control" name="vehicle_model_name">
+                            {% for v in vehicle_model_list %}
+                            <option value={{v.id}}>{{v.name}} </option>
+                            {% endfor %}
+                          </select>
+                        </td>
+                     </tr>
+                     <tr>
+                        <td>Vehicle_no:</td>
+                        <td><input type="text" class="form-control" placeholder="AA 99 AA 9999" pattern="^[A-Z]{2}[ -][0-9]{1,2}(?: [A-Z])?(?: [A-Z]*)? [0-9]{4}$" title="please enter No in AA 99 AA 9999 formate" name="vehicle_no" required=""></td>
+                     </tr>
+                     <tr>
+                        <td>Vehicle colour:</td>
+                        <td><input type="text" class="form-control" placeholder="vehicle colour" name="vehicle_colour" required=""></td>
+                     </tr>
+                     <tr>
+                        <td>Vehicle Owner name:</td>
+                        <td><input type="text" class="form-control" placeholder="vehicle owner name" name="vehicle_ownername"  required=""></td>
+                     </tr>
+                     <tr>
+                        <td>Vehicle_owner_phoneno:</td>
+                        <td><input type="text" class="form-control" placeholder="vehicle_owner_phoneno" name="vehicle_owner_phoneno" pattern="[0-9]{10}" maxlength="10" min="7000000000" max="9999999999" required=""  ></td>
+                     </tr>
+                     <tr>
+                        <td>Vehicle seat_capacity:</td>
+                        <td><input type="number" class="form-control" placeholder="vehicle seat_capacity" name="seat_capacity"  required=""></td>
+                     </tr>
+                     <tr>
+                        <td>Vehicle insurance_expire_date</td>
+                        <td><input type="text" class="form-control" placeholder="vehicle insurance_expire_date" id="insurance_date" required=""/><input style="display: none;" type="text" 
+                        id="actual_insurance_date" name="insurance_expire_date"/></td>
+                     </tr>
+                     <tr>
+                        <td>Vehicle tax_expire_date:</td>
+                        <td><input type="text" class="form-control" placeholder="vehicle tax_expire_date" name="tax_expire_date" id="tax_date"  required="">
+                        <td><input style="display: none;" type="text" name="tax_expire_date" id="actual_tax_date"></td>
+                     </tr>
+                     <tr>
+                        <td>Vehicle Engine no:</td>
+                        <td><input type="text" class="form-control" placeholder="Engine No" name="engineno"  required=""></td>
+                     </tr>
+                     <tr>
+                        <td>Vehicle image:</td>
+                        <td><input type="file" name="vehicle_picture" required=""></td>
+                     </tr>
+                     <!-- Provide a button to click to submit the form. -->
+                     <tr>
+                        <td><button type="save" class="btn btn-success" style="width:100%;">Save</button></td>
+                        <td>
+                           <button type="reset" class="btn btn-primary" style="width:100%;">Clear</button> 
+                           <!--       <input class="btn btn-outline btn-success" type="submit" value="Save">
+                              <input type="reset" class="btn btn-outline btn-primary" value="Reset">-->
+                        </td>
+                     </tr>
+                  </table>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
+{% endblock %}
+
+
+
+{% block javascript %}
+
+  <script>
+
+  $(function() {
+
+
+      function datePick(source, destination) {  //this function is for datepicker 
+
+          $(source).datepicker({
+              dateFormat: 'dd-mm-yy',
+              onSelect: function() {
+                  var date = $(this).val().split("-").reverse().join("-");  //format of date changes to yy-mm-dd
+                  $(destination).val(date);
+              }
+          });
+
+      }
+
+      datePick("#insurance_date", "#actual_insurance_date");
+      datePick("#tax_date", "#actual_tax_date");
+
+
+      function keyUpDate(arg1, arg2, arg3, arg4) {
+          $(arg1).keyup(function() {
+              $(arg2).val($(this).val().split("-").reverse().join("-"));
+
+              $(arg3).val($(arg4).val().split("-").reverse().join("-"));
+          });
+      }
+
+      keyUpDate("#insurance_date", "#actual_insurance_date", "#actual_tax_date", "#tax_date");
+      keyUpDate("#tax_date", "#actual_tax_date", "#actual_insurance_date", "#insurance_date");
+
+      $("#item_form").submit(function() {
+
+          $(this).children('#tax_date,#insurance_date').remove(); //remove original date pickers to read form while submission
+      });
+
+  });
+
+
+         //vendor search
+         $(document).ready(function(){
+         $.ajaxSetup({ cache: false });
+         $('#vensearch').keyup(function(){
+         $('#result').html('');
+         $('#state').val('');
+         var searchField = $('#vensearch').val();
+         var expression = new RegExp(searchField, "i");
+         $.getJSON('/rapido/api/add_vendor/', function(data) {
+          $.each(data, function(key, value){
+           if (value.vendor_name.search(expression) != -1 || value.vendor_phoneno.search(expression) != -1)
+           {
+             $('#result').append('<li class="list-group-item link-class">'+value.vendor_name+' | '+value.vendor_phoneno+'</li>');
+             $('#vendorid').val(value.id);
+           }
+           else{
+             event.preventDefault();
+           }
+          });   
+         });
+         });
+         
+         $('#result').on('click', 'li', function() {
+         var click_text = $(this).text();
+         $('#vensearch').val(click_text);
+         $("#result").html('');
+         });
+         });
+         //vendor search
+
+
+      $("#item_form").validate();
+
+  </script>
+
+{% endblock %}

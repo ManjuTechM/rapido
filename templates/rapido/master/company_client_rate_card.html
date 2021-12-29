@@ -1,0 +1,347 @@
+{% extends "rapido/master/master.html" %}
+
+
+{% block body_block %}
+<div class="row">
+    <div class="col-sm-12">
+      <div class="col-lg-12 col-md-12">
+        <div class="panel panel-primary">
+          <div class="panel-heading">
+        
+            <h4>Client Name: {{ company.company_name }}<span class="pull-right">{{ company.company_address.area }} ,{{ company.company_address.city }}
+            </span></h4>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h3>{{message}}</h3>
+      <div class="col-lg-6">
+        <div class="panel panel-default">
+          <div class="panel-heading" style="padding: 1px 15px;">
+          <h4>Airport Transfers</h4>
+          </div>
+          <!-- /.panel-heading -->
+          <div class="panel-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th>Category</th>
+                    <th>slab</th>
+                    <th>Base Fare</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for r in company_rate_card_list %}
+                {% if r.service_type == "Airport_Transfer" %}  
+                  <tr>
+                      <td>{{r.date.date}}</td>
+                      <td>{{r.category}}</td>
+                      <td>{{r.slab}}</td>
+                      <td>{{r.base_rate}}</td>
+                      <td><button class="btn btn-success">Edit</button></td>
+                  </tr>
+                  {% endif %}
+                  {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+          <a  data-toggle="modal" data-target="#myModal1">Add price for new category</a>
+         </div>
+         </div>
+      </div>
+   
+      <div class="col-lg-6">
+        <div class="panel panel-default">
+          <div class="panel-heading" style="padding: 1px 15px;">
+          <h4>Out station</h4>
+          </div>
+          <!-- /.panel-heading -->
+          <div class="panel-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                  <th></th>
+                    <th>Category</th>
+                    <th>Min Km/Day </th>
+                    <th>Per Km </th>
+                    <th> Batta</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for r in company_rate_card_list %}
+                {% if r.service_type == "Outstation" %}  
+                  <tr>
+                      <td>{{r.date.date}}</td>
+                      <td>{{r.category}}</td>
+                      <td>{{r.base_rate}}</td>
+                      <td>{{r.per_km_rate}} </td>
+                      <td>{{r.batta}} </td>
+                      <td><button class="btn btn-success">Edit</button></td>
+                  </tr>
+                  {% endif %}
+                  {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+          <a  data-toggle="modal" data-target="#myModal2">Add price for new category</a>
+         </div>
+        </div>
+      </div>
+
+      <div class="col-lg-8">
+        <div class="panel panel-default">
+          <div class="panel-heading" style="padding: 1px 15px;">
+          <h4>City Usage</h4>
+          </div>
+          <!-- /.panel-heading -->
+          <div class="panel-body">
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr><td></td>
+                    <th>Category</th>
+                    <th>slab</th>
+                    <th>Base rate</th>
+                    <th> Extra Km </th>
+                    <th> Extra Hrs</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for r in company_rate_card_list %}
+                {% if r.service_type == "City_Usage" %}  
+                  <tr>
+                      <td>{{r.date.date}}</td>
+                      <td>{{r.category}}</td>
+                      <td>{{r.slab}}</td>
+                      <td>{{r.base_rate}} </td>
+                      <td>{{r.per_km_rate}} </td>
+                      <td>{{r.per_hr_rate}} </td>
+                      <td><button class="btn btn-success">Edit</button></td>
+                  </tr>
+                  {% endif %}
+                  {% endfor %}
+                  </tbody>
+              </table>
+          </div>
+          <a  data-toggle="modal" data-target="#myModal3">Add price for new category</a>
+         </div>
+      </div>
+    </div>  
+</div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal1" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h3 class="modal-title">AirPort Service</h3>
+        </div>
+      
+      <div class="modal-body">
+
+       <form class="form-item span8" id="item_form" method="post"
+           action="/rapido/set_client_rate_card/{{ company.user.id }}/" enctype="multipart/form-data">
+
+          {% csrf_token %}          
+
+      <table>
+          <tr>
+            <td>Service Type</td>
+            <td>
+            <select name="service_type">
+            <option value="Airport_Transfer" class="form-control">AirPort Transfer</option>
+            </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Cateory:</td>
+            <td>
+            <select name="category">
+            {% for c in cat_list %}
+            <option value={{c.id}} class="form-control">{{c.name}} </option>
+            {% endfor %}
+            </select>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Base rate:</td>
+            <td><input type="number" class="form-control" name="base_rate" required=""  ></td>
+          </tr>
+
+          </table>
+            <!-- Provide a button to click to submit the form. -->
+        
+          <div class="modal-footer">
+            <div class="form-group">
+            <div class="col-xs-offset-3 col-xs-6">
+            <input class="btn btn-outline btn-success" type="submit" value="Save">
+            <input type="reset" class="btn btn-outline btn-primary" value="Reset">
+            </div>
+            </div>
+
+          </div>
+        </form>
+      </div>  
+    </div>
+  </div>
+  </div>
+  <!--  Model close -->
+
+    <!-- Modal -->
+  <div class="modal fade" id="myModal2" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h3 class="modal-title">Set price for Out Station </h3>
+        </div>
+      
+      <div class="modal-body">
+
+       <form class="form-item span8" id="item_form" method="post"
+           action="/rapido/set_client_rate_card/{{ company.user.id }}/" enctype="multipart/form-data">
+
+          {% csrf_token %}          
+
+      <table>
+          <tr>
+            <td>Service Type</td>
+            <select name="service_type">
+            <option value="Outstation">OutStation</option>
+            </select>
+          </tr>
+          <tr>
+            <td>Category:</td>
+            <td>
+            <select name="category">
+            {% for c in cat_list %}
+
+            <option value={{c.id}}>{{c.name}}</option>
+            {% endfor %}
+            </select>
+            </td>
+          </tr>
+    
+          <tr>
+            <td>Min Km/Day:</td>
+            <td><input type="number" name="base_rate" required="" > </td>
+          </tr>
+          <tr>
+            <td>Rate Per Km:</td>
+            <td><input type="number" name="per_km_rate" required=""></td>
+          </tr>
+          <tr>
+            <td>Betta:</td>
+            <td><input type="number" name="batta" required=""> </td>
+          </tr>
+
+          </table>
+            <!-- Provide a button to click to submit the form. -->
+        
+          <div class="modal-footer">
+            <div class="form-group">
+            <div class="col-xs-offset-3 col-xs-6">
+            <input class="btn btn-outline btn-success" type="submit" value="Save">
+            <input type="reset" class="btn btn-outline btn-primary" value="Reset">
+            </div>
+            </div>
+          </div>
+        
+        </form>
+      </div>  
+    </div>
+  </div>
+  </div>
+  <!--  Model close -->
+
+    <!-- Modal -->
+  <div class="modal fade" id="myModal3" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h3 class="modal-title">set Price for City usage </h3>
+        </div>
+      
+      <div class="modal-body">
+
+       <form class="form-item span8" id="item_form" method="post"
+           action="/rapido/set_client_rate_card/{{ company.user.id }}/" enctype="multipart/form-data">
+
+          {% csrf_token %}          
+
+       <table>
+          <tr>
+            <td>Service Type</td>
+            <td>
+            <select name="service_type">
+            <option value="City_Usage">City usage</option>
+            </select>
+            </td>
+          </tr>
+          <tr>
+            <td>Category:</td>
+            <td>
+            <select name="category">
+            {% for c in cat_list %}
+
+            <option value={{c.id}}>{{c.name}}</option>
+            {% endfor %}
+            </select>
+            </td>
+          </tr>
+
+            <td>Service Type</td>
+            <td>
+            <select name="slab">
+            <option value="slab4">4hrs-40km</option>
+            <option value="slab8">8hrs-80km</option>
+            </select>
+            </td>
+    
+          <tr>
+            <td>Base rate:</td>
+            <td><input type="number" name="base_rate" required="" > </td>
+          </tr>
+          <tr>
+            <td>Extra Km:</td>
+            <td><input type="number" name="extrakm" required=""></td>
+          </tr>
+          <tr>
+            <td>Extra Hrs:</td>
+            <td><input type="number" name="extrahrs" required=""> </td>
+          </tr>
+
+          </table>
+            <!-- Provide a button to click to submit the form. -->
+        
+          <div class="modal-footer">
+            <div class="form-group">
+            <div class="col-xs-offset-3 col-xs-6">
+            <input class="btn btn-outline btn-success" type="submit" value="Save">
+            <input type="reset" class="btn btn-outline btn-primary" value="Reset">
+            </div>
+            </div>
+
+          </div>
+        </form>
+      </div>  
+    </div>
+  </div>
+  </div>
+  <!--  Model close -->
+
+{% endblock %}

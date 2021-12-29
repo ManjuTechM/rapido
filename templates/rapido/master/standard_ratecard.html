@@ -1,0 +1,914 @@
+{% extends "rapido/master/master.html" %}
+{% block body_block %}
+<style type="text/css">
+   #city_list{
+   background-color: #347ab7;
+   }
+</style>
+<div class="row">
+   <div class="col-sm-12">
+      <div class="col-lg-12 col-md-12">
+         <div class="panel panel-primary">
+            <div class="panel-heading">
+               <h4>
+                  Select city:
+                  <select id="city_list" name="category">
+                     {% for c in city_list %}
+                     <option value={{c.id}}>{{c.name}}</option>
+                     {% endfor %}
+                  </select>
+               </h4>
+            </div>
+         </div>
+      </div>
+   </div>
+   <h3>{{message}}</h3>
+   <div class="col-lg-12 col-md-12 col-sm-12">
+      <div class="nav-tabs-custom">
+         <ul class="nav nav-tabs">
+            <li class="active"><a href="#tab_1" data-toggle="tab">Airport Transfers</a></li>
+            <li><a href="#tab_2" data-toggle="tab">Out station</a></li>
+            <li><a href="#tab_3" data-toggle="tab">City Usage</a></li>
+         </ul>
+         <div class="tab-content">
+            <div class="tab-pane active" id="tab_1">
+               <div class="panel panel-default">
+                  <div class="panel-heading" style="padding: 1px 15px;">
+                     <h4>Airport Transfers</h4>
+                  </div>
+                  <!-- /.panel-heading -->
+                  <div class="panel-body">
+                     <div class="table-responsive">
+                        <table class="table">
+                           <thead>
+                              <tr>
+                                 <th>Category</th>
+                                 <th>
+                                    Select service type :
+                                    <select id="select_service1" class="form-control" name="service_type">
+                                       {% for servicetype in travelservice_type_list %}
+                                       <option class="form-control" value={{servicetype.id}}>{{servicetype.name}}</option>
+                                       {% endfor %}
+                                    </select>
+                                 </th>
+                                 <th>Vehicle Varient</th>
+                                 <th>slab</th>
+                                 <th>Base Fare</th>
+                                 <th></th>
+                                 <th></th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              {% for c in cat_list %}
+                              <tr class="forInput">
+                                 <td><span class="cat_id">{{c.id}}</span>.{{c.name}}</td>
+                                 <td class="ast"></td>
+                                 <td class="vvid_result1"><input type="text" class="vvid atags" name=""></td>
+                                 <td>Airport</td>
+                                 <td><input type="text" class="base_rate form-control" name="base_rate"/></td>
+                                 <td><button class="airport_editid btn btn-success">Edit</button></td>
+                                 <td><button class="airport_saveid btn btn-primary" disabled>save</button></td>
+                              </tr>
+                              {% endfor %}
+                           </tbody>
+                        </table>
+                     </div>
+                     <!-- <a  data-toggle="modal" data-target="#myModal1">Add price for new category</a> -->
+                     <button id="saveairport" class="center-block btn btn-success">Save</button>
+                  </div>
+               </div>
+            </div>
+            <!-- /.tab-pane -->
+            <div class="tab-pane" id="tab_2">
+               <div class="panel panel-default">
+                  <div class="panel-heading" style="padding: 1px 15px;">
+                     <h4>Out station</h4>
+                  </div>
+                  <!-- /.panel-heading -->
+                  <div class="panel-body">
+                     <div class="table-responsive">
+                        <table class="table">
+                           <thead>
+                              <tr>
+                                 <th>Category</th>
+                                 <th>
+                                    Select service type :
+                                    <select id="select_service2" class="form-control" name="service_type">
+                                       {% for servicetype in travelservice_type_list %}
+                                       <option value={{servicetype.id}}>{{servicetype.name}}</option>
+                                       {% endfor %}
+                                    </select>
+                                 </th>
+                                 <th>Vehicle Varient</th>
+                                 <th>Min Km/Day </th>
+                                 <th>Per Km </th>
+                                 <th>Extra Km</th>
+                                 <th>day batta</th>
+                                 <th>night batta</th>
+                                 <th></th>
+                                 <th></th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              {% for c in cat_list %}
+                              <tr>
+                                 <td><span class="cat_id1">{{c.id}}</span>.{{c.name}}</td>
+                                 <td class="ost"></td>
+                                 <td class="vvid_result2"> <input type="text" class="vvid_ots otags" name="">   
+                                 </td>
+                                 <td><input type="text" class="minkm form-control" name=""/></td>
+                                 <td><input type="text" class="perkm form-control" name="base_rate"/></td>
+                                 <td><input type="text" class="extrakm form-control" name="base_rate"/></td>
+                                 <td><input type="text" class="day_bata form-control" name="base_rate"/></td>
+                                 <td><input type="text" class="night_bata form-control" name="base_rate"/></td>
+                                 <td><button class="outstation_editid btn btn-success">Edit</button></td>
+                                 <td><button class="outstation_saveid btn btn-primary" disabled>Save</button></td>
+                              </tr>
+                              {% endfor %}
+                           </tbody>
+                        </table>
+                     </div>
+                     <!--           <a  data-toggle="modal" data-target="#myModal2">Add price for new category</a> -->
+                     <br/><button id="saveoutstation" class="center-block btn btn-success">Save</button>
+                  </div>
+               </div>
+            </div>
+            <!-- /.tab-pane -->
+            <div class="tab-pane" id="tab_3">
+               <div class="panel panel-default">
+                  <div class="panel-heading" style="padding: 1px 15px;">
+                     <span>select slab:</span><br/><select id="slab" multiple>
+                      {% for s in slab_list %}
+                       <option id=slab{{s.id}} value={{s.id}}>{{s.name}}</option>
+                       {% endfor %}
+                     </select>
+                  </div>
+                  <!-- /.panel-heading -->
+                  <div class="panel-body">
+                     <div class="table-responsive">
+                        <table class="table">
+                           <thead>
+                              <tr id="thcount">
+                                 <th>Category</th>
+                                 <th>
+                                    Select service type :
+                                    <select id="select_service3" class="form-control" name="service_type">
+                                       {% for servicetype in travelservice_type_list %}
+                                       <option value={{servicetype.id}}>{{servicetype.name}}</option>
+                                       {% endfor %}
+                                    </select>
+                                 </th>
+                                 <th>Vehicle Varient</th>
+                                 <th class="addSlab" style="display: none;"></th>
+                                 <th> Extra Km </th>
+                                 <th> Extra Hrs</th>
+                                 <th>FGR</th>
+                                 <th>Night Bhatta</th>
+                                 <th></th>
+                                 <th></th>
+                              </tr>
+                           </thead>
+                           <tbody>
+                              {% for r in cat_list %}
+                              <tr id="trcount">
+                                 <td>{{r.name}}</td>
+                                 <td class="cst"></td>
+                                 <td class="vvid_result3"> <input type="text" class="vvid_city ctags" name="">
+                                 <td class="slab_data" style="display: none;"></td>
+                                 <td><input class="city_extra_km form-control" type="text" name="extrakm"></td>
+                                 <td><input class="city_extra_hrs form-control" type="text" name="extrahrs"></td>
+                                 <td><input class="fgr form-control" value="0" type="text" name="fgr"></td>
+                                 <td><input class="city_nightbatta form-control" type="text" name="nightbatta"></td>
+                                 <td><button class="city_editid btn btn-success">Edit</button></td>
+                                 <td><button class="city_saveid btn btn-primary" disabled>Save</button></td>
+                              </tr>
+                              {% endfor %}
+                           </tbody>
+                        </table>
+                     </div>
+                     <!-- <a  data-toggle="modal" data-target="#myModal3">Add price for new category</a> --><br/>
+                     <button id="savecityusage" class="center-block btn btn-success">Save</button>
+                  </div>
+               </div>
+            </div>
+         </div>
+         <!-- /.tab-pane -->
+      </div>
+      <!-- /.tab-content -->
+   </div>
+</div>
+
+<!--  Model close -->
+{% endblock %}
+{% block javascript %}
+<script type="text/javascript">
+   //standard rate_card airport related
+var vv_json = [
+{% for i in vehicle_model %}
+  { "id": {{i.id}},
+   "label":"{{i.name}}"
+   },
+
+{% endfor %}
+];   
+   
+   var cat_id = document.getElementsByClassName("cat_id");
+   
+   var cat_id1 = document.getElementsByClassName("cat_id1");
+   var minkm = document.getElementsByClassName("minkm");
+   var perkm = document.getElementsByClassName("perkm");
+   var extrakm = document.getElementsByClassName("extrakm");
+   var day_bata = document.getElementsByClassName("day_bata");
+   var night_bata = document.getElementsByClassName("night_bata");
+   var base_rate = document.getElementsByClassName("base_rate");
+   var ast = document.getElementsByClassName("ast");
+   var ost = document.getElementsByClassName("ost");
+   var cst = document.getElementsByClassName("cst");
+   var city_extra_km = document.getElementsByClassName("city_extra_km");
+   var city_nightbatta = document.getElementsByClassName("city_nightbatta");
+   var city_extra_hrs = document.getElementsByClassName("city_extra_hrs");
+   var vv_airname = document.getElementsByClassName("atags");
+   var vv_otsname = document.getElementsByClassName("otags");
+   var vv_cityname = document.getElementsByClassName("ctags");
+   var token = '{{ csrf_token }}';
+   var airportEditId = document.getElementsByClassName("airport_editid");
+   var airportSaveId = document.getElementsByClassName("airport_saveid");
+   var outstationEditId = document.getElementsByClassName("outstation_editid");
+   var outstationSaveId = document.getElementsByClassName("outstation_saveid");
+   var cityEditId = document.getElementsByClassName("city_editid");
+   var citySaveId = document.getElementsByClassName("city_saveid");
+   var newEvent;
+
+    tagsLoad();        
+   function tagsLoad(){
+         $(function(){
+      $('.vvid').tagsInput({width:'100%',defaultText:'Domain', autocomplete_url:vv_json});
+      $('.vvid_ots').tagsInput({width:'100%',defaultText:'Domain', autocomplete_url:vv_json});
+      $('.vvid_city').tagsInput({width:'100%',defaultText:'Domain', autocomplete_url:vv_json});
+    });
+   }
+
+ $('#city_list').on('click', function() {
+    var cityid = $('#city_list option:selected').val();
+
+    $.getJSON('/rapido/api/airportratecardbycity/' + cityid, function(data) {
+
+        for (var i = 0; i < cat_id.length; i++) {
+            var j = false;
+
+            var airport;
+            // if(data.length==0){
+            //   base_rate[i].value = "";
+            // }
+
+            function editCall(value){
+                    //edit
+                          $('.fireevent'+value).on('click',function(){
+                            $(this).attr("id",value);
+                            $(this).parents("tr").find("input.base_rate").prop('disabled',false);
+                            $(this).parents("tr").find("input.atags").addClass("vvid");
+                            tagsLoad();
+                            $(this).attr("disabled",true);
+                            $('.smokeevent'+value).removeAttr("disabled");
+                            // $(this).text("save");
+                            // $(this).removeClass().addClass("smokeevent"+value).addClass("btn btn-primary");
+                            saveCall(value);
+                        });
+
+            };
+
+            function saveCall(value){
+
+                  var smokeEvt = ".smokeevent"+value;
+                          $(smokeEvt).on('click',function(){
+                               airport = {
+                                  "updated_by":{{user.id}},
+                                  "city":parseInt($('#city_list option:selected').val()),
+                                  "service_type":parseInt($('#select_service1 option:selected').val()),
+                                  "base_rate":parseInt($(this).parents("tr").find("input.base_rate").val()),
+                                  "vehicle_varient":$(this).parents("tr").find("input.atags").val()
+                               };
+                               AjaxCall(value,smokeEvt);
+                            //save 
+                          });
+                        };
+
+            function AjaxCall(value,event){
+
+                            $.ajax({
+                                url: '/rapido/api/update_airportratecard/'+value+'/',
+                                method: 'PUT',
+                                headers:{'X-CSRFToken':'{{ csrf_token }}'},                  
+                                contentType : 'application/json',
+                                context:this,
+                                data: JSON.stringify(airport),
+                                success:function(res){
+                                  $(event).parents("tr").find("input.base_rate").prop('disabled',true);
+                                  $(event).parents("tr").find("input.vvid").removeClass("vvid");
+                                  $(event).parents("tr").find("div.tagsinput").remove();
+                                  $(event).parents("tr").find("input.atags").css("display","block");
+                                  $(event).attr("disabled",true);
+                                  $('.fireevent'+value).removeAttr("disabled");
+                                  // saveCall(value);
+                                }
+                             });
+
+            };
+
+            $.each(data, function(key, value) {
+                if (parseInt(cat_id[i].innerHTML) == value.category.id) {
+                    base_rate[i].value = value.base_rate;
+                    ast[i].innerHTML = value.service_type.name;
+                    if(value.vehicle_varient==null || value.vehicle_varient==""){
+                    document.getElementsByClassName("vvid_result1")[i].innerHTML = "<input type='text' class='vvid atags' name=''>";
+                    }
+                    else
+                    {
+                    document.getElementsByClassName("vvid_result1")[i].innerHTML = "<input type='text' class='atags' style='border:none;' value='"+value.vehicle_varient+"' name='' readonly>";
+
+                    }
+                    airportEditId[i].setAttribute("id",value.id);
+                    airportEditId[i].classList.add("fireevent"+value.id);
+                    newEvent = value.id;
+                    airportSaveId[i].classList.add("smokeevent"+value.id);
+                    base_rate[i].setAttribute("disabled",true);
+                    editCall(newEvent);
+                    j = true;
+                }
+
+            });
+            if (j == false) {
+                base_rate[i].value = "";
+                ast[i].innerHTML = "";
+                base_rate[i].disabled = false;
+                document.getElementsByClassName("vvid_result1")[i].innerHTML = "<input type='text' class='vvid atags' name=''>";
+            }
+
+        }
+        tagsLoad();
+    });
+
+    $.getJSON('/rapido/api/outstationratecardbycity/' + cityid, function(data) {
+
+
+        for (var i = 0; i < cat_id.length; i++) {
+            var j = false;
+            var outstation;
+
+            function editCall(value){
+                    //edit
+                          $('.fireevent'+value).on('click',function(){
+                            $(this).attr("id",value);
+                            $(this).parents("tr").find("input.base_rate").prop('disabled',false);
+                            $(this).parents("tr").find("input.minkm").prop('disabled',false);
+                            $(this).parents("tr").find("input.perkm").prop('disabled',false);
+                            $(this).parents("tr").find("input.extrakm").prop('disabled',false);
+                            $(this).parents("tr").find("input.day_bata").prop('disabled',false);
+                            $(this).parents("tr").find("input.night_bata").prop('disabled',false);
+                            $(this).parents("tr").find("input.otags").addClass("vvid_ots");
+
+                            $(this).attr("disabled",true);
+                            $('.smokeevent'+value).removeAttr("disabled");
+                            tagsLoad();
+
+                            saveCall(value);
+                  //save 
+                        });
+
+            };
+
+            function saveCall(value){
+
+                  var smokeEvt = ".smokeevent"+value;
+                          $(smokeEvt).on('click',function(){
+                               outstation = {
+               "min_km": parseInt($(this).parents("tr").find("input.minkm").val()),
+               "perkm_rate": parseInt($(this).parents("tr").find("input.perkm").val()),
+               "extrakm_rate": parseInt($(this).parents("tr").find("input.extrakm").val()),
+               "day_batta": parseInt($(this).parents("tr").find("input.day_bata").val()),
+               "night_batta": parseInt($(this).parents("tr").find("input.night_bata").val()),
+               "updated_by": {{user.id}},
+               "city":parseInt($('#city_list option:selected').val()),
+               "service_type":parseInt($('#select_service2 option:selected').val()),
+               "vehicle_varient":$(this).parents("tr").find("input.otags").val()
+   
+               };
+
+              AjaxCall(value,smokeEvt);
+              });
+          };
+
+            function AjaxCall(value,event){
+
+                            $.ajax({
+                                url: '/rapido/api/update_outstationratecard/'+value+'/',
+                                method: 'PUT',
+                                headers:{'X-CSRFToken':'{{ csrf_token }}'},                  
+                                contentType : 'application/json',
+                                context:this,
+                                data: JSON.stringify(outstation),
+                                success:function(res){
+                                  $(event).parents("tr").find("input.base_rate").prop('disabled',true);
+                                  $(event).parents("tr").find("input.minkm").prop('disabled',true);
+                                  $(event).parents("tr").find("input.perkm").prop('disabled',true);
+                                  $(event).parents("tr").find("input.extrakm").prop('disabled',true);
+                                  $(event).parents("tr").find("input.day_bata").prop('disabled',true);
+                                  $(event).parents("tr").find("input.night_bata").prop('disabled',true);
+
+                                  $(event).parents("tr").find("input.otags").removeClass("vvid_ots");
+                                  $(event).parents("tr").find("div.tagsinput").remove();
+                                  $(event).parents("tr").find("input.otags").css("display","block");
+                                  $(event).attr("disabled",true);
+                                  $('.fireevent'+value).removeAttr("disabled");
+                                }
+                             });
+
+            };
+
+            $.each(data, function(key, value) {
+                if (parseInt(cat_id1[i].innerHTML) == value.category.id) {
+                    minkm[i].value = value.min_km;
+                    perkm[i].value = value.perkm_rate;
+                    extrakm[i].value = value.extrakm_rate;
+                    day_bata[i].value = value.day_batta;
+                    night_bata[i].value = value.night_batta;
+                    ost[i].innerHTML = value.service_type.name;
+                    if(value.vehicle_varient==null || value.vehicle_varient=="")
+                    {
+                    document.getElementsByClassName("vvid_result2")[i].innerHTML = "<input type='text' class='vvid_ots otags' name=''>";
+                    }
+
+                  else{ 
+                    document.getElementsByClassName("vvid_result2")[i].innerHTML = "<input type='text' class='otags' style='border:none;' value='"+value.vehicle_varient+"' name='' readonly>";
+                  }
+                    outstationEditId[i].classList.add("fireevent"+value.id);
+                    outstationSaveId[i].classList.add("smokeevent"+value.id);
+                    outstationEditId[i].setAttribute("id",value.id);
+                    minkm[i].setAttribute("disabled",true);
+                    perkm[i].setAttribute("disabled",true);
+                    extrakm[i].setAttribute("disabled",true);
+                    day_bata[i].setAttribute("disabled",true);
+                    night_bata[i].setAttribute("disabled",true);
+                    editCall(value.id);
+                    j = true;
+                }
+
+            });
+            if (j == false) {
+                minkm[i].value = "";
+                perkm[i].value = "";
+                extrakm[i].value = "";
+                day_bata[i].value = "";
+                night_bata[i].value = "";
+                ost[i].innerHTML = "";
+                minkm[i].disabled = false;
+                perkm[i].disabled = false;
+                extrakm[i].disabled = false;
+                day_bata[i].disabled = false;
+                night_bata[i].disabled = false;
+                document.getElementsByClassName("vvid_result2")[i].innerHTML = "<input type='text' class='vvid_ots otags' name=''>";
+            }
+
+        }
+        tagsLoad();
+    });
+
+
+    $.getJSON('/rapido/api/cityratecardbycity/' + cityid, function(data) {
+
+//remove columns of slabs if exists
+  var optioncount=0;
+    $('#slab option').each(function() {
+        optioncount++;
+    });
+
+    var spans = document.querySelectorAll('#thcount th');
+
+    var colCount = 0;
+
+    //count no. of columns in cityusage
+    $('#thcount th').each(function() {
+        colCount++;
+    });
+    //count no. of columns in cityusage end
+
+    //avoid adding duplicate slabs
+    var thpresent = false;
+    for(var a=0;a<optioncount;a++)
+     {
+        var sample = document.querySelectorAll('#slab option');
+        var slab_id = sample[a].value;
+
+            for (var k = 0; k < colCount; k++) {
+              // console.log(spans[k].className);
+                if (('slab'+slab_id) == spans[k].className) {
+                    $('.slab'+slab_id).remove();
+                    $('.slab_dat'+slab_id).remove();
+                    // console.log("remove");
+                }
+            }
+
+     } 
+
+    if (thpresent == false) {
+        $('.close').click(function() {
+            $(this).parent().remove();
+            $('.slab_dat').remove();
+        });
+    } else {
+
+        alert("slab already added");
+    }
+    //avoid adding duplicate slabs end
+
+//remove columns of slabs if exists end    
+
+    //count no. of columns in cityusage
+var unique_slabs = [];
+            $.each(data, function(key, value) 
+            {
+                if ($.inArray(value.slab.id, unique_slabs) > -1)
+                {
+                    // console.log("There's a match!");
+                }
+                                
+                else 
+                {
+                    unique_slabs.push(value.slab.id, value.slab.name);
+
+                }
+            });
+
+
+                for (var n = 0; n <= (unique_slabs.length - 1); n += 2) 
+                {
+
+                    var text2 = $("<th class='slab" + unique_slabs[n] + "'>" + unique_slabs[n + 1] + "</th>");
+                    var text3 = $("<td class='slab_dat" + unique_slabs[n] + "'><input class='slabdata" + unique_slabs[n] + " " + "form-control' type='text'></td>");
+
+                    $('.addSlab').last().before(text2);
+                    $('.slab_data').before(text3);
+                }            
+
+        for (var i = 0; i < cat_id.length; i++) 
+        {
+            var j = false;
+            var cityusage;
+
+            function editCall(value,slab){
+                    //edit
+              $('.fireevent'+value).on('click',function(){
+                $(this).attr("id",value);
+                $(this).parents("tr").find("input.slabdata"+slab).prop('disabled',false);
+                $(this).parents("tr").find("input.city_extra_km").prop('disabled',false);
+                $(this).parents("tr").find("input.city_extra_hrs").prop('disabled',false);
+                $(this).parents("tr").find("input.fgr").prop('disabled',false);
+                $(this).parents("tr").find("input.city_nightbatta").prop('disabled',false);
+                $(this).parents("tr").find("input.ctags").addClass("vvid_city");
+
+                tagsLoad();
+                $(this).attr("disabled",true);
+                $('.smokeevent'+value).removeAttr("disabled");
+                saveCall(value,slab);
+                //save 
+              });
+
+            };
+
+            function saveCall(value,slab){
+              var smokeEvt = ".smokeevent"+value;
+              $(smokeEvt).on('click',function(){
+                // console.log($(this).parents("tr").find("input.slabdata").val());
+                cityusage = {
+                  "bill_computationtype": "a",
+                  "fgr":parseInt($(this).parents("tr").find("input.fgr").val()),
+                  "base_rate":parseInt($(this).parents("tr").find("input.slabdata"+slab).val()),
+                  "extra_kmrate":parseInt($(this).parents("tr").find("input.city_extra_km").val()),
+                  "extra_hrrate":parseInt($(this).parents("tr").find("input.city_extra_hrs").val()),
+                  "night_batta":parseInt($(this).parents("tr").find("input.city_nightbatta").val()),
+                  "updated_by": {{user.id}},    
+                  "city": parseInt($('#city_list option:selected').val()),
+                  "service_type": parseInt($('#select_service3 option:selected').val()),
+                  "slab": parseInt(slab),
+                  "vehicle_varient":$(this).parents("tr").find("input.ctags").val()
+                };
+
+                console.log(cityusage);
+
+                AjaxCall(value,slab,smokeEvt);
+
+              });
+            };
+
+            function AjaxCall(value, slab, event) {
+                $.ajax({
+                    url: '/rapido/api/update_cityratecard/' + value + '/',
+                    method: 'PUT',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    contentType: 'application/json',
+                    context: this,
+                    data: JSON.stringify(cityusage),
+                    success: function(res) {
+
+                        $(event).parents("tr").find("input.slabdata" + slab).prop('disabled', true);
+                        $(event).parents("tr").find("input.city_extra_km").prop('disabled', true);
+                        $(event).parents("tr").find("input.city_extra_hrs").prop('disabled', true);
+                        $(event).parents("tr").find("input.city_nightbatta").prop('disabled', true);
+                        $(event).parents("tr").find("input.fgr").prop('disabled', true);
+                        $(event).parents("tr").find("input.ctags").removeClass("vvid_city");
+                        $(event).parents("tr").find("div.tagsinput").remove();
+                        $(event).parents("tr").find("input.ctags").css("display", "block");
+                        
+                        $(event).attr("disabled",true);
+                        $('.fireevent'+value).removeAttr("disabled");
+                    }
+                });
+            };
+
+            $.each(data, function(key, value) 
+            {
+                if(parseInt(cat_id1[i].innerHTML)==value.category.id)
+                {
+                   //display value
+                   city_extra_km[i].value = value.extra_kmrate;
+                   city_extra_hrs[i].value = value.extra_hrrate;
+                   city_nightbatta[i].value = value.night_batta;
+                   cst[i].innerHTML = value.service_type.name;
+                   document.getElementsByClassName("slabdata"+value.slab.id)[i].value = value.base_rate;
+                   document.getElementsByClassName("fgr")[i].value = value.fgr;
+                  
+                   //disabled if value
+                   city_extra_km[i].disabled=true;
+                   city_extra_hrs[i].disabled=true;
+                   city_nightbatta[i].disabled=true;
+                   document.getElementsByClassName("fgr")[i].disabled=true;
+                   document.getElementsByClassName("slabdata"+value.slab.id)[i].disabled = true;
+
+                   //display vehicle varient value
+                   if(value.vehicle_varient==null || value.vehicle_varient==""){
+
+                    document.getElementsByClassName("vvid_result3")[i].innerHTML = "<input type='text' class='vvid_city ctags' name=''>";
+                   }
+
+                   else{ 
+                    document.getElementsByClassName("vvid_result3")[i].innerHTML = "<input type='text' class='ctags' style='border:none;' value='"+value.vehicle_varient+"' name='' readonly>";
+                   }
+
+                   //for edit purpose
+                   cityEditId[i].setAttribute("id",value.id);
+                   cityEditId[i].classList.add("fireevent"+value.id);
+                   citySaveId[i].classList.add("smokeevent"+value.id);
+                   editCall(value.id,value.slab.id);
+
+                   j=true;
+                }
+
+            });
+
+            if(j==false)
+            {
+              city_extra_km[i].value = "";
+              city_extra_hrs[i].value = "";
+              document.getElementsByClassName("fgr")[i].value = "";
+              cst[i].innerHTML = "";
+              city_nightbatta[i].value = "";
+              city_extra_km[i].disabled=false;
+              city_extra_hrs[i].disabled=false;
+              city_nightbatta[i].disabled=false;
+              document.getElementsByClassName("fgr")[i].disabled=false;
+              document.getElementsByClassName("vvid_result3")[i].innerHTML = "<input type='text' class='vvid_city ctags' name=''>";
+            }
+
+        }
+        tagsLoad();
+    });
+
+});
+   
+   $('#select_service1').on('click',function(){
+   
+   if($('#select_service1 option:selected').text()){
+      $('.ast').text($('#select_service1 option:selected').text());
+   }
+   });
+   
+   $('#saveairport').click(function(){
+   
+      for(var i=0;i<cat_id.length;i++){
+   
+   var airport = [{
+      "created_by":{{user.id}},
+      "city":parseInt($('#city_list option:selected').val()),
+      "category":parseInt(cat_id[i].innerHTML),
+      "service_type":parseInt($('#select_service1 option:selected').val()),
+      "base_rate":parseInt(base_rate[i].value),
+      "vehicle_varient":vv_airname[i].value
+   }];
+   
+   
+   
+         $.ajax({
+            url: '/rapido/api/airportratecard/',
+            method: 'POST',
+            headers:{'X-CSRFToken':'{{ csrf_token }}'},                  
+            contentType : 'application/json',
+            data: JSON.stringify(airport),
+            success:function(res){
+               
+                        swal("Thank you!", "Airport Rate card has been set!", "success");
+            }
+         });
+      }
+   });
+   
+   //standard rate_card airport related end
+   
+   //standard rate_card outstation related
+   
+   $('#select_service2').on('click',function(){
+   
+   if($('#select_service2 option:selected').text()){
+      $('.ost').text($('#select_service2 option:selected').text());
+   }
+   });
+   
+   
+   $('#saveoutstation').click(function() {
+
+       for (var i = 0; i < cat_id1.length; i++) {
+
+          if(document.getElementsByClassName("otags")[i].value!=""){
+           var outstation = [{
+               "min_km": parseInt(minkm[i].value),
+               "perkm_rate": parseInt(perkm[i].value),
+               "extrakm_rate": parseInt(extrakm[i].value),
+               "day_batta": parseInt(day_bata[i].value),
+               "night_batta": parseInt(night_bata[i].value),
+               "created_by": {{user.id}},
+               "city": parseInt($('#city_list option:selected').val()),
+               "category": parseInt(cat_id1[i].innerHTML),
+               "service_type": parseInt($('#select_service2 option:selected').val()),
+               "vehicle_varient": vv_otsname[i].value
+           }];
+
+
+
+           $.ajax({
+               url: '/rapido/api/set_outstationratecard/',
+               method: 'POST',
+               headers: {
+                   'X-CSRFToken': '{{ csrf_token }}'
+               },
+               contentType: 'application/json',
+               data: JSON.stringify(outstation),
+               success: function(res) {
+
+                   swal("Thank you!", "Outstation Rate card has been set!", "success");
+
+               }
+            });
+          } 
+       }
+   });
+   
+ //standard rate_card outstation related end
+
+ //standard rate_card cityusage related
+
+   
+   $('#select_service3').on('click',function(){
+   
+   if($('#select_service3 option:selected').text()){
+      $('.cst').text($('#select_service3 option:selected').text());
+   }
+   });
+
+//add extra slab
+
+$('#slab').change(function() {
+    var spans = document.querySelectorAll('#thcount th');
+
+    var colCount = 0;
+
+    //count no. of columns in cityusage
+    $('#thcount th').each(function() {
+        colCount++;
+    });
+    //count no. of columns in cityusage end
+
+    //avoid adding duplicate slabs
+    var thpresent = false;
+    for (var k = 0; k < colCount; k++) {
+        if ($(this).find('option:selected').attr('id') == spans[k].className) {
+            thpresent = true;
+        }
+    }
+
+    if (thpresent == false) {
+
+        var text2 = $("<th class='slab" + $(this).find('option:selected').val() + "'><div class='close' id='" + $(this).find('option:selected').val() + "'><i class='fa fa-close'></i></div>" + $(this).find('option:selected').text() + " " + $(this).find('option:selected').val() + "</th>");
+        var text3 = $("<td class='slab_dat" + $(this).find('option:selected').val() + "'><input class='slabdata" + $(this).find('option:selected').val() + " " + "form-control' type='text'></td>");
+
+        $('.addSlab').last().before(text2);
+        $('.slab_data').before(text3);
+
+        $('.close').click(function() {
+            $(this).parent().remove();
+            $('.slab_dat'+$(this).attr('id')).remove();
+        });
+    } else {
+
+        alert("slab already added");
+    }
+    //avoid adding duplicate slabs end
+
+});
+
+//add extra slab end
+
+   
+$('#savecityusage').click(function() {
+
+//for displaying success one time
+
+//for displaying success one time end
+
+//get slab options count
+  var optioncount=0;
+    $('#slab option').each(function() {
+        optioncount++;
+    });
+//get slab options count end
+
+    var spans = document.querySelectorAll('#thcount th'); //array of head columns
+    var colCount = 0;
+
+    //count no. of columns in cityusage
+    $('#thcount th').each(function() {
+        colCount++; //print array of columns
+    });
+    //count no. of columns in cityusage end
+
+
+    //avoid adding duplicate slabs
+    var thpresent;
+
+    for (var i = 0; i < cat_id1.length; i++) //6 times
+    {
+      //dynamically assign class for slabs
+      var l;
+
+      for(var m = 0;m <optioncount;m++) //8 times
+      {
+        var sample = document.querySelectorAll('#slab option');
+        var slab_id = sample[m].value;
+
+            for (var k = 0; k < colCount; k++) {
+                if (('slab'+slab_id) == spans[k].className) {
+                    thpresent = slab_id;
+
+                if(document.getElementsByClassName("slabdata"+thpresent)[i].value!="")
+                {
+                    var cityusage = 
+                    [{
+                    "bill_computationtype": "a",
+                    "fgr": parseInt(document.getElementsByClassName("fgr")[i].value),
+                    "base_rate": parseInt(document.getElementsByClassName("slabdata"+thpresent)[i].value),
+                    "extra_kmrate": parseInt(document.getElementsByClassName("city_extra_km")[i].value),
+                    "extra_hrrate": parseInt(document.getElementsByClassName("city_extra_hrs")[i].value),
+                    "night_batta": parseInt(document.getElementsByClassName("city_nightbatta")[i].value),
+                    "created_by": {{user.id}},
+                    "city": parseInt($('#city_list option:selected').val()),
+                    "category":  parseInt(cat_id1[i].innerHTML),
+                    "service_type": parseInt($('#select_service3 option:selected').val()),
+                    "slab": parseInt(thpresent),
+                    "vehicle_varient":vv_cityname[i].value
+                     }];    
+        
+                  $.ajax({
+                      url: '/rapido/api/set_cityratecard/',
+                      method: 'POST',
+                      headers: {
+                          'X-CSRFToken': '{{ csrf_token }}'
+                      },
+                      contentType: 'application/json',
+                      data: JSON.stringify(cityusage),
+                      success: function(res) {
+                        swal("Thank you!", "City Rate card has been set!", "success");
+                      }
+                  });        
+                }
+                }
+            }    
+      }
+      //dynamically assign class for slabs end
+    }
+});
+
+ //standard rate_card cityusage related end
+
+   
+</script>
+{% endblock %}

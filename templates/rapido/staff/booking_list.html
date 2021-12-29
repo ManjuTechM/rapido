@@ -1,0 +1,66 @@
+{% extends "rapido/staff/staff.html" %}
+
+{% block body_block %}
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading" style="padding: 1px 15px;">
+      <h4> Booked Requests </h4>
+      </div>
+      <!-- /.panel-heading -->
+      <div class="panel-body">
+
+            <div class="table-responsive">
+              <table class="table">
+                  <tr>
+                    <th>Date</th>
+                    <th>Booking ID</th>
+                    <th>Booked from</th>
+                    <th>Type of Service</th>
+                    <th> category</th>
+                    <th>Guest Name</th>
+                    <th>Guest PhoneNo</th>
+                    <th>PickUp date & time</th>
+                    <th> pickup location</th>
+                    <th> drop location</th>
+                    <th> requested vehicle</th>
+                    <th> billing type</th>
+                    <th> status </th>
+                    <th> view details</th>
+                    <th> edit </th>
+                    <th> assign</th>
+
+                  </tr>
+                {% for b in booking_list %}
+                  <tr>
+                      <td>{{b.date.date}}</td>
+                      <td>{{b.booking_id}}</td>
+                      <td>{{b.booking_from}}</td>
+                      <td>{{b.service_type}} </td>
+                      <td>{{b.category}}</td>
+                      <td>{{b.guest_name}} </td>
+                      <td>{{b.guest_phoneno}}</td>
+                      <td><li>{{b.pick_up_date }}</li><li>{{b.pick_up_time}}</li> </td>
+                      <td>{{b.pick_up_location}}</td>
+                      <td>{{b.drop_location}} </td>
+
+<!--                       <td>{{b.pick_up_location.area}},{{b.pick_up_location.city}} </td>
+                      <td>{{b.drop_location.area }}, {{b.pick_up_location.city}}</td>
+ -->                      <td>{{b.requested_vehicle_model}}</td>
+                      <td>{{b.billing_base}} </td>
+                      <td>{{b.status}}</td>
+                      <td><a>  view </a> </td>
+                      <td><button class="btn btn-success">Edit</button></td>
+                      <td><a href="/rapido/assign_cab/{{b.booking_id}}/"><button class="btn btn-success">Assign</button></td>
+                  </tr>
+                  {% endfor %}
+              </table>
+          </div>
+
+      </div>
+     </div>
+  </div>
+
+</div>
+
+{% endblock %}

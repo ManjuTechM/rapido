@@ -1,0 +1,214 @@
+{% extends "rapido/master/master.html" %}
+
+{% block body_block %}
+<style type="text/css">
+  #result {
+   position: absolute;
+   cursor: pointer;
+   overflow-y: auto;
+   max-height: 400px;
+   box-sizing: border-box;
+   z-index: 1001;
+  }
+  .link-class:hover{
+   background-color:#f1f1f1;
+  }
+
+.inputs { width: 34px; }
+
+
+  input.error{
+    border-color: red;
+  }
+
+  label.error{
+    color: red;
+    font-weight: 300 !important;
+  }
+   </style>
+
+        <section class="content-header">
+          <h6>
+          <ol class="breadcrumb">
+            <li><a href="/rapido/master/"><i class="fa fa-dashboard"></i> Home</a></li>
+            <li><a href="/rapido/company_client/"> Client</a></li>
+            <li><a href="/rapido/add_company_client/"> Add new client</a></li>
+          </ol>
+          </h6>
+        </section>
+
+<section>
+   <div class="row">
+      <div class="col-lg-10">
+         <div class="panel panel-default">
+            <div class="panel-heading" style="padding: 1px 15px;">
+               <h4> Add new Company </h4>
+            </div>
+            <h5> {{message}}</h5>
+            <!-- /.panel-heading -->
+            <div class="panel-body">
+         <form class="form-item span8" id="item_form" method="post"
+             action="/rapido/add_company_client/" enctype="multipart/form-data">
+
+            {% csrf_token %}          
+      <table>
+      <br>
+          <tr>
+            <td>Company  Name:</td>
+            <td><input type="text" class="form-control" placeholder="company Name" name="company_name"  required=""></td>
+          </tr>
+          <tr>
+            <td>company type:</td>
+            <td>
+                <select name="company_type">
+                {% for ct in company_type_list %}
+            <option value={{ct.id}} class="form-control">{{ct.name}}</option>
+                {% endfor %}
+               </select>
+            </td>
+          </tr>
+
+          <tr>
+            <td>Company logo:</td>
+            <td><input type="file" name="company_logo"></td>
+          </tr>
+
+          <tr>
+            <td>Company Email:</td>
+            <td><input type="email" class="form-control" placeholder=" Company Email id" name="company_email"></td>
+          </tr>
+
+          <tr>
+            <td>company phoneno:</td>
+            <td><input type="text" class="form-control" placeholder="company phoneno" name="company_phoneno" pattern="[0-9]*" maxlength="10" required=""  ></td>
+          </tr>
+
+          <tr>
+            <td>company Manager Name:</td>
+            <td><input type="text" class="form-control" placeholder="company_manager_name" name="company_manager_name"  required=""></td>
+          </tr>
+
+              <tr>
+                <td>company_manager_mobileno:</td>
+                <td><input type="text" class="form-control" placeholder="company_manager_mobileno" name="company_manager_mobileno" pattern="[0-9]{10}" maxlength="10" min="7000000000" max="9999999999" required=""  ></td>
+              </tr>
+
+              <tr>
+                <td>company manager Email-Id:</td>
+                <td><input type="email" class="form-control" placeholder="Manager Email" name="company_manager_email" required=""></td>
+              </tr>
+
+                <tr>
+                <td rowspan="3">Address</td>
+                <td>street name/no:<input type="text" class="form-control" placeholder="street_address" name="street_address"  required=""></td>
+                <td>landmark:<input type="text" class="form-control" placeholder="landmark" name="landmark"  required=""></td>
+              </tr>
+              <tr>
+                <td>area:<input type="text" class="form-control" placeholder="area" name="area"  required=""></td>
+                <td>state:<select id="listBox" class="form-control" name="state" onchange='selct_district(this.value)'></select></td>
+              </tr>
+              <tr>
+                <td>city:<select id='secondlist' class="form-control" name="city"></select></td>
+                <td>Country:<input type="text" class="form-control" name="country" value="India"></td>
+                <td>Pin code:<input type="text" class="form-control" placeholder="pincode" name="pincode" pattern="[0-9]{6}" required=""></td>
+            
+              </tr>
+
+              <tr>
+                <td>company agreement start Date</td>
+                <td><input type="text" id="agreement_start" class="form-control" required=""><input type="text" style="display: none;" id="actual_agreement_start" class="form-control" name="company_agreement_start_date"  required=""></td>
+              </tr>
+
+              <tr>
+                <td>company agreement end Date:</td>
+                <td><input type="text" id="agreement_end" class="form-control" required=""><input type="text" style="display: none;" id="actual_agreement_end" class="form-control" name="company_agreement_end_date"  required=""></td>
+              </tr>
+              <tr>
+                <td>Company payment type:</td>
+                <td><input type="text" class="form-control" placeholder="vendor_payment_type" name="company_payment_type"  required=""></td>
+              </tr>
+              <tr>
+                <td>travelling_time_treshhold:</td>
+                <td><input type="number" class="form-control" name="travelling_time_treshhold" required=""></td>
+              </tr>
+              <tr>
+                <td>upload Company Documents:</td>
+                <td><input type="file" name="company_documents" ></td>
+              </tr>
+
+              <tr>
+                <td>GST No:</td>
+                <td><input type="text" name="gst" required="" ></td>
+              </tr>
+              <tr>
+                <td>PAN No:</td>
+                <td><input type="text" name="pan" required=""></td>
+              </tr>
+
+                     <!-- Provide a button to click to submit the form. -->
+                     <tr>
+                        <td><button type="save" class="btn btn-success" style="width:100%;">Save</button></td>
+                        <td>
+                           <button type="reset" class="btn btn-primary" style="width:100%;">Clear</button> 
+                           <!--       <input class="btn btn-outline btn-success" type="submit" value="Save">
+                              <input type="reset" class="btn btn-outline btn-primary" value="Reset">-->
+                        </td>
+                     </tr>
+                  </table>
+               </form>
+            </div>
+         </div>
+      </div>
+   </div>
+</section>
+
+{% endblock %}
+
+{% block javascript %}
+
+  <script>
+
+    $(function () {
+      $("#agreement_start").datepicker(
+         { dateFormat: 'dd-mm-yy',
+           onSelect:function(){
+            var date = $(this).val().split("-").reverse().join("-");
+            $("#actual_agreement_start").val(date);
+           }
+         }
+       );
+
+      $("#agreement_end").datepicker(
+         { dateFormat: 'dd-mm-yy',
+           onSelect:function(){
+            var date = $(this).val().split("-").reverse().join("-");
+            $("#actual_agreement_end").val(date);
+           }
+         }
+       );
+
+      $("#agreement_start").keyup(function(){
+        $("#actual_agreement_start").val($(this).val().split("-").reverse().join("-"));
+
+        $("#actual_agreement_end").val($("#agreement_end").val().split("-").reverse().join("-"));
+      });
+
+
+      $("#agreement_end").keyup(function(){
+        $("#actual_agreement_start").val($("#agreement_start").val().split("-").reverse().join("-"));
+
+        $("#actual_agreement_end").val($(this).val().split("-").reverse().join("-"));
+      });
+
+      $("#item_form").submit(function() {
+
+            $(this).children('#agreement_start,#agreement_end').remove();
+      });
+
+    });
+
+      $("#item_form").validate();
+
+  </script>
+
+{% endblock %}
